@@ -1,0 +1,16 @@
+.bg {
+  background-color: #EBF1F0;
+  flex-grow: 1; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 0.6rem;
+  -webkit-box-shadow: 1px 1px 2px 1px rgba(0,0,0,0.2);
+  box-shadow: 1px 1px 2px 1px rgba(0,0,0,0.2);
+}

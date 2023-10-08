@@ -8,7 +8,7 @@ function CadastroPassos(props) {
     var iconePlano = props.corCheckout;
     var iconeCheckout = props.corCheckout;
     return (
-        <div className="flex justify-center">
+        <div className="flex justify-center items-center h-16 w-full bg-[#F9F9F9]">
             <div className="w-3/6">
                 <div className="flex justify-between items-center">
                     <div className="flex items-center">
