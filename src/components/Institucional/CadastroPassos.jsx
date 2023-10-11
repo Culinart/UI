@@ -2,13 +2,13 @@ import React from "react";
 
 function CadastroPassos(props) {
     var divisorEndereco = props.corEndereco;
-    var divisorPlano = props.corEndereco;
-    var divisorCheckout = props.corPlano;
-    var iconeEndereco = props.corPlano;
-    var iconePlano = props.corCheckout;
+    var divisorPlano = props.corPlano;
+    var divisorCheckout = props.corCheckout;
+    var iconeEndereco = props.corEndereco;
+    var iconePlano = props.corPlano;
     var iconeCheckout = props.corCheckout;
     return (
-        <div className="flex justify-center items-center h-16 w-full bg-[#F9F9F9]">
+        <div className="flex justify-center items-center h-14 w-full bg-[#F9F9F9]">
             <div className="w-3/6">
                 <div className="flex justify-between items-center">
                     <div className="flex items-center">
@@ -25,15 +25,15 @@ function CadastroPassos(props) {
                             <path d="M23.9374 9.86958C22.5177 3.1086 17.0687 0.0646973 12.2822 0.0646973C12.2822 0.0646973 12.2822 0.0646973 12.2687 0.0646973C7.49565 0.0646973 2.03311 3.09397 0.61339 9.85494C-0.968583 17.4062 3.3041 23.8013 7.17114 27.8257C8.60438 29.3184 10.4433 30.0647 12.2822 30.0647C14.121 30.0647 15.9599 29.3184 17.3796 27.8257C21.2467 23.8013 25.5194 17.4208 23.9374 9.86958ZM12.2822 17.2013C9.92949 17.2013 8.02297 15.1379 8.02297 12.5915C8.02297 10.0452 9.92949 7.98177 12.2822 7.98177C14.6348 7.98177 16.5413 10.0452 16.5413 12.5915C16.5413 15.1379 14.6348 17.2013 12.2822 17.2013Z" fill={iconeEndereco} />
                         </svg>
 
-                        <span className={`ml-2 ${iconeEndereco === "#AEBDBC" ? "text-[#AEBDBC]" : "[#045D53]"}`}>Endereço</span>
+                        <span className={`ml-2 ${iconeEndereco === "#AEBDBC" ? "text-[#AEBDBC]" : "text-[#045D53]"}`}>Endereço</span>
                     </div>
                     <div className={`border-t-3 border-[${divisorPlano}] w-1/12`}></div>
                     <div className="flex items-center">
                         <svg width="30" height="33" viewBox="0 0 30 33" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M4.20703 10.3787L15.2273 17.3384L26.1727 10.4195" stroke={iconePlano} stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M15.2285 29.6777V17.3245" stroke={iconePlano} stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M12.6447 3.62324L5.98007 7.6684C4.46993 8.58093 3.23438 10.869 3.23438 12.7486V20.4438C3.23438 22.3234 4.46993 24.6115 5.98007 25.5241L12.6447 29.5692C14.0674 30.4272 16.4013 30.4272 17.8241 29.5692L24.4887 25.5241C25.9988 24.6115 27.2344 22.3234 27.2344 20.4438V12.7486C27.2344 10.869 25.9988 8.58093 24.4887 7.6684L17.8241 3.62324C16.3888 2.75156 14.0674 2.75156 12.6447 3.62324Z" stroke={iconePlano} stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M21.467 18.2782V13.2934L9.62305 5.82959" stroke={iconePlano} stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M4.20703 10.3787L15.2273 17.3384L26.1727 10.4195" stroke={iconePlano} strokeWidth="4" strokeLinecap="round" strokelinejoint="round" />
+                            <path d="M15.2285 29.6777V17.3245" stroke={iconePlano} strokeWidth="4" strokeLinecap="round" strokelinejoint="round" />
+                            <path d="M12.6447 3.62324L5.98007 7.6684C4.46993 8.58093 3.23438 10.869 3.23438 12.7486V20.4438C3.23438 22.3234 4.46993 24.6115 5.98007 25.5241L12.6447 29.5692C14.0674 30.4272 16.4013 30.4272 17.8241 29.5692L24.4887 25.5241C25.9988 24.6115 27.2344 22.3234 27.2344 20.4438V12.7486C27.2344 10.869 25.9988 8.58093 24.4887 7.6684L17.8241 3.62324C16.3888 2.75156 14.0674 2.75156 12.6447 3.62324Z" stroke={iconePlano} strokeWidth="4" strokeLinecap="round" strokelinejoint="round" />
+                            <path d="M21.467 18.2782V13.2934L9.62305 5.82959" stroke={iconePlano} strokeWidth="4" strokeLinecap="round" strokelinejoint="round" />
                         </svg>
 
                         <span className={`ml-2 ${iconePlano === "#AEBDBC" ? "text-[#AEBDBC]" : "[#045D53]"}`}>Plano</span>

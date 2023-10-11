@@ -1,0 +1,37 @@
+.bg {
+    background-color: #EBF1F0;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 0.6rem;
+    -webkit-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.2);
+    box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+.input {
+    width: 17rem;
+    height: 2.125rem;
+    padding: 0.6rem;
+    border-radius: 0.5rem;
+    border: 0.5px solid #232323;
+    background: #FFFDFD;
+    margin-bottom: 1rem;
+}
+
+.btnCadastro {
+    width: 8rem;
+    height: 2.5rem;
+    border-radius: 0.5rem;
+    background-color: #F29311;
+    border: 2px solid #FF9F1C;
+    color: white;
+    font-weight: 600;
+    margin-top: 1rem;
+}
