@@ -65,7 +65,6 @@ function InformacoesPessoais() {
       senha: inputSenha,
     };
     console.log(corpoRequisicao);
-    // You can now use corpoRequisicao to send the data to your server using Axios or your API.
   }
 
   return (
@@ -91,10 +90,8 @@ function InformacoesPessoais() {
                 setInputTelefone(inputTelefone);
                 setInputSenha(values.senha);
                 setInputSenhaConfirmacao(values.senhaConfirmacao);
-
-                // Additional validation can be done here
                 if (values.nome && values.email && inputTelefone && values.senha && values.senhaConfirmacao) {
-                  cadastrarUsuario(); // Call the function to register the user
+                  cadastrarUsuario();
                 }
 
                 setSubmitting(false);
