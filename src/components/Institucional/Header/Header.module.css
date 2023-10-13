@@ -21,7 +21,6 @@
 }
 
 .itens {
-    /* background-color: red; */
     width: 25%;
     display: flex;
     justify-content: space-between;
