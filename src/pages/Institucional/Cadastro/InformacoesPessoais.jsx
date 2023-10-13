@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import CadastroPassos from "../../../components/Institucional/Cadastro/CadastroPassos";
@@ -6,6 +7,7 @@ import imgCadastro from "../../../assets/Institucional/Cadastro/imgCadastro.svg"
 import Header from "../../../components/Institucional/Header/Header";
 import api from "../../../api/api";
 import styles from "./CadastroStyles.module.css";
+
 
 const validationSchema = Yup.object().shape({
   nome: Yup.string()
@@ -30,6 +32,9 @@ const validationSchema = Yup.object().shape({
 });
 
 function InformacoesPessoais() {
+
+  const navigate = useNavigate();
+
   const [inputNome, setInputNome] = useState("");
   const [inputEmail, setInputEmail] = useState("");
   const [inputTelefone, setInputTelefone] = useState("");
@@ -65,6 +70,7 @@ function InformacoesPessoais() {
       senha: inputSenha,
     };
     console.log(corpoRequisicao);
+    navigate('/cadastro/endereco');
   }
 
   return (
@@ -98,7 +104,7 @@ function InformacoesPessoais() {
               }}
             >
               {({ setFieldValue }) => (
-                <Form className="flex flex-col space-y-4">
+                <Form className="flex flex-col space-y-4 w-full items-center">
                   <div className="flex flex-col">
                     <label htmlFor="nome" className={`text-[#045D53] font-medium ${styles.inputLabel}`}>Nome</label>
                     <Field
@@ -188,7 +194,7 @@ function InformacoesPessoais() {
               )}
             </Formik>
           </div>
-          <img src={imgCadastro} alt="Cadastro" />
+          <img src={imgCadastro} />
         </div>
       </div>
     </div>
