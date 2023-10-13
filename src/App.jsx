@@ -4,6 +4,8 @@ import Home from "../src/pages/Institucional/Home/Home.jsx"
 import NotFound from "../src/pages/NotFound.jsx"
 import InformacoesPessoais from "./pages/Institucional/Cadastro/InformacoesPessoais.jsx"
 import Endereco from './pages/Institucional/Cadastro/Endereco.jsx';
+import Plano from './pages/Institucional/Cadastro/Plano.jsx';
+import Checkout from './pages/Institucional/Cadastro/Checkout.jsx';
 import ComoFunciona from './pages/Institucional/ComoFunciona/ComoFunciona.jsx';
 
 function App() {
@@ -15,6 +17,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/cadastro/info-pessoal" element={<InformacoesPessoais />} />
           <Route path="/cadastro/endereco" element={<Endereco />} />
+          <Route path="/cadastro/plano" element={<Plano />} />
+          <Route path="/cadastro/checkout" element={<Checkout />} />
           <Route path="/como-funciona" element={<ComoFunciona />} />
           <Route path="/*" element={<NotFound />} />
         </Routes>
