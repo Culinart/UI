@@ -2,7 +2,7 @@
 import React from "react"
 import style from './Header.module.css';
 
-import logo from '../../../assets/header/logo_header.png';
+import logo from '../../../assets/Institucional/header/logo_header.png';
 
 function Header() {
     return (

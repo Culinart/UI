@@ -1,5 +1,5 @@
 import React from "react";
-import CadastroPassos from "../../../components/Institucional/CadastroPassos";
+import CadastroPassos from "../../../components/Institucional/Cadastro/CadastroPassos";
 
 function Endereco() {
     return(
