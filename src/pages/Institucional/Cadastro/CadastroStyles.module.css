@@ -15,14 +15,18 @@
     box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.2);
 }
 
+.inputLabel {
+    margin-top: 0.5rem;
+}
+
 .input {
     width: 17rem;
     height: 2.125rem;
     padding: 0.6rem;
-    border-radius: 0.5rem;
-    border: 0.5px solid #232323;
+    border-radius: 0.3rem;
+    border: 0.5px solid rgb(118, 118, 118);
     background: #FFFDFD;
-    margin-bottom: 1rem;
+    font-size: 16px;
 }
 
 .btnCadastro {
@@ -33,5 +37,5 @@
     border: 2px solid #FF9F1C;
     color: white;
     font-weight: 600;
-    margin-top: 1rem;
+    margin-top: 1.2rem;
 }
