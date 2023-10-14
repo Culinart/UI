@@ -20,7 +20,7 @@ const validationSchema = Yup.object().shape({
   telefone: Yup.string()
     .matches(
       /^\(\d{2}\) \d{5}-\d{4}$/,
-      "Telefone deve seguir o formato (00) 00000-0000"
+      "Insira o seu telefone com o DDD"
     )
     .required("Insira o seu telefone com o DDD"),
   senha: Yup.string()

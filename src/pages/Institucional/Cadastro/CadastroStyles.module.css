@@ -26,7 +26,7 @@
 }
 
 .input_pequena {
-    width: 9rem;
+    width: 10rem;
     height: 2.125rem;
     padding: 0.6rem;
     border-radius: 0.3rem;
@@ -36,7 +36,7 @@
 }
 
 .input_grande {
-    width: 20rem;
+    width: 22rem;
     height: 2.125rem;
     padding: 0.6rem;
     border-radius: 0.3rem;
@@ -46,7 +46,7 @@
 }
 
 .combobox {
-    padding: 0.3rem 3rem;
+    padding: 0.3rem 3.4rem;
     border-radius: 0.3rem;
     border: 0.5px solid rgb(118, 118, 118);
     background: #FFFDFD;

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import CadastroPassos from "../../../components/Institucional/Cadastro/CadastroPassos";
@@ -7,10 +8,26 @@ import imgEndereco from "../../../assets/Institucional/Cadastro/imgEndereco.svg"
 import styles from "./CadastroStyles.module.css";
 
 const validationSchema = Yup.object().shape({
-
+    cep: Yup.string()
+        .matches(/^\d{5}-\d{3}$/, "CEP inválido")
+        .required("Insira o seu CEP"),
+    estado: Yup.string().required("Escolha o seu estado"),
+    cidade: Yup.string().required("Insira a sua cidade"),
+    bairro: Yup.string().required("Insira o seu bairro"),
+    logradouro: Yup.string().required("Insira o seu logradouro"),
+    numero: Yup.number()
+        .typeError("Número deve ser um valor numérico")
+        .positive("Número deve ser positivo")
+        .integer("Número deve ser um número inteiro")
+        .min(1, "Número não pode ser menor do que 1")
+        .required("Insira número do endereço"),
+    complemento: Yup.string(),
 });
 
 function Endereco() {
+
+    const navigate = useNavigate();
+
     const [inputCep, setInputCep] = useState("");
     const [inputEstado, setInputEstado] = useState("");
     const [inputCidade, setInputCidade] = useState("");
@@ -21,7 +38,7 @@ function Endereco() {
 
     const estados = [
         "AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA", "MG", "MS", "MT",
-        "PA", "PB", "PE", "PI", "PR", "RJ", "RN", "RO", "RR", "RS", "SC", "SE", "TO"
+        "PA", "PB", "PE", "PI", "PR", "RJ", "RN", "RO", "RR", "RS", "SC", "SE", "SP", "TO"
     ];
 
     const handleCepChange = (event) => {
@@ -42,8 +59,16 @@ function Endereco() {
     function cadastrarEndereco() {
 
         const corpoRequisicao = {
+            cep: inputCep,
+            estado: inputEstado,
+            cidade: inputCidade,
+            bairro: inputBairro,
+            logradouro: inputLogradouro,
+            numero: inputNumero,
+            complemento: inputComplemento
         };
         console.log(corpoRequisicao);
+        navigate('/cadastro/plano');
     }
 
     return (
@@ -58,12 +83,24 @@ function Endereco() {
                                 <h2 className="text-[#DC7726] font-bold text-2xl mb-2">Onde fica sua cozinha, Chef?</h2>
                                 <Formik
                                     initialValues={{
-                                        cep: ""
+                                        cep: "",
+                                        estado: "",
+                                        cidade: "",
+                                        bairro: "",
+                                        logradouro: "",
+                                        numero: "",
+                                        complemento: ""
                                     }}
                                     validationSchema={validationSchema}
                                     onSubmit={(values, { setSubmitting }) => {
                                         setInputCep(values.cep);
-                                        if (values.cep) {
+                                        setInputEstado(values.estado);
+                                        setInputCidade(values.cidade);
+                                        setInputBairro(values.bairro);
+                                        setInputLogradouro(values.logradouro);
+                                        setInputNumero(values.numero);
+                                        setInputComplemento(values.complemento);
+                                        if (values.cep && values.estado && values.cidade && values.bairro && values.logradouro && values.numero) {
                                             cadastrarEndereco();
                                         }
 
@@ -72,7 +109,7 @@ function Endereco() {
                                 >
                                     {({ setFieldValue }) => (
                                         <Form className="flex flex-col space-y-4 w-full items-center">
-                                            <div className="flex">
+                                            <div className="flex w-full">
                                                 <div className="flex flex-col">
                                                     <label htmlFor="cep" className={`text-[#045D53] font-medium ${styles.inputLabel}`}>CEP</label>
                                                     <Field
@@ -92,7 +129,9 @@ function Endereco() {
                                                 </div>
                                                 <span className="w-8"></span>
                                                 <div className="flex flex-col">
-                                                    <label htmlFor="estado" className={`text-[#045D53] font-medium ${styles.inputLabel}`}>Estado</label>
+                                                    <label htmlFor="estado" className={`text-[#045D53] font-medium ${styles.inputLabel}`}>
+                                                        Estado
+                                                    </label>
                                                     <select
                                                         id="estado"
                                                         name="estado"
@@ -102,20 +141,18 @@ function Endereco() {
                                                             setInputEstado(e.target.value);
                                                             setFieldValue("estado", e.target.value);
                                                         }}
-                                                        defaultValue="SP"
                                                     >
-                                                        <option value="">SP</option>
+                                                        <option value="">-</option>
                                                         {estados.map((estado) => (
                                                             <option key={estado} value={estado}>
                                                                 {estado}
                                                             </option>
                                                         ))}
                                                     </select>
-
-                                                    <ErrorMessage name="cep" component="div" className="text-red-500 font-medium text-xs" />
+                                                    <ErrorMessage name="estado" component="div" className="text-red-500 font-medium text-xs" />
                                                 </div>
                                             </div>
-                                            <div className="flex">
+                                            <div className="flex w-full">
                                                 <div className="flex flex-col">
                                                     <label htmlFor="cidade" className={`text-[#045D53] font-medium ${styles.inputLabel}`}>Cidade</label>
                                                     <Field
@@ -167,7 +204,7 @@ function Endereco() {
                                                 />
                                                 <ErrorMessage name="logradouro" component="div" className="text-red-500 font-medium text-xs" />
                                             </div>
-                                            <div className="flex">
+                                            <div className="flex w-full">
                                                 <div className="flex flex-col">
                                                     <label htmlFor="numero" className={`text-[#045D53] font-medium ${styles.inputLabel}`}>Número</label>
                                                     <Field
@@ -178,9 +215,9 @@ function Endereco() {
                                                         className={styles.input_pequena}
                                                         value={inputNumero}
                                                         onChange={(e) => {
-                                                          const value = e.target.value.replace(/\D/g, ''); 
-                                                          setInputNumero(value);
-                                                          setFieldValue("numero", value);
+                                                            const value = e.target.value.replace(/\D/g, '');
+                                                            setInputNumero(value);
+                                                            setFieldValue("numero", value);
                                                         }}
                                                     />
                                                     <ErrorMessage name="numero" component="div" className="text-red-500 font-medium text-xs" />
@@ -211,7 +248,7 @@ function Endereco() {
                                     )}
                                 </Formik>
                             </div>
-                            <img src={imgEndereco} />
+                            <img src={imgEndereco} className="ml-2"/>
                         </div>
                     </div>
                 </div>
