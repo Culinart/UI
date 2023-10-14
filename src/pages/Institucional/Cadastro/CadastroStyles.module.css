@@ -25,6 +25,34 @@
     font-size: 16px;
 }
 
+.input_pequena {
+    width: 9rem;
+    height: 2.125rem;
+    padding: 0.6rem;
+    border-radius: 0.3rem;
+    border: 0.5px solid rgb(118, 118, 118);
+    background: #FFFDFD;
+    font-size: 16px;
+}
+
+.input_grande {
+    width: 20rem;
+    height: 2.125rem;
+    padding: 0.6rem;
+    border-radius: 0.3rem;
+    border: 0.5px solid rgb(118, 118, 118);
+    background: #FFFDFD;
+    font-size: 16px;
+}
+
+.combobox {
+    padding: 0.3rem 3rem;
+    border-radius: 0.3rem;
+    border: 0.5px solid rgb(118, 118, 118);
+    background: #FFFDFD;
+    font-size: 16px;
+}
+
 .btnCadastro {
     width: 8rem;
     height: 2.5rem;
@@ -33,5 +61,5 @@
     border: 2px solid #FF9F1C;
     color: white;
     font-weight: 600;
-    margin-top: 1.2rem;
+    margin-top: 1.4rem;
 }
