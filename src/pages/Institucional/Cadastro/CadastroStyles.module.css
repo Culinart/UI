@@ -15,14 +15,38 @@
     box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.2);
 }
 
-.inputLabel {
-    margin-top: 0.5rem;
-}
-
 .input {
     width: 17rem;
     height: 2.125rem;
     padding: 0.6rem;
+    border-radius: 0.3rem;
+    border: 0.5px solid rgb(118, 118, 118);
+    background: #FFFDFD;
+    font-size: 16px;
+}
+
+.input_pequena {
+    width: 10rem;
+    height: 2.125rem;
+    padding: 0.6rem;
+    border-radius: 0.3rem;
+    border: 0.5px solid rgb(118, 118, 118);
+    background: #FFFDFD;
+    font-size: 16px;
+}
+
+.input_grande {
+    width: 22rem;
+    height: 2.125rem;
+    padding: 0.6rem;
+    border-radius: 0.3rem;
+    border: 0.5px solid rgb(118, 118, 118);
+    background: #FFFDFD;
+    font-size: 16px;
+}
+
+.combobox {
+    padding: 0.3rem 3.4rem;
     border-radius: 0.3rem;
     border: 0.5px solid rgb(118, 118, 118);
     background: #FFFDFD;
@@ -37,5 +61,5 @@
     border: 2px solid #FF9F1C;
     color: white;
     font-weight: 600;
-    margin-top: 1.2rem;
+    margin-top: 1.4rem;
 }

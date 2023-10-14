@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import CadastroPassos from "../../../components/Institucional/Cadastro/CadastroPassos";
@@ -7,18 +8,19 @@ import Header from "../../../components/Institucional/Header/Header";
 import api from "../../../api/api";
 import styles from "./CadastroStyles.module.css";
 
+
 const validationSchema = Yup.object().shape({
   nome: Yup.string()
     .required("Insira o seu nome completo")
-    .test("two-words", "Insira ao menos duas palavras com ao menos 1 letra cada", (value) => {
+    .test("two-words", "Insira o seu nome completo", (value) => {
       const words = value.split(" ");
       return words.filter((word) => word.replace(/\W/g, "").length >= 1).length >= 2;
     }),
-  email: Yup.string().email("Email é inválido").required("Insira o seu email"),
+  email: Yup.string().email("Email inválido").required("Insira o seu email"),
   telefone: Yup.string()
     .matches(
       /^\(\d{2}\) \d{5}-\d{4}$/,
-      "Telefone deve seguir o formato (00) 00000-0000"
+      "Insira o seu telefone com o DDD"
     )
     .required("Insira o seu telefone com o DDD"),
   senha: Yup.string()
@@ -30,6 +32,9 @@ const validationSchema = Yup.object().shape({
 });
 
 function InformacoesPessoais() {
+
+  const navigate = useNavigate();
+
   const [inputNome, setInputNome] = useState("");
   const [inputEmail, setInputEmail] = useState("");
   const [inputTelefone, setInputTelefone] = useState("");
@@ -50,9 +55,9 @@ function InformacoesPessoais() {
           telefoneFormatado += `-${inputTelefone.slice(7, 11)}`;
         }
       }
-    }
 
-    setInputTelefone(telefoneFormatado);
+      setInputTelefone(telefoneFormatado);
+    }
   };
 
   function cadastrarUsuario() {
@@ -65,16 +70,17 @@ function InformacoesPessoais() {
       senha: inputSenha,
     };
     console.log(corpoRequisicao);
+    navigate('/cadastro/endereco');
   }
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col min-h-screen">
       <Header />
       <CadastroPassos corEndereco="#AEBDBC" corPlano="#AEBDBC" corCheckout="#AEBDBC" />
       <div className={`bg ${styles.bg}`}>
-        <div className={`card ${styles.card} flex`}>
-          <div className="flex flex-col">
-            <span className="text-[#DC7726] font-bold text-2xl mb-2">Crie sua conta e faça arte!</span>
+        <div className={`card ${styles.card} flex p-4`}>
+          <div className="flex flex-col w-full max-w-md mx-auto">
+            <h2 className="text-[#DC7726] font-bold text-2xl mb-2">Crie sua conta e faça arte!</h2>
             <Formik
               initialValues={{
                 nome: "",
@@ -98,7 +104,7 @@ function InformacoesPessoais() {
               }}
             >
               {({ setFieldValue }) => (
-                <Form>
+                <Form className="flex flex-col space-y-4 w-full items-center">
                   <div className="flex flex-col">
                     <label htmlFor="nome" className={`text-[#045D53] font-medium ${styles.inputLabel}`}>Nome</label>
                     <Field
@@ -188,7 +194,7 @@ function InformacoesPessoais() {
               )}
             </Formik>
           </div>
-          <img src={imgCadastro} alt="Cadastro" />
+          <img src={imgCadastro} />
         </div>
       </div>
     </div>
