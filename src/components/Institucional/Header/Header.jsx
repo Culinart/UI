@@ -13,7 +13,9 @@ function Header() {
                         <img src={logo} alt="Logo Culinart" href="/" className={style.logo} />
                     </a>
                     <div className={style.itens}>
-                        <a href="/como-funciona" className={style.como_funciona}>Como Funciona</a>
+                        <a href="/como-funciona" className={style.como_funciona}>
+                            Como Funciona
+                        </a>
                         <button className={style.botao_login}>Login</button>
                     </div>
                 </div>
