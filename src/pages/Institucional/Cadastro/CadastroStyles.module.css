@@ -15,6 +15,57 @@
     box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.2);
 }
 
+.card_plano {
+    background-color: #f4f4f4;
+    padding: 10px;
+    border-radius: 0.6rem;
+    margin: 1rem 0.5rem;
+    -webkit-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.2);
+    box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+.card_plano_selecionado {
+    background-color: #FFF1DD;
+    border: 3px solid #FF9F1C;
+    padding: 8px;
+    border-radius: 0.6rem;
+    margin: 1rem 0.5rem;
+    -webkit-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.2);
+    box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+.customizacao_plano {
+    background-color: #f4f4f4;
+    padding: 10px;
+    border: 1px solid rgb(145, 145, 145);
+}
+
+.customizacao_plano_selecionado {
+    background-color: #FFF1DD;
+    border: 2px solid #FF9F1C;
+    padding: 8px;
+}
+
+.customizacao_plano_ends {
+    background-color: #f4f4f4;
+    padding: 10px;
+    border: 1px solid rgb(145, 145, 145);
+}
+
+.customizacao_plano_selecionado_ends {
+    background-color: #FFF1DD;
+    border: 2px solid #FF9F1C;
+    padding: 8px;
+}
+
+.texto_card_plano {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #045D53;
+}
+
 .input {
     width: 17rem;
     height: 2.125rem;
