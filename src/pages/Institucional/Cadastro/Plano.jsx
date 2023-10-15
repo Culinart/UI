@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import CadastroPassos from "../../../components/Institucional/Cadastro/CadastroPassos";
 import Header from "../../../components/Institucional/Header/Header";
 import iconeCarne from "../../../assets/Institucional/Cadastro/iconeCarne.svg";
@@ -10,6 +11,8 @@ import iconeMaca from "../../../assets/Institucional/Cadastro/iconeMaca.svg";
 import styles from "./CadastroStyles.module.css";
 
 function Plano() {
+
+    const navigate = useNavigate();
 
     const [preferenciasSelecionadas, setPreferenciasSelecionadas] = useState([]);
     const [pessoasSelecionadas, setPessoasSelecionadas] = useState(0);
@@ -140,6 +143,8 @@ function Plano() {
             console.log("Selected Dias por semana:", diasSelecionados);
             console.log("Selected Dia da semana:", diaSemanaSelecionado);
             console.log("Selected Time:", selectedTime);
+
+            navigate('/cadastro/checkout');
         }
     };
 
