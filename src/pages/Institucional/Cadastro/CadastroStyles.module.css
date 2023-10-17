@@ -141,7 +141,14 @@
 .divisor {
     background-color: #AEBDBC;
     height: 100%;
-    width: 0.15rem;
+    width: 3px;
+}
+
+.divisorTotalPreco {
+    display: block;
+    width: 100%;
+    height: 2.5px; 
+    background-color: #AEBDBC;
 }
 
 .btnCadastro {
