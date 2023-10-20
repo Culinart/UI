@@ -7,6 +7,7 @@ import Endereco from './pages/Institucional/Cadastro/Endereco.jsx';
 import Plano from './pages/Institucional/Cadastro/Plano.jsx';
 import Checkout from './pages/Institucional/Cadastro/Checkout.jsx';
 import ComoFunciona from './pages/Institucional/ComoFunciona/ComoFunciona.jsx';
+import Login from './pages/Institucional/Login/Login.jsx';
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
           <Route path="/cadastro/plano" element={<Plano />} />
           <Route path="/cadastro/checkout" element={<Checkout />} />
           <Route path="/como-funciona" element={<ComoFunciona />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/*" element={<NotFound />} />
         </Routes>
       </Router>
