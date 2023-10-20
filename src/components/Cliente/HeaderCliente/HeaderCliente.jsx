@@ -1,5 +1,3 @@
-// HeaderCliente.jsx
-
 import React from "react"
 import style from './HeaderCliente.module.css';
 import pedidos from '../../../assets/header/purchase_order.svg';
@@ -43,7 +41,7 @@ function HeaderCliente() {
                         </a>
                     </div>
                 </div>
-            </header>
+            </header >
         </>
     )
 }
