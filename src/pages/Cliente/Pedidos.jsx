@@ -1,11 +1,11 @@
 import React from "react";
 
-function InformacoesPessoais() {
-    
+function Pedidos() {
     return (
         <>
+        
         </>
     )
 }
 
-export default InformacoesPessoais;
+export default Pedidos;
