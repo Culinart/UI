@@ -11,8 +11,9 @@
     width: 80%;
     justify-content: space-between;
     align-items: center;
-    height: 200px;
-    margin: 5vh 0px;
+    height: 250px;
+    margin-top: 12vh;
+    /* margin: 5vh 0px; */
 }
 
 .imagem_topico {
@@ -23,10 +24,11 @@
 .texto {
     height: 100%;
     /* background-color: rgb(178, 255, 255); */
-    width: 80%;
+    /* margin-left: 30px; */
+    width: 74%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
 }
 
@@ -40,36 +42,8 @@
 .texto>p {
     color: #000;
     text-align: justify;
-    font-family: Poppins;
     font-size: 16px;
-    font-style: normal;
     font-weight: 500;
-    line-height: normal;
-}
-
-.variedade {
-    /* background-color: rgb(212, 212, 212); */
-    display: flex;
-    flex-direction: row-reverse;
-    width: 80%;
-    justify-content: space-between;
-    align-items: center;
-    height: 200px;
-    margin-top: 8vh;
-    margin-bottom: 10vh;
-}
-
-.texto>button {
-    border-radius: 12px;
-    height: 50px;
-    width: 50%;
-    background-color: #FF9F1C;
-    color: #FFF;
-    font-size: 24px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    box-shadow: 0px 2px 5px 2px rgba(0, 0, 0, 0.1);
 }
 
 .como_fazemos {
@@ -85,7 +59,7 @@
 .como_fazemos>h1 {
     color: #DC7726;
     text-align: center;
-    font-size: 48px;
+    font-size: 32px;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
@@ -102,12 +76,17 @@
 }
 
 .item {
-    /* background-color: rgb(174, 174, 253); */
+    /* background-color: rgb(174, 174, 253); */ 
     /* border: solid 1px rgb(0, 0, 0); */
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 25%;
+}
+
+.item>img{
+    /* background-color: red; */
+    width: 55%;
 }
 
 .item>span {
@@ -132,4 +111,29 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.variedade {
+    display: flex;
+    /* background-color: rgb(212, 212, 212); */
+    flex-direction: row-reverse;
+    width: 80%;
+    justify-content: space-between;
+    align-items: center;
+    height: 250px;
+    margin-top: 10vh;
+    margin-bottom: 12vh;
+}
+
+.texto>button {
+    border-radius: 12px;
+    height: 40px;
+    width: 30%;
+    background-color: #FF9F1C;
+    color: #FFF;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    box-shadow: 0px 2px 5px 2px rgba(0, 0, 0, 0.1);
 }
