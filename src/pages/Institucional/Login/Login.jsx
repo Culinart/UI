@@ -15,6 +15,10 @@ function Login() {
         navigate('/cadastro/info-pessoal');
     }
 
+    const login = () => {
+        navigate('/cliente/pedidos');
+    }
+
     return (
         <>
             <div className="flex flex-col h-screen">
@@ -36,14 +40,14 @@ function Login() {
                                 <input type="password" placeholder="************" />
                             </div>
                             <span><input type="checkbox" /> Mantenha-me conectado</span>
-                            <button>Entrar</button>
+                            <button onClick={login}>Entrar</button>
                             <a href="" className={styles.esqueci_senha}>Esqueci minha senha</a>
                             <div className={styles.container_ou}>
                                 <div className={styles.linha} />
                                 <h1>ou</h1>
                                 <div className={styles.linha} />
                             </div>
-                            <a href="" className={styles.cadastre_conta}>Cadastre uma conta</a>
+                            <a onClick={cadastro} className={styles.cadastre_conta}>Cadastre uma conta</a>
                         </div>
                     </div>
                 </div>
