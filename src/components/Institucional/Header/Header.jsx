@@ -16,7 +16,7 @@ function Header() {
                         <a href="/como-funciona" className={style.como_funciona}>
                             Como Funciona
                         </a>
-                        <button className={style.botao_login}>Login</button>
+                        <button className={style.botao_login} href="/login">Login</button>
                     </div>
                 </div>
             </header>
