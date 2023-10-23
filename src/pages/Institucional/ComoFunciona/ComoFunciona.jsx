@@ -8,6 +8,7 @@ import plano from "../../../assets/como-funciona/escolha-plano.svg";
 import entrega from "../../../assets/como-funciona/entrega.svg";
 import fazendo_receita from "../../../assets/como-funciona/fazendo-receita.svg";
 import comendo from "../../../assets/como-funciona/aproveitando-refeicao.svg";
+import Footer from "../../../components/Cliente/Footer/Footer";
 
 function ComoFunciona() {
 
@@ -76,6 +77,7 @@ function ComoFunciona() {
                     </div>
                 </section>
             </body>
+            <Footer />
         </>
     )
 }

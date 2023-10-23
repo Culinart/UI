@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import Header from "../../../components/Institucional/Header/Header";
 import imgLogin from "../../../assets/Institucional/Login/imgLogin.png"
 import ondaSuperiorDireita from "../../../assets/Institucional/Login/ondaSuperiorDireita.png"
@@ -7,6 +8,13 @@ import ondaInferiorDireita from "../../../assets/Institucional/Login/ondaInferio
 import styles from "./LoginStyles.module.css";
 
 function Login() {
+
+    const navigate = useNavigate();
+
+    const cadastro = () => {
+        navigate('/cadastro/info-pessoal');
+    }
+
     return (
         <>
             <div className="flex flex-col h-screen">
@@ -37,14 +45,14 @@ function Login() {
                                     <label htmlFor="checkbox" className={styles.labelCheckbox}>Mantenha-me conectado</label>
                                 </div>
                             </ul>
-                            <button className={styles.btnEntrar}><a href="/"><b>Entrar</b></a></button>
+                            <button className={styles.btnEntrar}><a href="/cliente/pedidos"><b>Entrar</b></a></button>
                             <p className={styles.esqueciSenha}>Esqueci minha senha</p>
                             <div className={styles.containerLinha}>
                                 <div className={styles.linha} />
                                 <b>ou</b>
                                 <div className={styles.linha} />
                             </div>
-                                <b className={styles.cadastrarConta}>Cadastre uma conta</b>
+                                <b className={styles.cadastrarConta} onClick={cadastro}>Cadastre uma conta</b>
                         </div>
                     </div>
                 </div>
