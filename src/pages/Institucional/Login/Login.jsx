@@ -16,35 +16,26 @@ function Login() {
                     <img src={ondaInferiorEsquerda} className={styles.ondaInferiorEsquerda} />
                     <img src={ondaInferiorDireita} className={styles.ondaInferiorDireita} />
                     <div className={`${styles.containerCard} flex`}>
-                        <img src={imgLogin} className={styles.imgLogin} />
-                        <div className={`${styles.card} flex`}>
-                            <h2 className={styles.titulo}>
-                                <b>
-                                    Bem vindo, Chef!
-                                </b>
-                            </h2>
-                            <ul className={styles.formularioLogin}>
-                                <li className={styles.campo}>
-                                    <b className={styles.tituloInput}>Email</b>
-                                    <input type="email" className={styles.inputFormulario} placeholder="user@mail.com" />
-                                </li>
-                                <li className={`${styles.campo} mt-4`}>
-                                    <b className={styles.tituloInput}>Senha</b>
-                                    <input type="password" className={styles.inputFormulario} placeholder="*********" />
-                                </li>
-                                <div className="mt-3">
-                                    <input type="checkbox" name="checkbox" className={styles.checkbox} />
-                                    <label htmlFor="checkbox" className={styles.labelCheckbox}>Mantenha-me conectado</label>
-                                </div>
-                            </ul>
-                            <button className={styles.btnEntrar}><a href="/"><b>Entrar</b></a></button>
-                            <p className={styles.esqueciSenha}>Esqueci minha senha</p>
-                            <div className={styles.containerLinha}>
+                        <img src={imgLogin} alt="Mulher cozinhando" />
+                        <div className={styles.card_formulario}>
+                            <h1>Bem vindo, Chef!</h1>
+                            <div className={styles.campo}>
+                                <b>Email</b>
+                                <input type="text" placeholder="user@mail.com" />
+                            </div>
+                            <div className={styles.campo}>
+                                <b>Senha</b>
+                                <input type="password" placeholder="************" />
+                            </div>
+                            <span><input type="checkbox" /> Mantenha-me conectado</span>
+                            <button>Entrar</button>
+                            <a href="" className={styles.esqueci_senha}>Esqueci minha senha</a>
+                            <div className={styles.container_ou}>
                                 <div className={styles.linha} />
-                                <b>ou</b>
+                                <h1>ou</h1>
                                 <div className={styles.linha} />
                             </div>
-                                <b className={styles.cadastrarConta}>Cadastre uma conta</b>
+                            <a href="" className={styles.cadastre_conta}>Cadastre uma conta</a>
                         </div>
                     </div>
                 </div>
