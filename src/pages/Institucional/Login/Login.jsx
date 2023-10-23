@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import Header from "../../../components/Institucional/Header/Header";
 import imgLogin from "../../../assets/Institucional/Login/imgLogin.png"
 import ondaSuperiorDireita from "../../../assets/Institucional/Login/ondaSuperiorDireita.png"
@@ -7,6 +8,13 @@ import ondaInferiorDireita from "../../../assets/Institucional/Login/ondaInferio
 import styles from "./LoginStyles.module.css";
 
 function Login() {
+
+    const navigate = useNavigate();
+
+    const cadastro = () => {
+        navigate('/cadastro/info-pessoal');
+    }
+
     return (
         <>
             <div className="flex flex-col h-screen">
@@ -43,8 +51,5 @@ function Login() {
         </>
     )
 }
-
-
-
 
 export default Login;

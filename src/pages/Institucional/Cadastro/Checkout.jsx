@@ -9,7 +9,7 @@ function Checkout() {
     const navigate = useNavigate();
 
     const handleButtonClick = () => {
-        navigate('/cliente/pedidos');
+        navigate('/login');
     }
 
     return (
