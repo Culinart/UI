@@ -1,10 +1,18 @@
 // Header.jsx
-import React from "react"
+import React from "react";
+import { useNavigate } from 'react-router-dom';
 import style from './Header.module.css';
 
 import logo from '../../../assets/Institucional/header/logo_header.png';
 
 function Header() {
+
+    const navigate = useNavigate();
+
+    const login = () => {
+        navigate('/login');
+    }
+
     return (
         <>
             <header className={style.headerHome}>
@@ -16,7 +24,7 @@ function Header() {
                         <a href="/como-funciona" className={style.como_funciona}>
                             Como Funciona
                         </a>
-                        <button className={style.botao_login} href="/login">Login</button>
+                        <button className={style.botao_login} onClick={login}>Login</button>
                     </div>
                 </div>
             </header>
