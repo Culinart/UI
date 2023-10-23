@@ -45,7 +45,7 @@ function Login() {
                                     <label htmlFor="checkbox" className={styles.labelCheckbox}>Mantenha-me conectado</label>
                                 </div>
                             </ul>
-                            <button className={styles.btnEntrar}><a href="/"><b>Entrar</b></a></button>
+                            <button className={styles.btnEntrar}><a href="/cliente/pedidos"><b>Entrar</b></a></button>
                             <p className={styles.esqueciSenha}>Esqueci minha senha</p>
                             <div className={styles.containerLinha}>
                                 <div className={styles.linha} />
