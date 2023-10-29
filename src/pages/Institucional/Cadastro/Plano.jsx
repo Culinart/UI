@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import CadastroPassos from "../../../components/Institucional/Cadastro/CadastroPassos";
-import Header from "../../../components/Institucional/Header/Header";
+import HeaderCliente from "../../../components/Cliente/HeaderCliente/HeaderCliente";
 import iconeCarne from "../../../assets/Institucional/Cadastro/iconeCarne.svg";
 import iconePeixe from "../../../assets/Institucional/Cadastro/iconePeixe.svg";
 import iconeRelogio from "../../../assets/Institucional/Cadastro/iconeRelogio.svg";
@@ -152,7 +152,7 @@ function Plano() {
     return (
         <>
             <div className="flex flex-col h-screen">
-                <Header />
+                <HeaderCliente />
                 <CadastroPassos corEndereco="#2EC4B6" corPlano="#2EC4B6" corCheckout="#AEBDBC" />
                 <div className={`bg ${styles.bg}`}>
                     <div className={`card ${styles.card} flex`}>

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import CadastroPassos from "../../../components/Institucional/Cadastro/CadastroPassos";
 import imgCadastro from "../../../assets/Institucional/Cadastro/imgCadastro.svg";
 import Header from "../../../components/Institucional/Header/Header";
 import api from "../../../api/api";
@@ -70,13 +69,12 @@ function InformacoesPessoais() {
       senha: inputSenha,
     };
     console.log(corpoRequisicao);
-    navigate('/cadastro/endereco');
+    navigate('/login');
   }
 
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <CadastroPassos corEndereco="#AEBDBC" corPlano="#AEBDBC" corCheckout="#AEBDBC" />
       <div className={`bg ${styles.bg}`}>
         <div className={`card ${styles.card} flex p-4`}>
           <div className="flex flex-col w-full max-w-md mx-auto">
