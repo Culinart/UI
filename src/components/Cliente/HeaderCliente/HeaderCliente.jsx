@@ -1,11 +1,11 @@
 import React from "react"
 import style from './HeaderCliente.module.css';
-import pedidos from '../../../assets/header/purchase_order.svg';
-import receitas from '../../../assets/header/cooking_book.svg';
-import meuPlano from '../../../assets/header/to_do.svg';
-import suporte from '../../../assets/header/request_service.svg';
-import perfil from '../../../assets/header/profile.svg';
-import logout from '../../../assets/header/logout.svg';
+import pedidos from '../../../assets/Institucional/header/purchase_order.svg';
+import receitas from '../../../assets/Institucional/header/cooking_book.svg';
+import meuPlano from '../../../assets/Institucional/header/to_do.svg';
+import suporte from '../../../assets/Institucional/header/request_service.svg';
+import perfil from '../../../assets/Institucional/header/profile.svg';
+import logout from '../../../assets/Institucional/header/logout.svg';
 
 function HeaderCliente() {
     return (
