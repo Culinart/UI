@@ -153,7 +153,7 @@ function Plano() {
         <>
             <div className="flex flex-col h-screen">
                 <HeaderCliente />
-                <CadastroPassos corEndereco="#2EC4B6" corPlano="#2EC4B6" corCheckout="#AEBDBC" />
+                <CadastroPassos corPlano="#F29311" corCheckout="#CCD7D6" />
                 <div className={`bg ${styles.bg}`}>
                     <div className={`card ${styles.card} flex`}>
                         <div className="flex flex-col w-full items-center">

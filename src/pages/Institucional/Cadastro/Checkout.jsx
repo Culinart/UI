@@ -9,14 +9,14 @@ function Checkout() {
     const navigate = useNavigate();
 
     const handleButtonClick = () => {
-        navigate('/login');
+        navigate('/cliente/pedidos');
     }
 
     return (
         <>
             <div className="flex flex-col h-screen">
                 <HeaderCliente />
-                <CadastroPassos corEndereco="#2EC4B6" corPlano="#2EC4B6" corCheckout="#2EC4B6" />
+                <CadastroPassos corPlano="#F29311" corCheckout="#F29311" />
                 <div className={`bg ${styles.bg}`}>
                     <div className={`card ${styles.card} flex`}>
                         <div className="flex flex-col w-full items-center">

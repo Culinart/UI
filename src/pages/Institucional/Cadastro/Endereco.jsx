@@ -75,7 +75,7 @@ function Endereco() {
         <>
             <div className="flex flex-col h-screen">
                 <HeaderCliente />
-                <CadastroPassos corEndereco="#2EC4B6" corPlano="#AEBDBC" corCheckout="#AEBDBC" />
+                <CadastroPassos corPlano="#CCD7D6" corCheckout="#CCD7D6" />
                 <div className={`bg ${styles.bg}`}>
                     <div className={`card ${styles.card} flex`}>
                         <div className="flex">
