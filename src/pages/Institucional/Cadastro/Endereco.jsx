@@ -81,10 +81,18 @@ function Endereco() {
             setInputCidade(resposta.data.localidade);
             setInputEstado(resposta.data.uf);
             setInputLogradouro(resposta.data.logradouro);
+            printar();
           })
           .catch((erro) => {
             console.log(erro);
           });
+      }
+
+      function printar() {
+        console.log(inputBairro);
+        console.log(inputCidade);
+        console.log(inputEstado);
+        console.log(inputLogradouro);
       }
 
     return (

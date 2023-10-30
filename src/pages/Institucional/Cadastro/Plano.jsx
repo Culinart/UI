@@ -144,8 +144,27 @@ function Plano() {
             console.log("Selected Dia da semana:", diaSemanaSelecionado);
             console.log("Selected Time:", selectedTime);
 
+    //         const corpoRequisicao = {
+    //             preferencias: preferenciasSelecionadas,
+    //             qtdPessoas: pessoasSelecionadas,
+    //             qtdRefeicoesDia: refeicoesSelecionadas,
+    //             qtdDiasSemana: diasSelecionados,
+    //             horaEntrega: selectedTime,
+    //             diaSemana: diaSemanaSelecionado,
+    //         };
+
+    //         api
+    //       .post(`/planos?id=${idUsuario}`, corpoRequisicao)
+    //       .then((response) => {
+    //         console.log("Resposta", response);
+    //         navigate('/cadastro/checkout');
+    //     })
+    //     .catch((erro) => {
+    //         console.log("Erro", erro);
+    //     });
+
+      }
             navigate('/cadastro/checkout');
-        }
     };
 
 
