@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import api from "../../../api/api";
 import CadastroPassos from "../../../components/Institucional/Cadastro/CadastroPassos";
 import HeaderCliente from "../../../components/Cliente/HeaderCliente/HeaderCliente";
 import imgEndereco from "../../../assets/Institucional/Cadastro/imgEndereco.svg"
@@ -71,6 +72,21 @@ function Endereco() {
         navigate('/cadastro/plano');
     }
 
+    function buscarEnderecoPorCep(cep) {
+        api
+          .get(`/enderecos/buscarCEP?cep=${cep}`)
+          .then((resposta) => {
+            console.log(resposta.data);
+            setInputBairro(resposta.data.bairro);
+            setInputCidade(resposta.data.localidade);
+            setInputEstado(resposta.data.uf);
+            setInputLogradouro(resposta.data.logradouro);
+          })
+          .catch((erro) => {
+            console.log(erro);
+          });
+      }
+
     return (
         <>
             <div className="flex flex-col h-screen">
@@ -124,6 +140,9 @@ function Endereco() {
                                                             handleCepChange(e);
                                                             setFieldValue("cep", e.target.value);
                                                         }}
+                                                        onBlur={(e) => {
+                                                            buscarEnderecoPorCep(e.target.value);
+                                                          }}
                                                     />
                                                     <ErrorMessage name="cep" component="div" className="text-red-500 font-medium text-xs" />
                                                 </div>

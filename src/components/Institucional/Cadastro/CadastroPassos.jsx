@@ -20,10 +20,10 @@ function CadastroPassos(props) {
                     <div className="flex-col items-center justify-center">
                         <svg  className="flex w-full justify-center" width="32" height="32" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="22" cy="22" r="22" fill={plano} />
-                            <path d="M10.9727 15.4093L21.9929 22.369L32.9383 15.4501" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M21.9941 34.7084V22.3551" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M19.4103 8.65376L12.7457 12.6989C11.2356 13.6114 10 15.8996 10 17.7791V25.4744C10 27.3539 11.2356 29.6421 12.7457 30.5546L19.4103 34.5997C20.8331 35.4578 23.1669 35.4578 24.5897 34.5997L31.2543 30.5546C32.7644 29.6421 34 27.3539 34 25.4744V17.7791C34 15.8996 32.7644 13.6114 31.2543 12.6989L24.5897 8.65376C23.1544 7.78208 20.8331 7.78208 19.4103 8.65376Z" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M28.2327 23.3087V18.3239L16.3887 10.8601" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M10.9727 15.4093L21.9929 22.369L32.9383 15.4501" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                            <path d="M21.9941 34.7084V22.3551" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                            <path d="M19.4103 8.65376L12.7457 12.6989C11.2356 13.6114 10 15.8996 10 17.7791V25.4744C10 27.3539 11.2356 29.6421 12.7457 30.5546L19.4103 34.5997C20.8331 35.4578 23.1669 35.4578 24.5897 34.5997L31.2543 30.5546C32.7644 29.6421 34 27.3539 34 25.4744V17.7791C34 15.8996 32.7644 13.6114 31.2543 12.6989L24.5897 8.65376C23.1544 7.78208 20.8331 7.78208 19.4103 8.65376Z" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                            <path d="M28.2327 23.3087V18.3239L16.3887 10.8601" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
 
 
