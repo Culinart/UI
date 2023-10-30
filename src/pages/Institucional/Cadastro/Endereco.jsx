@@ -72,28 +72,26 @@ function Endereco() {
         navigate('/cadastro/plano');
     }
 
-    function buscarEnderecoPorCep(cep) {
+    function buscarEnderecoPorCep(cep, setFieldValue) {
         api
-          .get(`/enderecos/buscarCEP?cep=${cep}`)
-          .then((resposta) => {
-            console.log(resposta.data);
-            setInputBairro(resposta.data.bairro);
-            setInputCidade(resposta.data.localidade);
-            setInputEstado(resposta.data.uf);
-            setInputLogradouro(resposta.data.logradouro);
-            printar();
-          })
-          .catch((erro) => {
-            console.log(erro);
-          });
-      }
-
-      function printar() {
-        console.log(inputBairro);
-        console.log(inputCidade);
-        console.log(inputEstado);
-        console.log(inputLogradouro);
-      }
+            .get(`/enderecos/buscarCEP?cep=${cep}`)
+            .then((resposta) => {
+                console.log(resposta.data);
+                setFieldValue("cep", cep);
+                setFieldValue("bairro", resposta.data.bairro);
+                setFieldValue("cidade", resposta.data.localidade);
+                setFieldValue("estado", resposta.data.uf);
+                setFieldValue("logradouro", resposta.data.logradouro);
+                setInputCep(cep);
+                setInputBairro(resposta.data.bairro);
+                setInputCidade(resposta.data.localidade);
+                setInputEstado(resposta.data.uf);
+                setInputLogradouro(resposta.data.logradouro);
+            })
+            .catch((erro) => {
+                console.log(erro);
+            });
+    }
 
     return (
         <>
@@ -146,12 +144,12 @@ function Endereco() {
                                                         value={inputCep}
                                                         onChange={(e) => {
                                                             handleCepChange(e);
-                                                            setFieldValue("cep", e.target.value);
                                                         }}
                                                         onBlur={(e) => {
-                                                            buscarEnderecoPorCep(e.target.value);
-                                                          }}
+                                                            buscarEnderecoPorCep(e.target.value, setFieldValue);
+                                                        }}
                                                     />
+
                                                     <ErrorMessage name="cep" component="div" className="text-red-500 font-medium text-xs" />
                                                 </div>
                                                 <span className="w-8"></span>
@@ -275,7 +273,7 @@ function Endereco() {
                                     )}
                                 </Formik>
                             </div>
-                            <img src={imgEndereco} className="ml-2"/>
+                            <img src={imgEndereco} className="ml-2" />
                         </div>
                     </div>
                 </div>
