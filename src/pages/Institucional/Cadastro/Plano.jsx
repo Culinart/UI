@@ -137,34 +137,24 @@ function Plano() {
 
     const cadastrarPlano = () => {
         if (validateConstants()) {
-            console.log("Selected preferencias:", preferenciasSelecionadas);
-            console.log("Selected Pessoas:", pessoasSelecionadas);
-            console.log("Selected Refeições por dia:", refeicoesSelecionadas);
-            console.log("Selected Dias por semana:", diasSelecionados);
-            console.log("Selected Dia da semana:", diaSemanaSelecionado);
-            console.log("Selected Time:", selectedTime);
-
-    //         const corpoRequisicao = {
-    //             preferencias: preferenciasSelecionadas,
-    //             qtdPessoas: pessoasSelecionadas,
-    //             qtdRefeicoesDia: refeicoesSelecionadas,
-    //             qtdDiasSemana: diasSelecionados,
-    //             horaEntrega: selectedTime,
-    //             diaSemana: diaSemanaSelecionado,
-    //         };
-
-    //         api
-    //       .post(`/planos?id=${idUsuario}`, corpoRequisicao)
-    //       .then((response) => {
-    //         console.log("Resposta", response);
-    //         navigate('/cadastro/checkout');
-    //     })
-    //     .catch((erro) => {
-    //         console.log("Erro", erro);
-    //     });
-
-      }
+            const corpoRequisicao = {
+                preferencias: preferenciasSelecionadas,
+                qtdPessoas: pessoasSelecionadas,
+                qtdRefeicoesDia: refeicoesSelecionadas,
+                qtdDiasSemana: diasSelecionados,
+                horaEntrega: selectedTime,
+                diaSemana: diaSemanaSelecionado,
+            };
+            api
+          .post(`/planos/${idUsuario}`, corpoRequisicao)
+          .then((response) => {
+            console.log("Resposta", response);
             navigate('/cadastro/checkout');
+        })
+        .catch((erro) => {
+            console.log("Erro", erro);
+        });
+      }
     };
 
 

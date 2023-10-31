@@ -69,7 +69,15 @@ function InformacoesPessoais() {
       senha: inputSenha,
     };
     console.log(corpoRequisicao);
-    navigate('/login');
+    api
+            .post(`/usuarios/cadastro`, corpoRequisicao)
+            .then((response) => {
+                console.log("Resposta", response);
+                navigate('/login');
+            })
+            .catch((erro) => {
+                console.log("Erro", erro);
+            });
   }
 
   return (

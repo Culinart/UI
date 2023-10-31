@@ -73,7 +73,6 @@ function Endereco() {
             complemento: inputComplemento
         };
         console.log(corpoRequisicao);
-
         api
             .post(`/${idUsuario}`, corpoRequisicao)
             .then((response) => {
