@@ -1,8 +1,101 @@
-import React from "react";
+import React, { useState } from "react";
 import HeaderCliente from "../../components/Cliente/HeaderCliente/HeaderCliente";
 import iconeBusca from "../../assets/Cliente/iconeBusca.svg";
+import { FiEdit } from "react-icons/fi";
+import CardReceita from "../../components/Cliente/Receitas/CardReceita";
+import Preferencia from "../../components/Cliente/Receitas/Preferencia";
 
 function Receitas() {
+  const [showOptions, setShowOptions] = useState(false);
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [preferencias, setPreferencias] = useState([
+    {
+      nome: "Picante",
+      corFundo: "#F54A4A",
+      corTexto: "#FFFFFF",
+    },
+    {
+      nome: "Koreana",
+      corFundo: "#BDC2DE",
+      corTexto: "#000000",
+    },
+  ]);
+
+  const toggleOptions = () => {
+    setShowOptions(!showOptions);
+  };
+
+  const options = [
+    "Carnes",
+    "Vegetariano",
+    "Pescetariano",
+    "Vegano",
+    "Rápido e Fácil",
+    "Fit e Saudável",
+  ];
+
+  const handleOptionChange = (option) => {
+    if (selectedOptions.includes(option)) {
+      setSelectedOptions(selectedOptions.filter((item) => item !== option));
+    } else {
+      setSelectedOptions([...selectedOptions, option]);
+    }
+  };
+
+  const receitas = [
+    {
+      nome: "Receita 1",
+      tempoPreparo: "1 Hora e 30 Minutos",
+      categorias: ["Categoria 1"],
+      preferencias: [{
+        nome: "Picante",
+        corFundo: "#F54A4A",
+        corTexto: "#FFFFFF",
+      },
+      {
+        nome: "Koreana",
+        corFundo: "#BDC2DE",
+        corTexto: "#000000",
+      }],
+      nota: 5,
+      qtdAvaliacoes: 100,
+    },
+    {
+      nome: "Receita 2",
+      tempoPreparo: "45 Minutos",
+      categorias: ["Categoria 2"],
+      preferencias: [{
+        nome: "Picante",
+        corFundo: "#F54A4A",
+        corTexto: "#FFFFFF",
+      },
+      {
+        nome: "Koreana",
+        corFundo: "#BDC2DE",
+        corTexto: "#000000",
+      }],
+      nota: 4.5,
+      qtdAvaliacoes: 80,
+    },
+    {
+      nome: "Receita 3",
+      tempoPreparo: "2 Horas",
+      categorias: ["Categoria 3"],
+      preferencias: [{
+        nome: "Picante",
+        corFundo: "#F54A4A",
+        corTexto: "#FFFFFF",
+      },
+      {
+        nome: "Koreana",
+        corFundo: "#BDC2DE",
+        corTexto: "#000000",
+      }],
+      nota: 4.8,
+      qtdAvaliacoes: 120,
+    },
+  ];
+
   return (
     <>
       <HeaderCliente />
@@ -10,19 +103,26 @@ function Receitas() {
         <div className="items-center justify-between w-4/5 flex border-b border-gray-300">
           <h1 className="text-2xl text-[#045D53] mb-4">Receitas</h1>
           <div className="relative flex items-center">
-            <select
-              className="border border-gray-300 rounded-md py-1 px-2 mr-2"
-              name="categorias"
-              id="categorias"
+            <div
+              className="border border-gray-300 bg-white rounded-md py-1 px-6 mr-8 cursor-pointer"
+              onClick={toggleOptions}
             >
-              <option value="todas">Categorias</option>
-              <option value="categoria1">Carnes</option>
-              <option value="categoria2">Vegetariano</option>
-              <option value="categoria2">Pescetariano</option>
-              <option value="categoria2">Vegano</option>
-              <option value="categoria2">Rápido e Fácil</option>
-              <option value="categoria2">Fit e Saudável</option>
-            </select>
+              Categorias
+            </div>
+            {showOptions && (
+              <div className="absolute mt-48 p-2 bg-white border border-gray-300 rounded-md">
+                {options.map((option) => (
+                  <label key={option} className="block">
+                    <input
+                      type="checkbox"
+                      checked={selectedOptions.includes(option)}
+                      onChange={() => handleOptionChange(option)}
+                    />
+                    {option}
+                  </label>
+                ))}
+              </div>
+            )}
             <div className="relative">
               <input
                 type="text"
@@ -37,6 +137,30 @@ function Receitas() {
             </div>
           </div>
         </div>
+      </div>
+      <div className="flex-col">
+        <div className="items-center justify-center w-full flex mt-4">
+          <div className="items-center justify-start w-4/5 flex text-[#3F4747]">
+            <h2 className="mr-4">Preferências</h2>
+            <FiEdit />
+          </div>
+        </div>
+        <div
+          className="mt-4 mb-8 flex flex-wrap"
+          style={{
+            marginLeft: "10%", 
+            marginRight: "10%",
+          }}
+        >
+          {preferencias.map((preferencia) => (
+            <Preferencia key={preferencia.nome} preferencia={preferencia} /> 
+          ))}
+        </div>
+      </div>
+      <div className="flex justify-between mt-4" style={{ marginRight: "10%", marginLeft: "10%" }}>
+        {receitas.map((receita, index) => (
+          <CardReceita key={index} receita={receita} />
+        ))}
       </div>
     </>
   );
