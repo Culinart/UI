@@ -9,11 +9,25 @@ import Checkout from './pages/Institucional/Cadastro/Checkout.jsx';
 import Pedidos from './pages/Cliente/Pedidos.jsx';
 import ComoFunciona from './pages/Institucional/ComoFunciona/ComoFunciona.jsx';
 import Login from './pages/Institucional/Login/Login.jsx';
+import { ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.minimal.css";
 
 function App() {
 
   return (
     <>
+      <ToastContainer
+        limit={3}
+        draggable
+        rtl={false}
+        pauseOnHover
+        closeOnClick
+        autoClose={2500}
+        pauseOnFocusLoss
+        newestOnTop={false}
+        position="top-right"
+        hideProgressBar={false}
+      />
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
