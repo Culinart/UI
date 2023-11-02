@@ -4,20 +4,25 @@ import Preferencia from "./Preferencia";
 
 function CardReceita(props) {
     const {
+        imagem,
         nome,
         tempoPreparo,
         categorias,
         preferencias,
         nota,
         qtdAvaliacoes,
+        favorito,
     } = props.receita;
 
     return (
         <div className="p-4 border rounded-lg mb-4 bg-white">
-            <div className="flex items-center justify-between">
-                <button>
-                    <FaHeart className="text-red-500 text-2xl" />
+            <div className="relative">
+                <button className="absolute top-0 left-0 bg-white rounded-lg p-2">
+                    <FaHeart
+                        className={favorito ? "text-red-500 text-2xl" : "text-gray-400 text-2xl"}
+                    />
                 </button>
+                <img src={imagem} alt="Imagem da Receita" style={{ width: '280px', height: '160px', borderRadius: '1.2rem' }} />
             </div>
             <h2 className="text-lg font-semibold mt-2">{nome}</h2>
             <div>
@@ -34,22 +39,15 @@ function CardReceita(props) {
                 ))}
             </div>
             <div className="flex items-center mt-2">
-        <div className="flex items-center">
-          <FaClock className="text-gray-400 text-xl mr-2" size={16}/> 
-          <span className="text-sm">{tempoPreparo}</span>
-        </div>
-      </div>
-            <div className="flex items-center mt-2">
                 <div className="flex items-center">
                     <FaStar className="text-yellow-400 text-xl mr-2" />
                     <span className="text-sm">{nota}</span>
                 </div>
-                <div className="mx-2">|</div>
-                <div>
-                    <span className="text-sm">{qtdAvaliacoes} Avaliações</span>
+                <div className="ml-2 mr-4 items-center">
+                    <span className="text-sm">({qtdAvaliacoes} Avaliações)</span>
                 </div>
             </div>
-            <div className="flex justify-end mt-2">
+            <div className="flex justify-end ">
                 <button>
                     <FaPlusCircle className="text-green-500 text-2xl" />
                 </button>

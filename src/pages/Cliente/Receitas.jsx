@@ -4,6 +4,7 @@ import iconeBusca from "../../assets/Cliente/iconeBusca.svg";
 import { FiEdit } from "react-icons/fi";
 import CardReceita from "../../components/Cliente/Receitas/CardReceita";
 import Preferencia from "../../components/Cliente/Receitas/Preferencia";
+import temp from "../../assets/Cliente/temp.svg";
 
 function Receitas() {
   const [showOptions, setShowOptions] = useState(false);
@@ -44,8 +45,8 @@ function Receitas() {
 
   const receitas = [
     {
+      imagem: temp,
       nome: "Receita 1",
-      tempoPreparo: "1 Hora e 30 Minutos",
       categorias: ["Categoria 1"],
       preferencias: [{
         nome: "Picante",
@@ -59,10 +60,11 @@ function Receitas() {
       }],
       nota: 5,
       qtdAvaliacoes: 100,
+      favorito: true
     },
     {
+      imagem: temp,
       nome: "Receita 2",
-      tempoPreparo: "45 Minutos",
       categorias: ["Categoria 2"],
       preferencias: [{
         nome: "Picante",
@@ -76,10 +78,11 @@ function Receitas() {
       }],
       nota: 4.5,
       qtdAvaliacoes: 80,
+      favorito: false
     },
     {
+      imagem: temp,
       nome: "Receita 3",
-      tempoPreparo: "2 Horas",
       categorias: ["Categoria 3"],
       preferencias: [{
         nome: "Picante",
@@ -93,6 +96,7 @@ function Receitas() {
       }],
       nota: 4.8,
       qtdAvaliacoes: 120,
+      favorito: false
     },
   ];
 
