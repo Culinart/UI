@@ -6,7 +6,6 @@ function CardReceita(props) {
     const {
         imagem,
         nome,
-        tempoPreparo,
         categorias,
         preferencias,
         nota,
@@ -24,10 +23,10 @@ function CardReceita(props) {
                 </button>
                 <img src={imagem} alt="Imagem da Receita" style={{ width: '280px', height: '160px', borderRadius: '1.2rem' }} />
             </div>
-            <h2 className="text-lg font-semibold mt-2">{nome}</h2>
+            <h2 className=" text-lg font-semibold mt-2">{nome}</h2>
             <div>
                 {categorias.map((categoria) => (
-                    <span key={categoria} className="mr-2 text-gray-400">
+                    <span key={categoria} className=" text-sm mr-2 text-gray-600">
                         {categoria}
                     </span>
                 ))}
