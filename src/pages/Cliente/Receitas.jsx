@@ -43,8 +43,36 @@ function Receitas() {
     }
   };
 
+  const respostaPedido = [
+    {
+        pedido: [{
+            id: 2,
+            status: 'ativo'
+        }],
+        receita: [{
+            id: 1,
+            nome: 'Receita 1'
+        }]
+    },
+    {
+        pedido: [{
+            id: 1,
+            status: 'inativo'
+        }],
+        receita: [{
+            id: 1,
+            nome: 'Receita 1'
+        },
+        {
+            id: 2,
+            nome: 'Receita 2'
+        }]
+    }
+]
+
   const receitas = [
     {
+      id: 1,
       imagem: temp,
       nome: "Receita 1",
       categorias: ["Categoria 1"],
@@ -63,6 +91,7 @@ function Receitas() {
       favorito: true
     },
     {
+      id: 2,
       imagem: temp,
       nome: "Receita 2",
       categorias: ["Categoria 2"],
@@ -81,6 +110,7 @@ function Receitas() {
       favorito: false
     },
     {
+      id: 3,
       imagem: temp,
       nome: "Receita 3",
       categorias: ["Categoria 3"],
@@ -107,26 +137,7 @@ function Receitas() {
         <div className="items-center justify-between w-4/5 flex border-b border-gray-300">
           <h1 className="text-2xl text-[#045D53] mb-4">Receitas</h1>
           <div className="relative flex items-center">
-            <div
-              className="border border-gray-300 bg-white rounded-md py-1 px-6 mr-8 cursor-pointer"
-              onClick={toggleOptions}
-            >
-              Categorias
-            </div>
-            {showOptions && (
-              <div className="absolute mt-48 p-2 bg-white border border-gray-300 rounded-md">
-                {options.map((option) => (
-                  <label key={option} className="block">
-                    <input
-                      type="checkbox"
-                      checked={selectedOptions.includes(option)}
-                      onChange={() => handleOptionChange(option)}
-                    />
-                    {option}
-                  </label>
-                ))}
-              </div>
-            )}
+            
             <div className="relative">
               <input
                 type="text"
@@ -162,10 +173,11 @@ function Receitas() {
         </div>
       </div>
       <div className="flex justify-between mt-4" style={{ marginRight: "10%", marginLeft: "10%" }}>
-        {receitas.map((receita, index) => (
-          <CardReceita key={index} receita={receita} />
-        ))}
-      </div>
+  {receitas.map((receita, index) => (
+    <CardReceita key={index} receita={receita} pedidosReceita={respostaPedido} />
+  ))}
+</div>
+
     </>
   );
 }
