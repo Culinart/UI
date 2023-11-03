@@ -5,8 +5,12 @@ import { FiEdit } from "react-icons/fi";
 import CardReceita from "../../components/Cliente/Receitas/CardReceita";
 import Preferencia from "../../components/Cliente/Receitas/Preferencia";
 import temp from "../../assets/Cliente/temp.svg";
+import { useNavigate } from 'react-router-dom';
 
 function Receitas() {
+
+  const navigate = useNavigate();
+
   const [showOptions, setShowOptions] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [preferencias, setPreferencias] = useState([
@@ -42,6 +46,10 @@ function Receitas() {
       setSelectedOptions([...selectedOptions, option]);
     }
   };
+
+  const navegarPreferencias = () => {
+    navigate("/cliente/preferencias");
+  }
 
   const respostaPedido = [
     {
@@ -142,7 +150,7 @@ function Receitas() {
               <input
                 type="text"
                 className="w-80 border border-gray-300 rounded-full py-1 px-4"
-                placeholder="Qual será sua próxima refeição?"
+                placeholder="Pesquisar..."
               />
               <img
                 src={iconeBusca}
@@ -157,7 +165,7 @@ function Receitas() {
         <div className="items-center justify-center w-full flex mt-4">
           <div className="items-center justify-start w-4/5 flex text-[#3F4747]">
             <h2 className="mr-4">Preferências</h2>
-            <FiEdit />
+            <FiEdit onClick={navegarPreferencias} className="cursor-pointer"/>
           </div>
         </div>
         <div
