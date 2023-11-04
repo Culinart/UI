@@ -13,11 +13,11 @@ function HeaderCliente() {
             <header className={style.header}>
                 <div className={style.conteudo}>
                     <div className={style.itens_esquerda}>
-                        <a href="/" className={style.item}>
+                        <a href="/cliente/pedidos" className={style.item}>
                             <img src={pedidos} alt="Icone de pedidos" />
                             <span>Pedidos</span>
                         </a>
-                        <a href="/" className={style.item}>
+                        <a href="/cliente/receitas" className={style.item}>
                             <img src={receitas} alt="Icone de receitas" />
                             <span>Receitas</span>
                         </a>
