@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import CadastroPassos from "../../../components/Institucional/Cadastro/CadastroPassos";
-import Header from "../../../components/Institucional/Header/Header";
+import HeaderCliente from "../../../components/Cliente/HeaderCliente/HeaderCliente";
 import iconeCarne from "../../../assets/Institucional/Cadastro/iconeCarne.svg";
 import iconePeixe from "../../../assets/Institucional/Cadastro/iconePeixe.svg";
 import iconeRelogio from "../../../assets/Institucional/Cadastro/iconeRelogio.svg";
@@ -137,23 +137,32 @@ function Plano() {
 
     const cadastrarPlano = () => {
         if (validateConstants()) {
-            console.log("Selected preferencias:", preferenciasSelecionadas);
-            console.log("Selected Pessoas:", pessoasSelecionadas);
-            console.log("Selected Refeições por dia:", refeicoesSelecionadas);
-            console.log("Selected Dias por semana:", diasSelecionados);
-            console.log("Selected Dia da semana:", diaSemanaSelecionado);
-            console.log("Selected Time:", selectedTime);
-
+            const corpoRequisicao = {
+                preferencias: preferenciasSelecionadas,
+                qtdPessoas: pessoasSelecionadas,
+                qtdRefeicoesDia: refeicoesSelecionadas,
+                qtdDiasSemana: diasSelecionados,
+                horaEntrega: selectedTime,
+                diaSemana: diaSemanaSelecionado,
+            };
+            api
+          .post(`/planos/${idUsuario}`, corpoRequisicao)
+          .then((response) => {
+            console.log("Resposta", response);
             navigate('/cadastro/checkout');
-        }
+        })
+        .catch((erro) => {
+            console.log("Erro", erro);
+        });
+      }
     };
 
 
     return (
         <>
             <div className="flex flex-col h-screen">
-                <Header />
-                <CadastroPassos corEndereco="#2EC4B6" corPlano="#2EC4B6" corCheckout="#AEBDBC" />
+                <HeaderCliente />
+                <CadastroPassos corPlano="#F29311" corCheckout="#CCD7D6" />
                 <div className={`bg ${styles.bg}`}>
                     <div className={`card ${styles.card} flex`}>
                         <div className="flex flex-col w-full items-center">

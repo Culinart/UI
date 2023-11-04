@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from 'react-router-dom';
 import CadastroPassos from "../../../components/Institucional/Cadastro/CadastroPassos";
-import Header from "../../../components/Institucional/Header/Header";
+import HeaderCliente from "../../../components/Cliente/HeaderCliente/HeaderCliente";
 import styles from "./CadastroStyles.module.css";
 
 function Checkout() {
@@ -9,14 +9,14 @@ function Checkout() {
     const navigate = useNavigate();
 
     const handleButtonClick = () => {
-        navigate('/login');
+        navigate('/cliente/pedidos');
     }
 
     return (
         <>
             <div className="flex flex-col h-screen">
-                <Header />
-                <CadastroPassos corEndereco="#2EC4B6" corPlano="#2EC4B6" corCheckout="#2EC4B6" />
+                <HeaderCliente />
+                <CadastroPassos corPlano="#F29311" corCheckout="#F29311" />
                 <div className={`bg ${styles.bg}`}>
                     <div className={`card ${styles.card} flex`}>
                         <div className="flex flex-col w-full items-center">
