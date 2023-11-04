@@ -10,6 +10,7 @@ import Pedidos from './pages/Cliente/Pedidos.jsx';
 import ComoFunciona from './pages/Institucional/ComoFunciona/ComoFunciona.jsx';
 import Login from './pages/Institucional/Login/Login.jsx';
 import Receitas from './pages/Cliente/Receitas.jsx';
+import Preferencias from './pages/Cliente/Preferencias.jsx';
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/cliente/pedidos" element={<Pedidos />} />
           <Route path="/cliente/receitas" element={<Receitas />} />
+          <Route path="/cliente/preferencias" element={<Preferencias />} />
           <Route path="/*" element={<NotFound />} />
         </Routes>
       </Router>

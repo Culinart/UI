@@ -1,104 +1,63 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import HeaderCliente from "../../components/Cliente/HeaderCliente/HeaderCliente";
 import iconeBusca from "../../assets/Cliente/iconeBusca.svg";
 import { FiEdit } from "react-icons/fi";
 import CardReceita from "../../components/Cliente/Receitas/CardReceita";
 import Preferencia from "../../components/Cliente/Receitas/Preferencia";
-import temp from "../../assets/Cliente/temp.svg";
+import { useNavigate } from 'react-router-dom';
+import api from "../../api/api";
 
 function Receitas() {
-  const [showOptions, setShowOptions] = useState(false);
-  const [selectedOptions, setSelectedOptions] = useState([]);
-  const [preferencias, setPreferencias] = useState([
-    {
-      nome: "Picante",
-      corFundo: "#F54A4A",
-      corTexto: "#FFFFFF",
-    },
-    {
-      nome: "Koreana",
-      corFundo: "#BDC2DE",
-      corTexto: "#000000",
-    },
-  ]);
+  const navigate = useNavigate();
 
-  const toggleOptions = () => {
-    setShowOptions(!showOptions);
-  };
+  const [preferencias, setPreferencias] = useState([]);
+  const [receitasPedido, setReceitasPedido] = useState([]);
+  const [searchInput, setSearchInput] = useState('');
 
-  const options = [
-    "Carnes",
-    "Vegetariano",
-    "Pescetariano",
-    "Vegano",
-    "Rápido e Fácil",
-    "Fit e Saudável",
-  ];
+  useEffect(() => {
+    buscarPreferencias();
+    buscarReceitasPedidos();
+  }, []);
 
-  const handleOptionChange = (option) => {
-    if (selectedOptions.includes(option)) {
-      setSelectedOptions(selectedOptions.filter((item) => item !== option));
+  const buscarPreferencias = () => {
+    api.get('/preferencias').then((response) => {
+      setPreferencias(response.data);
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+
+  const buscarReceitasPedidos = () => {
+    api.get('/receitas').then((response) => {
+      setReceitasPedido(response.data);
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+
+  const navegarPreferencias = () => {
+    navigate("/cliente/preferencias");
+  }
+
+  const handleSearchInputChange = (e) => {
+    const { value } = e.target;
+    setSearchInput(value);
+  }
+
+  useEffect(() => {
+    if (searchInput) {
+      console.log(searchInput);
+      api.get(`/search-receitas?name=${searchInput}`)
+        .then((response) => {
+          setReceitasPedido(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     } else {
-      setSelectedOptions([...selectedOptions, option]);
+      buscarReceitasPedidos();
     }
-  };
-
-  const receitas = [
-    {
-      imagem: temp,
-      nome: "Receita 1",
-      categorias: ["Categoria 1"],
-      preferencias: [{
-        nome: "Picante",
-        corFundo: "#F54A4A",
-        corTexto: "#FFFFFF",
-      },
-      {
-        nome: "Koreana",
-        corFundo: "#BDC2DE",
-        corTexto: "#000000",
-      }],
-      nota: 5,
-      qtdAvaliacoes: 100,
-      favorito: true
-    },
-    {
-      imagem: temp,
-      nome: "Receita 2",
-      categorias: ["Categoria 2"],
-      preferencias: [{
-        nome: "Picante",
-        corFundo: "#F54A4A",
-        corTexto: "#FFFFFF",
-      },
-      {
-        nome: "Koreana",
-        corFundo: "#BDC2DE",
-        corTexto: "#000000",
-      }],
-      nota: 4.5,
-      qtdAvaliacoes: 80,
-      favorito: false
-    },
-    {
-      imagem: temp,
-      nome: "Receita 3",
-      categorias: ["Categoria 3"],
-      preferencias: [{
-        nome: "Picante",
-        corFundo: "#F54A4A",
-        corTexto: "#FFFFFF",
-      },
-      {
-        nome: "Koreana",
-        corFundo: "#BDC2DE",
-        corTexto: "#000000",
-      }],
-      nota: 4.8,
-      qtdAvaliacoes: 120,
-      favorito: false
-    },
-  ];
+  }, [searchInput]);
 
   return (
     <>
@@ -107,31 +66,13 @@ function Receitas() {
         <div className="items-center justify-between w-4/5 flex border-b border-gray-300">
           <h1 className="text-2xl text-[#045D53] mb-4">Receitas</h1>
           <div className="relative flex items-center">
-            <div
-              className="border border-gray-300 bg-white rounded-md py-1 px-6 mr-8 cursor-pointer"
-              onClick={toggleOptions}
-            >
-              Categorias
-            </div>
-            {showOptions && (
-              <div className="absolute mt-48 p-2 bg-white border border-gray-300 rounded-md">
-                {options.map((option) => (
-                  <label key={option} className="block">
-                    <input
-                      type="checkbox"
-                      checked={selectedOptions.includes(option)}
-                      onChange={() => handleOptionChange(option)}
-                    />
-                    {option}
-                  </label>
-                ))}
-              </div>
-            )}
             <div className="relative">
               <input
                 type="text"
                 className="w-80 border border-gray-300 rounded-full py-1 px-4"
-                placeholder="Qual será sua próxima refeição?"
+                placeholder="Pesquisar..."
+                value={searchInput}
+                onChange={handleSearchInputChange}
               />
               <img
                 src={iconeBusca}
@@ -146,25 +87,25 @@ function Receitas() {
         <div className="items-center justify-center w-full flex mt-4">
           <div className="items-center justify-start w-4/5 flex text-[#3F4747]">
             <h2 className="mr-4">Preferências</h2>
-            <FiEdit />
+            <FiEdit onClick={navegarPreferencias} className="cursor-pointer" />
           </div>
         </div>
-        <div
-          className="mt-4 mb-8 flex flex-wrap"
-          style={{
-            marginLeft: "10%", 
-            marginRight: "10%",
-          }}
-        >
+        <div className="mt-4 mb-8 flex flex-wrap" style={{ marginLeft: "10%", marginRight: "10%" }}>
           {preferencias.map((preferencia) => (
-            <Preferencia key={preferencia.nome} preferencia={preferencia} /> 
+            <Preferencia key={preferencia.nome} preferencia={preferencia} />
           ))}
         </div>
       </div>
       <div className="flex justify-between mt-4" style={{ marginRight: "10%", marginLeft: "10%" }}>
-        {receitas.map((receita, index) => (
-          <CardReceita key={index} receita={receita} />
-        ))}
+        {receitasPedido.length > 0 ? (
+          receitasPedido.map((receita, index) => (
+            <CardReceita key={index} receita={receita} pedidosReceita={receitasPedido} />
+          ))
+        ) : (
+          <div className="text-gray-600 text-2xl w-full text-center">
+            Nenhum resultado encontrado
+          </div>
+        )}
       </div>
     </>
   );

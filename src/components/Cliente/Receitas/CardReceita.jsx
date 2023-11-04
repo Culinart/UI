@@ -1,9 +1,14 @@
-import React from "react";
-import { FaHeart, FaClock, FaStar, FaPlusCircle } from 'react-icons/fa';
+import React, { useState } from "react";
+import { FaHeart, FaStar, FaPlusCircle, FaCheckCircle } from 'react-icons/fa';
 import Preferencia from "./Preferencia";
+import ModalPedido from "../Pedido/ModalPedido";
+import ModalReceita from "./ModalReceita";
+import api from "../../../api/api";
 
 function CardReceita(props) {
+
     const {
+        id,
         imagem,
         nome,
         categorias,
@@ -11,14 +16,55 @@ function CardReceita(props) {
         nota,
         qtdAvaliacoes,
         favorito,
+        pedido,
     } = props.receita;
 
+    const [isFavorito, setIsFavorito] = useState(favorito);
+    const [isReceitaNoPedido, setIsReceitaNoPedido] = useState(pedido);
+    const [isModalReceitaOpen, setIsModalReceitaOpen] = useState(false);
+    const [isModalPedidoOpen, setIsModalPedidoOpen] = useState(false);
+
+    const handleFavoritedClick = async (e) => {
+        e.stopPropagation();
+        setIsFavorito(!isFavorito);
+        try {
+            await api.post(`/receitas/favorito/${id}`, {
+                Favorito: !isFavorito,
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleAdicionarClick = (e) => {
+        e.stopPropagation();
+        if (isReceitaNoPedido) {
+            setIsReceitaNoPedido(!isReceitaNoPedido);
+        }
+        setIsModalPedidoOpen(true); 
+    };
+
+    const openModalReceita = () => {
+        setIsModalReceitaOpen(true);
+    };
+
+    const closeModalReceita = () => {
+        setIsModalReceitaOpen(false);
+    };
+
+    const closeModalPedido = () => {
+        setIsModalPedidoOpen(false);
+    };
+
     return (
-        <div className="p-4 border rounded-lg mb-4 bg-white">
+        <div className="p-4 border rounded-lg mb-4 bg-white hover:shadow-md hover:border-orange-400" onClick={openModalReceita}>
             <div className="relative">
-                <button className="absolute top-0 left-0 bg-white rounded-lg p-2">
+                <button
+                    className="absolute top-0 left-0 bg-white rounded-lg p-2"
+                    onClick={handleFavoritedClick}
+                >
                     <FaHeart
-                        className={favorito ? "text-red-500 text-2xl" : "text-gray-400 text-2xl"}
+                        className={isFavorito ? "text-red-500 text-2xl" : "text-gray-400 text-2xl"}
                     />
                 </button>
                 <img src={imagem} alt="Imagem da Receita" style={{ width: '280px', height: '160px', borderRadius: '1.2rem' }} />
@@ -31,7 +77,6 @@ function CardReceita(props) {
                     </span>
                 ))}
             </div>
-
             <div className="flex items-center mt-2">
                 {preferencias.map((preferencia) => (
                     <Preferencia key={preferencia.nome} preferencia={preferencia} />
@@ -46,11 +91,21 @@ function CardReceita(props) {
                     <span className="text-sm">({qtdAvaliacoes} Avaliações)</span>
                 </div>
             </div>
-            <div className="flex justify-end ">
-                <button>
-                    <FaPlusCircle className="text-green-500 text-2xl" />
+            <div className="flex justify-end">
+                <button onClick={handleAdicionarClick}>
+                    {isReceitaNoPedido ? (
+                        <FaCheckCircle className="text-green-500 text-2xl hover:text-green-700" />
+                    ) : (
+                        <FaPlusCircle className="text-green-500 text-2xl hover:text-green-700" />
+                    )}
                 </button>
             </div>
+            {isModalReceitaOpen && (
+                <ModalReceita receita={props.receita} oncloseModalReceita={closeModalReceita} />
+            )}
+            {isModalPedidoOpen && (
+                <ModalPedido receita={props.receita} oncloseModalPedido={closeModalPedido} />
+            )}
         </div>
     );
 }
