@@ -66,17 +66,20 @@ function Login() {
 
                     console.log("Entrei na validação de status do .then -> Login")
 
-                    var authToken = response.data.token;
-                    var nomeUsuario = response.data.nome;
-                    sessionStorage.setItem('authToken', authToken);
-                    sessionStorage.setItem('nome', nomeUsuario)
-                    console.log("Token gerado: " + authToken)
-                    console.log("Nome do usuario: " + nomeUsuario)
+                    sessionStorage.setItem('authToken', response.data.token);
+                    sessionStorage.setItem('nome', response.data.nome)
+                    sessionStorage.setItem('idUsuario', response.data.userID)
+                    sessionStorage.setItem('emailUsuario', response.data.email)
+
+                    console.log("Token gerado: " + response.data.token)
+                    console.log("Nome do usuario: " + response.data.nome)
+                    console.log("ID Usuário: " + response.data.userID)
+                    console.log("EMail usuário: " + response.data.email)
+
+                    console.log(response.data);
 
                     navigate('/cliente/pedidos');
 
-                    console.log(response.data);
-            
                     toast.success('Login realizado com sucesso!');
                 }
             })
