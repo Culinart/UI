@@ -67,8 +67,11 @@ function Login() {
                     console.log("Entrei na validação de status do .then -> Login")
 
                     var authToken = response.data.token;
-                    var authTokenArmazenado = sessionStorage.setItem('authToken', authToken);
-                    console.log("Token gerado:" + authToken)
+                    var nomeUsuario = response.data.nome;
+                    sessionStorage.setItem('authToken', authToken);
+                    sessionStorage.setItem('nome', nomeUsuario)
+                    console.log("Token gerado: " + authToken)
+                    console.log("Nome do usuario: " + nomeUsuario)
 
                     navigate('/cliente/pedidos');
 
