@@ -13,6 +13,7 @@ import imgLogin from "../../../assets/Institucional/Login/imgLogin.png"
 import ondaSuperiorDireita from "../../../assets/Institucional/Login/ondaSuperiorDireita.png"
 import ondaInferiorEsquerda from "../../../assets/Institucional/Login/ondaInferiorEsquerda.png"
 import ondaInferiorDireita from "../../../assets/Institucional/Login/ondaInferiorDireita.png"
+
 import styles from "./LoginStyles.module.css";
 
 function Login() {
