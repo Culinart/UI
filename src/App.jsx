@@ -22,10 +22,10 @@ function App() {
         rtl={false}
         pauseOnHover
         closeOnClick
-        autoClose={2500}
+        autoClose={2100}
         pauseOnFocusLoss
         newestOnTop={false}
-        position="top-right"
+        position="top-center"
         hideProgressBar={false}
       />
       <Router>

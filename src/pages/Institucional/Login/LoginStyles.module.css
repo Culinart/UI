@@ -117,7 +117,7 @@ body {
     background: #2EC4B6;
     border-radius: 8px;
     width: 35%;
-    height: 2.125rem;
+    height: 2.525rem;
     color: #FFFDFD;
     font-weight: 700;
     margin-bottom: 15px;
@@ -161,12 +161,14 @@ body {
     font-size: 16px;
     font-weight: 700;
     margin-bottom: 2rem;
+    cursor: pointer;
 }
 
 /* Mensagem de erro  */
 .errorMessage {
     color: red;
-    font-size: 12px;
+    margin-top: 5px;
+    font-size: 13px;
   }
 
 .inputError{
