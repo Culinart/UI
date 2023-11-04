@@ -16,38 +16,29 @@ function CardReceita(props) {
         nota,
         qtdAvaliacoes,
         favorito,
+        pedido,
     } = props.receita;
 
     const [isFavorito, setIsFavorito] = useState(favorito);
-    const [isReceitaNoPedido, setIsReceitaNoPedido] = useState(false);
+    const [isReceitaNoPedido, setIsReceitaNoPedido] = useState(pedido);
     const [isModalReceitaOpen, setIsModalReceitaOpen] = useState(false);
     const [isModalPedidoOpen, setIsModalPedidoOpen] = useState(false);
 
-    const recipeInPedido =
-        Array.isArray(props.pedidosReceita) &&
-        props.pedidosReceita.length > 0 &&
-        props.pedidosReceita.some(
-            (item) =>
-                item.receita &&
-                item.receita.some((r) => r.id === id && item.pedido && item.pedido.some((p) => p.status === 'ativo'))
-        );
-
-        const handleFavoritedClick = async (e) => {
-            e.stopPropagation();
-            setIsFavorito(!isFavorito);
-            try {
-                await api.post(`/receitas/favorito/${id}`, {
-                    Favorito: !isFavorito,
-                });
-            } catch (error) {
-                console.log(error);
-            }
+    const handleFavoritedClick = async (e) => {
+        e.stopPropagation();
+        setIsFavorito(!isFavorito);
+        try {
+            await api.post(`/receitas/favorito/${id}`, {
+                Favorito: !isFavorito,
+            });
+        } catch (error) {
+            console.log(error);
         }
-    
-    
+    }
+
     const handleAdicionarClick = (e) => {
         e.stopPropagation();
-        if (recipeInPedido) {
+        if (isReceitaNoPedido) {
             setIsReceitaNoPedido(!isReceitaNoPedido);
         }
         setIsModalPedidoOpen(true); 
@@ -102,7 +93,7 @@ function CardReceita(props) {
             </div>
             <div className="flex justify-end">
                 <button onClick={handleAdicionarClick}>
-                    {recipeInPedido ? (
+                    {isReceitaNoPedido ? (
                         <FaCheckCircle className="text-green-500 text-2xl hover:text-green-700" />
                     ) : (
                         <FaPlusCircle className="text-green-500 text-2xl hover:text-green-700" />
