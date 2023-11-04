@@ -3,6 +3,7 @@ import { FaHeart, FaStar, FaPlusCircle, FaCheckCircle } from 'react-icons/fa';
 import Preferencia from "./Preferencia";
 import ModalPedido from "../Pedido/ModalPedido";
 import ModalReceita from "./ModalReceita";
+import api from "../../../api/api";
 
 function CardReceita(props) {
 
@@ -22,19 +23,34 @@ function CardReceita(props) {
     const [isModalReceitaOpen, setIsModalReceitaOpen] = useState(false);
     const [isModalPedidoOpen, setIsModalPedidoOpen] = useState(false);
 
-    const recipeInPedido = props.pedidosReceita.some((item) => item.receita.some((r) => r.id === id && item.pedido.some((p) => p.status === 'ativo')));
+    const recipeInPedido =
+        Array.isArray(props.pedidosReceita) &&
+        props.pedidosReceita.length > 0 &&
+        props.pedidosReceita.some(
+            (item) =>
+                item.receita &&
+                item.receita.some((r) => r.id === id && item.pedido && item.pedido.some((p) => p.status === 'ativo'))
+        );
 
-    const handleFavoritedClick = (e) => {
-        e.stopPropagation();
-        setIsFavorito(!isFavorito);
-    };
+        const handleFavoritedClick = async (e) => {
+            e.stopPropagation();
+            setIsFavorito(!isFavorito);
+            try {
+                await api.post(`/receitas/favorito/${id}`, {
+                    Favorito: !isFavorito,
+                });
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    
     
     const handleAdicionarClick = (e) => {
         e.stopPropagation();
         if (recipeInPedido) {
             setIsReceitaNoPedido(!isReceitaNoPedido);
         }
-        setIsModalPedidoOpen(true); // Always open ModalPedido when clicking plus
+        setIsModalPedidoOpen(true); 
     };
 
     const openModalReceita = () => {
