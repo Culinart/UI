@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import api from "../../../api/api";
 import CadastroPassos from "../../../components/Institucional/Cadastro/CadastroPassos";
-import Header from "../../../components/Institucional/Header/Header";
+import HeaderCliente from "../../../components/Cliente/HeaderCliente/HeaderCliente";
 import imgEndereco from "../../../assets/Institucional/Cadastro/imgEndereco.svg"
 import styles from "./CadastroStyles.module.css";
 
@@ -35,6 +36,10 @@ function Endereco() {
     const [inputLogradouro, setInputLogradouro] = useState("");
     const [inputNumero, setInputNumero] = useState("");
     const [inputComplemento, setInputComplemento] = useState("");
+
+    const idUsuario = 1;
+    localStorage.setItem("idUsuario", idUsuario);
+
 
     const estados = [
         "AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA", "MG", "MS", "MT",
@@ -68,14 +73,43 @@ function Endereco() {
             complemento: inputComplemento
         };
         console.log(corpoRequisicao);
-        navigate('/cadastro/plano');
+        api
+            .post(`/${idUsuario}`, corpoRequisicao)
+            .then((response) => {
+                console.log("Resposta", response);
+                navigate('/cadastro/plano');
+            })
+            .catch((erro) => {
+                console.log("Erro", erro);
+            });
+    }
+
+    function buscarEnderecoPorCep(cep, setFieldValue) {
+        api
+            .get(`/enderecos/buscarCEP?cep=${cep}`)
+            .then((resposta) => {
+                console.log(resposta.data);
+                setFieldValue("cep", cep);
+                setFieldValue("bairro", resposta.data.bairro);
+                setFieldValue("cidade", resposta.data.localidade);
+                setFieldValue("estado", resposta.data.uf);
+                setFieldValue("logradouro", resposta.data.logradouro);
+                setInputCep(cep);
+                setInputBairro(resposta.data.bairro);
+                setInputCidade(resposta.data.localidade);
+                setInputEstado(resposta.data.uf);
+                setInputLogradouro(resposta.data.logradouro);
+            })
+            .catch((erro) => {
+                console.log(erro);
+            });
     }
 
     return (
         <>
             <div className="flex flex-col h-screen">
-                <Header />
-                <CadastroPassos corEndereco="#2EC4B6" corPlano="#AEBDBC" corCheckout="#AEBDBC" />
+                <HeaderCliente />
+                <CadastroPassos corPlano="#CCD7D6" corCheckout="#CCD7D6" />
                 <div className={`bg ${styles.bg}`}>
                     <div className={`card ${styles.card} flex`}>
                         <div className="flex">
@@ -122,9 +156,12 @@ function Endereco() {
                                                         value={inputCep}
                                                         onChange={(e) => {
                                                             handleCepChange(e);
-                                                            setFieldValue("cep", e.target.value);
+                                                        }}
+                                                        onBlur={(e) => {
+                                                            buscarEnderecoPorCep(e.target.value, setFieldValue);
                                                         }}
                                                     />
+
                                                     <ErrorMessage name="cep" component="div" className="text-red-500 font-medium text-xs" />
                                                 </div>
                                                 <span className="w-8"></span>
@@ -248,7 +285,7 @@ function Endereco() {
                                     )}
                                 </Formik>
                             </div>
-                            <img src={imgEndereco} className="ml-2"/>
+                            <img src={imgEndereco} className="ml-2" />
                         </div>
                     </div>
                 </div>
