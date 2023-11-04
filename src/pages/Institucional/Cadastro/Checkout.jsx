@@ -9,8 +9,21 @@ function Checkout() {
     const navigate = useNavigate();
 
     const handleButtonClick = () => {
-        navigate('/cliente/pedidos');
-    }
+            api
+          .post(`/planos/ativar/${idUsuario}`, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+            }
+        })
+          .then((response) => {
+            console.log("Resposta", response);
+            navigate('/cliente/pedidos');
+        })
+        .catch((erro) => {
+            console.log("Erro ", erro);
+        });
+      }
+
 
     return (
         <>

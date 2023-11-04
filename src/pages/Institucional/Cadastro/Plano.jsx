@@ -146,7 +146,11 @@ function Plano() {
                 diaSemana: diaSemanaSelecionado,
             };
             api
-          .post(`/planos/${idUsuario}`, corpoRequisicao)
+          .post(`/planos/${idUsuario}`, corpoRequisicao, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+            }
+        })
           .then((response) => {
             console.log("Resposta", response);
             navigate('/cadastro/checkout');

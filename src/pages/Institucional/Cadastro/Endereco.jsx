@@ -37,10 +37,6 @@ function Endereco() {
     const [inputNumero, setInputNumero] = useState("");
     const [inputComplemento, setInputComplemento] = useState("");
 
-    const idUsuario = 1;
-    localStorage.setItem("idUsuario", idUsuario);
-
-
     const estados = [
         "AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA", "MG", "MS", "MT",
         "PA", "PB", "PE", "PI", "PR", "RJ", "RN", "RO", "RR", "RS", "SC", "SE", "SP", "TO"
@@ -74,7 +70,11 @@ function Endereco() {
         };
         console.log(corpoRequisicao);
         api
-            .post(`/${idUsuario}`, corpoRequisicao)
+            .post(`/${sessionStorage.getItem('idUsuario')}`, corpoRequisicao, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+                }
+            })
             .then((response) => {
                 console.log("Resposta", response);
                 navigate('/cadastro/plano');
@@ -86,7 +86,11 @@ function Endereco() {
 
     function buscarEnderecoPorCep(cep, setFieldValue) {
         api
-            .get(`/enderecos/buscarCEP?cep=${cep}`)
+            .get(`/enderecos/buscarCEP?cep=${cep}`, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+                }
+            })
             .then((resposta) => {
                 console.log(resposta.data);
                 setFieldValue("cep", cep);
