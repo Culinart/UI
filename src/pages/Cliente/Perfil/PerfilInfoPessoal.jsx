@@ -5,6 +5,7 @@ import { FiEdit } from "react-icons/fi";
 import api from "../../../api/api";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import Swal from "sweetalert2";
 
 const validationSchema = Yup.object().shape({
   nome: Yup.string()
@@ -32,6 +33,17 @@ function PerfilInfoPessoal() {
   useEffect(() => {
     buscarInfoPessoal();
   }, []);
+
+  const alertaErro = () => {
+    Swal.fire({
+        icon: "error",
+        iconColor: "#FF9F1C",
+        title: "<b>Erro ao atualizar as informações!</b>",
+        text: "Confira suas credênciais e tente novamente",
+        position: "center",
+        confirmButtonColor: "#FF9F1C"
+    })
+}
 
   const buscarInfoPessoal = () => {
     api
@@ -75,7 +87,7 @@ function PerfilInfoPessoal() {
 
   function atualizarUsuario(values) {
     if (!isEditing) {
-      return Promise.resolve(true); // No update required when not in editing mode
+      return Promise.resolve(true);
     }
 
     const telefoneNumerico = values.telefone.replace(/\D/g, "");
@@ -101,11 +113,11 @@ function PerfilInfoPessoal() {
         setNome(response.data.nome);
         setEmail(response.data.email);
         setTelefone(response.data.telefone);
-        return true; // Request successful
+        return true; 
       })
       .catch((erro) => {
         console.log("Erro", erro);
-        return false; // Request failed
+        return false;
       });
   }
 
@@ -141,12 +153,12 @@ function PerfilInfoPessoal() {
                     if (success) {
                       setIsEditing(false);
                     } else {
-                      alert("Falha ao atualizar informações. Tente novamente.");
+                      alertaErro();
                     }
                     setIsSubmitting(false);
                   })
                   .catch(() => {
-                    alert("Falha ao atualizar informações. Tente novamente.");
+                    alertaErro();
                     setIsSubmitting(false);
                   });
               }}
