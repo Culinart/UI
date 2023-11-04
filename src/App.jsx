@@ -12,6 +12,9 @@ import Login from './pages/Institucional/Login/Login.jsx';
 import Receitas from './pages/Cliente/Receitas.jsx';
 import Preferencias from './pages/Cliente/Preferencias.jsx';
 import PerfilInfoPessoal from './pages/Cliente/Perfil/PerfilInfoPessoal.jsx';
+import PerfilSenhaAutenticacao from './pages/Cliente/Perfil/PerfilSenhaAutenticacao.jsx';
+import PerfilEndereco from './pages/Cliente/Perfil/PerfilEndereco.jsx';
+import PerfilPagamento from './pages/Cliente/Perfil/PerfilPagamento.jsx';
 
 function App() {
 
@@ -30,6 +33,9 @@ function App() {
           <Route path="/cliente/receitas" element={<Receitas />} />
           <Route path="/cliente/preferencias" element={<Preferencias />} />
           <Route path="/cliente/perfil/info-pessoal" element={<PerfilInfoPessoal />} />
+          <Route path="/cliente/perfil/senha-autenticacao" element={<PerfilSenhaAutenticacao />} />
+          <Route path="/cliente/perfil/endereco" element={<PerfilEndereco />} />
+          <Route path="/cliente/perfil/pagamento" element={<PerfilPagamento />} />
           <Route path="/*" element={<NotFound />} />
         </Routes>
       </Router>
