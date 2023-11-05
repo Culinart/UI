@@ -12,10 +12,26 @@ import Login from './pages/Institucional/Login/Login.jsx';
 import Receitas from './pages/Cliente/Receitas.jsx';
 import Preferencias from './pages/Cliente/Preferencias.jsx';
 
+import { ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.minimal.css";
+
+
 function App() {
 
   return (
     <>
+      <ToastContainer
+        limit={3}
+        draggable
+        rtl={false}
+        pauseOnHover
+        closeOnClick
+        autoClose={2100}
+        pauseOnFocusLoss
+        newestOnTop={false}
+        position="top-center"
+        hideProgressBar={false}
+      />
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
