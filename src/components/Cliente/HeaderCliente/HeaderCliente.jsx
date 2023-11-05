@@ -31,7 +31,7 @@ function HeaderCliente() {
                             <img src={suporte} alt="Icone suporte" />
                             <span>Suporte</span>
                         </a>
-                        <a href="/" className={style.item}>
+                        <a href="/cliente/perfil/info-pessoal" className={style.item}>
                             <img src={perfil} alt="Icone perfil" />
                             <span>Perfil</span>
                         </a>
