@@ -6,7 +6,7 @@ import api from "../../../api/api";
 import CadastroPassos from "../../../components/Institucional/Cadastro/CadastroPassos";
 import HeaderCliente from "../../../components/Cliente/HeaderCliente/HeaderCliente";
 import imgEndereco from "../../../assets/Institucional/Cadastro/imgEndereco.svg"
-import styles from "./CadastroStyles.module.css";
+import styles from "../../Institucional/Cadastro/CadastroStyles.module.css";
 
 const validationSchema = Yup.object().shape({
     cep: Yup.string()
@@ -25,7 +25,7 @@ const validationSchema = Yup.object().shape({
     complemento: Yup.string(),
 });
 
-function Endereco() {
+function AdicionarEndereco() {
 
     const navigate = useNavigate();
 
@@ -41,6 +41,10 @@ function Endereco() {
         "AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA", "MG", "MS", "MT",
         "PA", "PB", "PE", "PI", "PR", "RJ", "RN", "RO", "RR", "RS", "SC", "SE", "SP", "TO"
     ];
+
+    const cancelar = () => {
+        navigate('/cliente/perfil/endereco');
+    }
 
     const handleCepChange = (event) => {
         const inputCep = event.target.value.replace(/\D/g, '');
@@ -67,7 +71,7 @@ function Endereco() {
             })
             .then((response) => {
                 console.log("Resposta", response);
-                navigate('/cadastro/plano');
+                navigate('/cliente/perfil/endereco');
             })
             .catch((erro) => {
                 console.log("Erro", erro);
@@ -103,12 +107,11 @@ function Endereco() {
         <>
             <div className="flex flex-col h-screen">
                 <HeaderCliente />
-                <CadastroPassos corPlano="#CCD7D6" corCheckout="#CCD7D6" />
                 <div className={`bg ${styles.bg}`}>
                     <div className={`card ${styles.card} flex`}>
                         <div className="flex">
                             <div className="flex flex-col items-center">
-                                <h2 className="text-[#DC7726] font-bold text-2xl mb-2">Onde fica sua cozinha, Chef?</h2>
+                                <h2 className="text-[#DC7726] font-bold text-2xl mb-2">Adicionar Endereço</h2>
                                 <Formik
                                     initialValues={{
                                         cep: "",
@@ -272,9 +275,14 @@ function Endereco() {
                                                 </div>
 
                                             </div>
-                                            <button type="submit" className={`bg-[#F29311] ${styles.btnCadastro}`}>
-                                                Confirmar
-                                            </button>
+                                            <div className="flex w-full justify-around">
+                                                <button onClick={cancelar} className={`bg-gray-500 ${styles.btnCadastroCancelar}`}>
+                                                    Cancelar
+                                                </button>
+                                                <button type="submit" className={`bg-[#F29311] ${styles.btnCadastro}`}>
+                                                    Confirmar
+                                                </button>
+                                            </div>
                                         </Form>
                                     )}
                                 </Formik>
@@ -288,4 +296,4 @@ function Endereco() {
     )
 }
 
-export default Endereco;
+export default AdicionarEndereco;

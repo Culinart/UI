@@ -15,6 +15,7 @@ import PerfilInfoPessoal from './pages/Cliente/Perfil/PerfilInfoPessoal.jsx';
 import PerfilSenhaAutenticacao from './pages/Cliente/Perfil/PerfilSenhaAutenticacao.jsx';
 import PerfilEndereco from './pages/Cliente/Perfil/PerfilEndereco.jsx';
 import PerfilPagamento from './pages/Cliente/Perfil/PerfilPagamento.jsx';
+import AdicionarEndereco from './pages/Cliente/Perfil/AdicionarEndereco.jsx';
 
 function App() {
 
@@ -36,6 +37,7 @@ function App() {
           <Route path="/cliente/perfil/senha-autenticacao" element={<PerfilSenhaAutenticacao />} />
           <Route path="/cliente/perfil/endereco" element={<PerfilEndereco />} />
           <Route path="/cliente/perfil/pagamento" element={<PerfilPagamento />} />
+          <Route path="/cliente/adicionar/endereco" element={<AdicionarEndereco />} />
           <Route path="/*" element={<NotFound />} />
         </Routes>
       </Router>
