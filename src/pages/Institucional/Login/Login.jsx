@@ -141,7 +141,7 @@ function Login() {
                             </div>
                             <span><input type="checkbox" /> Mantenha-me conectado</span>
                             <button type="submit" onClick={login}>Entrar</button>
-                            <a href="" className={styles.esqueci_senha}>Esqueci minha senha</a>
+                            <a href="/redefinir-senha" className={styles.esqueci_senha}>Esqueci minha senha</a>
                             <div className={styles.container_ou}>
                                 <div className={styles.linha} />
                                 <h1>ou</h1>
