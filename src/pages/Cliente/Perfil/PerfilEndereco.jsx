@@ -33,7 +33,7 @@ function PerfilEndereco() {
 
     const setEnderecoAsFavorito = (id) => {
          api
-         .put(`/enderecos/favorito/${sessionStorage.getItem("idUsuario")}/${id}`, {
+         .put(`/enderecos/favorito/${sessionStorage.getItem("idUsuario")}/${id}`, null, {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
                 }
