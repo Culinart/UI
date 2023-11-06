@@ -50,7 +50,7 @@ function RedefinirSenha() {
                     <div className="flex-col justify-center items-center w-full max-w-md bg-white p-6 rounded-lg filter drop-shadow(0px 0px 8px rgba(0, 0, 0, 0.25))">
                         <div className="flex">
                             <h1 className="text-[#DC7726] font-bold text-2xl mb-2 flex justify-center items-center w-full">
-                                Alterar Senha
+                                Redefinir Senha
                             </h1>
                         </div>
                         <Formik
