@@ -9,6 +9,7 @@ import Checkout from './pages/Institucional/Cadastro/Checkout.jsx';
 import Pedidos from './pages/Cliente/Pedidos.jsx';
 import ComoFunciona from './pages/Institucional/ComoFunciona/ComoFunciona.jsx';
 import Login from './pages/Institucional/Login/Login.jsx';
+import RedefinirSenha from './pages/Institucional/Login/RedefinirSenha.jsx';
 import Receitas from './pages/Cliente/Receitas.jsx';
 import Preferencias from './pages/Cliente/Preferencias.jsx';
 import PerfilInfoPessoal from './pages/Cliente/Perfil/PerfilInfoPessoal.jsx';
@@ -46,6 +47,7 @@ function App() {
           <Route path="/cadastro/checkout" element={<Checkout />} />
           <Route path="/como-funciona" element={<ComoFunciona />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/redefinir-senha" element={<RedefinirSenha />} />
           <Route path="/cliente/pedidos" element={<Pedidos />} />
           <Route path="/cliente/receitas" element={<Receitas />} />
           <Route path="/cliente/preferencias" element={<Preferencias />} />
