@@ -5,8 +5,6 @@ import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { BiTrash } from 'react-icons/bi';
 import api from "../../api/api";
 
-sessionStorage.setItem("idUsuario", 1);
-
 function Preferencias() {
     const [preferencias, setPreferencias] = useState([]);
     const [userPreferences, setUserPreferences] = useState([]);
@@ -17,7 +15,11 @@ function Preferencias() {
     }, [preferencias, userPreferences]);
 
     const buscarPreferencias = () => {
-        api.get('/preferencias').then((response) => {
+        api.get('/preferencias', {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+            }})
+        .then((response) => {
             setPreferencias(response.data);
         }).catch((error) => {
             console.log(error);
@@ -25,7 +27,10 @@ function Preferencias() {
     }
 
     const buscarPreferenciasUsuario = () => {
-        api.get(`/preferencias/${sessionStorage.getItem("idUsuario")}`)
+        api.get(`/preferencias/${sessionStorage.getItem("idUsuario")}`, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+            }})
         .then((response) => {
             setUserPreferences(response.data);
         }).catch((error) => {
@@ -38,7 +43,10 @@ function Preferencias() {
     }
 
     const addPreference = (preferenceId) => {
-        api.post(`/preferencias/${preferenceId}/${sessionStorage.getItem("idUsuario")}`)
+        api.post(`/preferencias/${preferenceId}/${sessionStorage.getItem("idUsuario")}`, null, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+            }})
         .then((response) => {
             setUserPreferences(response.data);
         }).catch((error) => {
@@ -47,7 +55,10 @@ function Preferencias() {
     }
 
     const removePreference = (preferenceId) => {
-        api.delete(`/preferencias/${preferenceId}/${sessionStorage.getItem("idUsuario")}`)
+        api.delete(`/preferencias/${preferenceId}/${sessionStorage.getItem("idUsuario")}`, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+            }})
         .then((response) => {
             setUserPreferences(response.data);
         }).catch((error) => {
