@@ -27,7 +27,7 @@ function Preferencias() {
     }
 
     const buscarPreferenciasUsuario = () => {
-        api.get(`/preferencias/${sessionStorage.getItem("idUsuario")}`, {
+        api.get(`/usuarios/preferencias/${sessionStorage.getItem("idUsuario")}`, {
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
             }})
@@ -43,7 +43,7 @@ function Preferencias() {
     }
 
     const addPreference = (preferenceId) => {
-        api.post(`/preferencias/${preferenceId}/${sessionStorage.getItem("idUsuario")}`, null, {
+        api.post(`/usuarios/preferencias/${preferenceId}/${sessionStorage.getItem("idUsuario")}`, null, {
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
             }})
@@ -55,7 +55,7 @@ function Preferencias() {
     }
 
     const removePreference = (preferenceId) => {
-        api.delete(`/preferencias/${preferenceId}/${sessionStorage.getItem("idUsuario")}`, {
+        api.delete(`/usuarios/preferencias/${preferenceId}/${sessionStorage.getItem("idUsuario")}`, {
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
             }})
