@@ -22,7 +22,7 @@ import PerfilSenhaAutenticacaoFornecedor from './pages/Fornecedor/Perfil/PerfilS
 
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.minimal.css";
-
+import ReceitasFornecedor from './pages/Fornecedor/Receitas/Receitas.jsx';
 
 function App() {
 
@@ -60,6 +60,7 @@ function App() {
           <Route path="/cliente/adicionar/endereco" element={<AdicionarEndereco />} />
           <Route path="/fornecedor/perfil/info-pessoal" element={<PerfilInfoPessoalFornecedor />} />
           <Route path="/fornecedor/perfil/senha-autenticacao" element={<PerfilSenhaAutenticacaoFornecedor />} />
+          <Route path="/fornecedor/receitas" element={<ReceitasFornecedor />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
