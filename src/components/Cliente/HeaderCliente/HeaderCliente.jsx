@@ -21,7 +21,7 @@ function HeaderCliente() {
                             <img src={receitas} alt="Icone de receitas" />
                             <span>Receitas</span>
                         </a>
-                        <a href="/" className={style.item}>
+                        <a href="/cliente/meu-plano" className={style.item}>
                             <img src={meuPlano} alt="Icone meu plano" />
                             <span>Meu Plano</span>
                         </a>
