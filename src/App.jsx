@@ -17,6 +17,7 @@ import PerfilSenhaAutenticacao from './pages/Cliente/Perfil/PerfilSenhaAutentica
 import PerfilEndereco from './pages/Cliente/Perfil/PerfilEndereco.jsx';
 import PerfilPagamento from './pages/Cliente/Perfil/PerfilPagamento.jsx';
 import AdicionarEndereco from './pages/Cliente/Perfil/AdicionarEndereco.jsx';
+import MeuPlano from './pages/Cliente/MeuPlano.jsx';
 import PerfilInfoPessoalFornecedor from './pages/Fornecedor/Perfil/PerfilFornecedor.jsx';
 import PerfilSenhaAutenticacaoFornecedor from './pages/Fornecedor/Perfil/PerfilSenhaAutenticacaoFornecedor.jsx';
 
@@ -58,6 +59,7 @@ function App() {
           <Route path="/cliente/perfil/endereco" element={<PerfilEndereco />} />
           <Route path="/cliente/perfil/pagamento" element={<PerfilPagamento />} />
           <Route path="/cliente/adicionar/endereco" element={<AdicionarEndereco />} />
+          <Route path="/cliente/meu-plano" element={<MeuPlano />} />
           <Route path="/fornecedor/perfil/info-pessoal" element={<PerfilInfoPessoalFornecedor />} />
           <Route path="/fornecedor/perfil/senha-autenticacao" element={<PerfilSenhaAutenticacaoFornecedor />} />
           <Route path="*" element={<NotFound />} />
