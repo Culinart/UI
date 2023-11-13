@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { FiEdit } from "react-icons/fi";
 import HeaderCliente from "../../components/Cliente/HeaderCliente/HeaderCliente";
 import iconeCarne from "../../assets/Institucional/Cadastro/iconeCarne.svg";
 import iconePeixe from "../../assets/Institucional/Cadastro/iconePeixe.svg";
@@ -8,11 +8,11 @@ import iconeSuco from "../../assets/Institucional/Cadastro/iconeSuco.svg";
 import iconePlanta from "../../assets/Institucional/Cadastro/iconePlanta.svg";
 import iconeMaca from "../../assets/Institucional/Cadastro/iconeMaca.svg";
 import styles from "./MeuPlano.module.css";
+import api from "../../api/api";
 
 function MeuPlano() {
 
-    const navigate = useNavigate();
-
+    const [isEditing, setIsEditing] = useState(false);
     const [preferenciasSelecionadas, setPreferenciasSelecionadas] = useState([]);
     const [pessoasSelecionadas, setPessoasSelecionadas] = useState(0);
     const [refeicoesSelecionadas, setRefeicoesSelecionadas] = useState(0);
@@ -20,6 +20,10 @@ function MeuPlano() {
     const [diaSemanaSelecionado, setDiaSemanaSelecionado] = useState(0);
     const [selectedTime, setSelectedTime] = useState("");
     const [error, setError] = useState("");
+
+    useEffect(() => {
+        buscarPlano();
+    }, []);
 
     const handlePreferencias = (preferencia) => {
         if (preferenciasSelecionadas.includes(preferencia)) {
@@ -134,6 +138,27 @@ function MeuPlano() {
         return true;
     };
 
+    const buscarPlano = () => {
+        api
+            .get(`/planos/${sessionStorage.getItem('idUsuario')}`, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+                }
+            })
+            .then((response) => {
+                console.log("Resposta", response);
+                setPreferenciasSelecionadas(response.data.categoria);
+                setPessoasSelecionadas(response.data.qtdPessoas);
+                setRefeicoesSelecionadas(response.data.qtdRefeicoesDia);
+                setDiasSelecionados(response.data.qtdDiasSemana);
+                setDiaSemanaSelecionado(response.data.diaSemana);
+                setSelectedTime(response.data.horaEntrega);
+            })
+            .catch((erro) => {
+                console.log("Erro", erro);
+            });
+    }
+
     const atualizarPlano = () => {
         if (validateConstants()) {
             const corpoRequisicao = {
@@ -145,14 +170,14 @@ function MeuPlano() {
                 diaSemana: diaSemanaSelecionado,
             };
             api
-                .put(`/planos/${idUsuario}`, corpoRequisicao, {
+                .put(`/planos/${sessionStorage.getItem('idUsuario')}`, corpoRequisicao, {
                     headers: {
                         Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
                     }
                 })
                 .then((response) => {
                     console.log("Resposta", response);
-                    navigate('/cadastro/checkout');
+                    buscarPlano();
                 })
                 .catch((erro) => {
                     console.log("Erro", erro);
@@ -160,15 +185,26 @@ function MeuPlano() {
         }
     };
 
+    const cancelarEdicao = () => {
+        setIsEditing(false);
+        setError("");
+    }
+
 
     return (
         <>
             <div className="flex flex-col">
                 <HeaderCliente />
                 <div className={`bg ${styles.bg} mt-10 mb-10`}>
-                    <div className={`card ${styles.card} flex`}>
+                <div className={`card ${styles.card} flex relative`}>
+                        {!isEditing && (
+                            <FiEdit
+                                onClick={() => setIsEditing(true)}
+                                className="cursor-pointer text-[#DC7726] text-2xl absolute top-10 right-14"
+                            />
+                        )}
                         <div className="flex flex-col w-full items-center">
-                            <div className="flex flex-col items-center">
+                            <div className="flex items-center">
                                 <h2 className="text-[#045D53] font-semibold text-2xl mb-2 mt-8">Meu Plano</h2>
                             </div>
                             <div className="flex mt-4 mb-4">
@@ -283,57 +319,69 @@ function MeuPlano() {
                                     {error}
                                 </div>
                             )}
-
-                            <div className="flex flex-col w-full items-center mt-20">
-                                <div className="flex flex-col items-center">
-                                    <h2 className="text-[#045D53] font-semibold text-2xl mb-6">Checkout</h2>
-                                </div>
-                                <div className="flex">
-                                    <div>
-                                        <div className="flex-col">
-                                            <div className="flex justify-between mb-6">
-                                                <div className="mr-8">
-                                                    + X Refeições por mês
-                                                </div>
-                                                <div>
-                                                    R$ XXX,XX
-                                                </div>
-                                            </div>
-                                            <div className="flex justify-between mb-4">
-                                                <div className="mr-8">
-                                                    + Frete
-                                                </div>
-                                                <div>
-                                                    R$ XXX,XX
-                                                </div>
-                                            </div>
+                            {isEditing && (
+                                <>
+                                    <div className="flex flex-col w-full items-center mt-4">
+                                        <div className="flex flex-col items-center">
+                                            <h2 className="text-[#045D53] font-semibold text-2xl mb-6">Checkout</h2>
                                         </div>
-                                        <span className={`${styles.divisorTotalPreco}`}></span>
-                                        <div className="flex justify-between mb-6 mt-2">
-                                            <div className="font-semibold">
-                                                Total à pagar
-                                            </div>
-                                            <div className="font-semibold">
-                                                R$ XXX,XX
+                                        <div className="flex">
+                                            <div>
+                                                <div className="flex-col">
+                                                    <div className="flex justify-between mb-6">
+                                                        <div className="mr-8">
+                                                            + X Refeições por mês
+                                                        </div>
+                                                        <div>
+                                                            R$ XXX,XX
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex justify-between mb-4">
+                                                        <div className="mr-8">
+                                                            + Frete
+                                                        </div>
+                                                        <div>
+                                                            R$ XXX,XX
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <span className={`${styles.divisorTotalPreco}`}></span>
+                                                <div className="flex justify-between mb-6 mt-2">
+                                                    <div className="font-semibold">
+                                                        Total à pagar
+                                                    </div>
+                                                    <div className="font-semibold">
+                                                        R$ XXX,XX
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <button
-                                type="submit"
-                                className={`bg-[#F29311] ${styles.btnCadastro} mt-16`}
-                                onClick={atualizarPlano}
-                            >
-                                Confirmar
-                            </button>
-                        </div>
+                                    <div className="flex space-x-12 mt-4 mb-4">
+                                    <button
+                                        className={` bg-gray-400 ${styles.btnCadastroCancelar}`}
+                                        onClick={cancelarEdicao}
+                                        >
+                                        Cancelar
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className={`bg-[#F29311] ${styles.btnCadastro}`}
+                                        onClick={atualizarPlano}
+                                        >
+                                        Confirmar
+                                    </button>
+                                        </div>
+                                </>
+                            )}
+
                         </div>
                     </div>
                 </div>
-            </>
-            );
+            </div>
+        </>
+    );
 
 }
 
-            export default MeuPlano;
+export default MeuPlano;
