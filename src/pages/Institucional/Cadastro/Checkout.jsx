@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import CadastroPassos from "../../../components/Institucional/Cadastro/CadastroPassos";
 import HeaderCliente from "../../../components/Cliente/HeaderCliente/HeaderCliente";
 import styles from "./CadastroStyles.module.css";
+import api from "../../../api/api";
 
 function Checkout() {
 
@@ -10,7 +11,7 @@ function Checkout() {
 
     const handleButtonClick = () => {
             api
-          .post(`/planos/ativar/${idUsuario}`, {
+          .put(`/usuarios/ativar/${sessionStorage.getItem("idUsuario")}`, null,{
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
             }
