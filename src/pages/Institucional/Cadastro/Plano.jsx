@@ -9,6 +9,7 @@ import iconeSuco from "../../../assets/Institucional/Cadastro/iconeSuco.svg";
 import iconePlanta from "../../../assets/Institucional/Cadastro/iconePlanta.svg";
 import iconeMaca from "../../../assets/Institucional/Cadastro/iconeMaca.svg";
 import styles from "./CadastroStyles.module.css";
+import api from "../../../api/api";
 
 function Plano() {
 
@@ -146,7 +147,7 @@ function Plano() {
                 diaSemana: diaSemanaSelecionado,
             };
             api
-          .post(`/planos/${idUsuario}`, corpoRequisicao, {
+          .post(`/planos/${sessionStorage.getItem("idUsuario")}`, corpoRequisicao, {
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
             }

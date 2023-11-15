@@ -6,6 +6,7 @@ import api from "../../../api/api";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Swal from "sweetalert2";
+import { useNavigate } from 'react-router-dom';
 
 const validationSchema = Yup.object().shape({
     nome: Yup.string()
@@ -21,6 +22,9 @@ const validationSchema = Yup.object().shape({
 });
 
 function PerfilInfoPessoal() {
+
+    const navigate = useNavigate();
+
     const [isEditing, setIsEditing] = useState(false);
     const [inputNome, setInputNome] = useState("");
     const [inputEmail, setInputEmail] = useState("");
@@ -32,6 +36,10 @@ function PerfilInfoPessoal() {
 
     useEffect(() => {
         buscarInfoPessoal();
+        const permissao = sessionStorage.getItem('permissao');
+        if (permissao === null || parseInt(permissao, 10) < 1) {
+            navigate('/cadastro/endereco')
+        }
     }, []);
 
     const alertaErro = () => {
@@ -100,7 +108,7 @@ function PerfilInfoPessoal() {
         console.log(corpoRequisicao);
 
         return api
-            .put(`/usuarios/info-pessoal`, corpoRequisicao, null, {
+            .put(`/usuarios/${sessionStorage.getItem("idUsuario")}`, corpoRequisicao, {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
                 },

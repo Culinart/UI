@@ -58,19 +58,18 @@ function Endereco() {
     };
 
     function cadastrarEndereco() {
-        console.log(corpoRequisicao);
         api
-            .post(`/enderecos/${sessionStorage.getItem('idUsuario')}?cep=${inputCep}&numero=${inputNumero}&complemento=${inputComplemento}`, {
+            .post(`/enderecos/${sessionStorage.getItem('idUsuario')}?cep=${inputCep}&numero=${inputNumero}&complemento=${inputComplemento}`, null, {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
                 }
             })
             .then((response) => {
-                console.log("Resposta", response);
+                console.log("Resposta: ", response);
                 navigate('/cadastro/plano');
             })
             .catch((erro) => {
-                console.log("Erro", erro);
+                console.log("Erro: ", erro);
             });
     }
 
