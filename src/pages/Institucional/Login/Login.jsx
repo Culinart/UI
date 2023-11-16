@@ -68,18 +68,15 @@ function Login() {
                     console.log("Entrei na validação de status do .then -> Login")
 
                     sessionStorage.setItem('authToken', response.data.token);
-                    sessionStorage.setItem('nome', response.data.nome)
-                    sessionStorage.setItem('idUsuario', response.data.userID)
-                    sessionStorage.setItem('emailUsuario', response.data.email)
-
-                    console.log("Token gerado: " + response.data.token)
-                    console.log("Nome do usuario: " + response.data.nome)
-                    console.log("ID Usuário: " + response.data.userID)
-                    console.log("EMail usuário: " + response.data.email)
+                    sessionStorage.setItem('nome', response.data.nome);
+                    sessionStorage.setItem('idUsuario', response.data.userID);
+                    sessionStorage.setItem('emailUsuario', response.data.email);
+                    sessionStorage.setItem('permissao', response.data.permissao);
+                    sessionStorage.setItem('isAtivo', response.data.isAtivo);
 
                     console.log(response.data);
 
-                    navigate('/cliente/pedidos');
+                    verificarPermissao();
 
                     toast.success('Login realizado com sucesso!');
                 }
@@ -98,6 +95,14 @@ function Login() {
                     alertaErroInterno()
                 }
             })
+    }
+
+    const verificarPermissao = () => {
+        if (sessionStorage.getItem('permissao') == 'ADMINISTRADOR' || sessionStorage.getItem('permissao') == 'FUNCIONARIO') {
+            navigate('/fornecedor/pedidos');
+        } else {
+            navigate('/cliente/pedidos');
+        }
     }
 
     return (

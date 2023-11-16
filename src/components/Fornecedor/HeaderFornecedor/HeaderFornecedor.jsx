@@ -32,7 +32,7 @@ function HeaderFornecedor() {
                         </a>
                     </div>
                     <div className={style.itens_direita}>
-                        <a href="/" className={style.item}>
+                        <a href="https://app.pipefy.com/public/form/VqIeVqHH"  target="_blank" className={style.item}>
                             <img src={suporte} alt="Icone suporte" />
                             <span>Suporte</span>
                         </a>
