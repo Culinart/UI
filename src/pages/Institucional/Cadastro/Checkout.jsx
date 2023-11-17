@@ -11,7 +11,7 @@ function Checkout() {
 
     const handleButtonClick = () => {
             api
-          .put(`/usuarios/ativar/${sessionStorage.getItem("idUsuario")}`, null,{
+          .put(`/permissionar/cliente/${sessionStorage.getItem("idUsuario")}`, null,{
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
             }
