@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import api from "../../../api/api";
-import CadastroPassos from "../../../components/Institucional/Cadastro/CadastroPassos";
 import HeaderCliente from "../../../components/Cliente/HeaderCliente/HeaderCliente";
 import imgEndereco from "../../../assets/Institucional/Cadastro/imgEndereco.svg"
 import styles from "../../Institucional/Cadastro/CadastroStyles.module.css";
@@ -36,6 +35,14 @@ function AdicionarEndereco() {
     const [inputLogradouro, setInputLogradouro] = useState("");
     const [inputNumero, setInputNumero] = useState("");
     const [inputComplemento, setInputComplemento] = useState("");
+
+    useEffect(() => {
+        if (sessionStorage.getItem('permissao') == null || sessionStorage.getItem('permissao') == '') {
+            navigate('/')
+        } else if (sessionStorage.getItem('permissao') == 'USUARIO') {
+            navigate('/cadastro/endereco')
+        }
+    }, []);
 
     const estados = [
         "AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA", "MG", "MS", "MT",

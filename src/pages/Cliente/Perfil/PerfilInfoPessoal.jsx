@@ -36,7 +36,9 @@ function PerfilInfoPessoal() {
 
     useEffect(() => {
         buscarInfoPessoal();
-        if (sessionStorage.getItem('permissao') == null || sessionStorage.getItem('permissao') == 'USUARIO') {
+        if (sessionStorage.getItem('permissao') == null || sessionStorage.getItem('permissao') == '') {
+            navigate('/')
+        } else if (sessionStorage.getItem('permissao') == 'USUARIO') {
             navigate('/cadastro/endereco')
         }
     }, []);

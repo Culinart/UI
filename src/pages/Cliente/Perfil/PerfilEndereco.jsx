@@ -3,14 +3,23 @@ import HeaderCliente from "../../../components/Cliente/HeaderCliente/HeaderClien
 import SidebarPerfil from "../../../components/Cliente/Perfil/SidebarPerfil";
 import { FiHome } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import api from "../../../api/api";
 
 function PerfilEndereco() {
+
+    const navigate = useNavigate();
+
     const [enderecos, setEnderecos] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         buscarEnderecos();
+        if (sessionStorage.getItem('permissao') == null || sessionStorage.getItem('permissao') == '') {
+            navigate('/')
+        } else if (sessionStorage.getItem('permissao') == 'USUARIO') {
+            navigate('/cadastro/endereco')
+        }
     }, []);
 
     const buscarEnderecos = () => {
