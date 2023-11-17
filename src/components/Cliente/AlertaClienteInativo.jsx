@@ -24,7 +24,7 @@ function AlertaClienteInativo(props) {
 
     return (
        <>
-       {!props.isAtivo && 
+       {!props.permissao || props.permissao == 'USUARIO' && 
             <div onClick={alertaFinalizarCadastro} className=" absolute w-full h-full z-20">
             </div>
             }

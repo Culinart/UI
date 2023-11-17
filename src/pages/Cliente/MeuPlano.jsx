@@ -21,16 +21,11 @@ function MeuPlano() {
     const [diaSemanaSelecionado, setDiaSemanaSelecionado] = useState(0);
     const [selectedTime, setSelectedTime] = useState("");
     const [error, setError] = useState("");
-    const [isAtivo, setAtivo] = useState(false);
+    const [isAtivo, setAtivo] = useState(sessionStorage.getItem('isAtivo'));
+    const [permissao, setPermissao] = useState(sessionStorage.getItem('permissao'));
 
     useEffect(() => {
         buscarPlano();
-        const permissao = sessionStorage.getItem('permissao');
-        if (permissao === null || parseInt(permissao, 10) < 1) {
-            setAtivo(false);
-        } else {
-            setAtivo(true);
-        }
     }, []);
 
     const handlePreferencias = (preferencia) => {
@@ -203,7 +198,7 @@ function MeuPlano() {
         <>
             <div className="flex flex-col">
                 <HeaderCliente />
-                <AlertaClienteInativo isAtivo={isAtivo} />
+                <AlertaClienteInativo permissao={permissao} />
                 <div className={`bg ${styles.bg} mt-10 mb-10`}>
                 <div className={`card ${styles.card} flex relative`}>
                         {!isEditing && (
