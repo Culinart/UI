@@ -19,6 +19,9 @@ const validationSchema = Yup.object().shape({
     telefone: Yup.string()
         .matches(/^\(\d{2}\) \d{5}-\d{4}$/, "Insira o seu telefone com o DDD")
         .required("Insira o seu telefone com o DDD"),
+    cpf: Yup.string()
+        .matches(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, "Insira um CPF válido")
+        .required("Insira o seu CPF"),
 });
 
 function PerfilInfoPessoal() {
@@ -33,15 +36,17 @@ function PerfilInfoPessoal() {
     const [email, setEmail] = useState("");
     const [telefone, setTelefone] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [inputCPF, setInputCPF] = useState("");
+    const [cpf, setCPF] = useState("");
 
-    useEffect(() => {
-        buscarInfoPessoal();
-        if (sessionStorage.getItem('permissao') == null || sessionStorage.getItem('permissao') == '') {
-            navigate('/')
-        } else if (sessionStorage.getItem('permissao') == 'USUARIO') {
-            navigate('/cadastro/endereco')
-        }
-    }, []);
+    // useEffect(() => {
+    //     buscarInfoPessoal();
+    //     if (sessionStorage.getItem('permissao') == null || sessionStorage.getItem('permissao') == '') {
+    //         navigate('/')
+    //     } else if (sessionStorage.getItem('permissao') == 'USUARIO') {
+    //         navigate('/cadastro/endereco')
+    //     }
+    // }, []);
 
     const alertaErro = () => {
         Swal.fire({
@@ -54,7 +59,7 @@ function PerfilInfoPessoal() {
         })
     }
 
-    const buscarInfoPessoal = () => {
+    function buscarInfoPessoal() {
         api
             .get(`/usuarios/${sessionStorage.getItem('idUsuario')}`, {
                 headers: {
@@ -66,14 +71,16 @@ function PerfilInfoPessoal() {
                 setInputNome(response.data.nome);
                 setInputEmail(response.data.email);
                 setInputTelefone(response.data.telefone);
+                setInputCPF(response.data.cpf);
                 setNome(response.data.nome);
                 setEmail(response.data.email);
                 setTelefone(response.data.telefone);
+                setCPF(response.data.cpf);
             })
             .catch((erro) => {
                 console.log("Erro", erro);
             });
-    };
+    }
 
     const handleTelefoneChange = (event) => {
         const inputTelefone = event.target.value.replace(/\D/g, "");
@@ -94,7 +101,30 @@ function PerfilInfoPessoal() {
         }
     };
 
-    function atualizarUsuario(values) {
+    const handleCPFChange = (event) => {
+        const inputCPF = event.target.value.replace(/\D/g, "");
+        let cpfFormatado = "";
+
+        if (inputCPF.length > 0) {
+            cpfFormatado = `${inputCPF.slice(0, 3)}.`;
+
+            if (inputCPF.length > 3) {
+                cpfFormatado += `${inputCPF.slice(3, 6)}.`;
+
+                if (inputCPF.length > 6) {
+                    cpfFormatado += `${inputCPF.slice(6, 9)}-`;
+
+                    if (inputCPF.length > 9) {
+                        cpfFormatado += `${inputCPF.slice(9, 11)}`;
+                    }
+                }
+            }
+
+            setInputCPF(cpfFormatado);
+        }
+    };
+
+    const atualizarUsuario = (values) => {
         if (!isEditing) {
             return Promise.resolve(true);
         }
@@ -105,6 +135,7 @@ function PerfilInfoPessoal() {
             nome: values.nome,
             email: values.email,
             telefone: telefoneNumerico,
+            cpf: values.cpf,
         };
         console.log(corpoRequisicao);
 
@@ -119,16 +150,18 @@ function PerfilInfoPessoal() {
                 setInputNome(response.data.nome);
                 setInputEmail(response.data.email);
                 setInputTelefone(response.data.telefone);
+                setInputCPF(response.data.cpf);
                 setNome(response.data.nome);
                 setEmail(response.data.email);
                 setTelefone(response.data.telefone);
+                setCPF(response.data.cpf);
                 return true;
             })
             .catch((erro) => {
                 console.log("Erro", erro);
                 return false;
             });
-    }
+    };
 
     return (
         <>
@@ -148,6 +181,7 @@ function PerfilInfoPessoal() {
                                 nome: nome,
                                 email: email,
                                 telefone: telefone,
+                                cpf: cpf,
                             }}
                             validationSchema={validationSchema}
                             onSubmit={(values, { setSubmitting }) => {
@@ -155,6 +189,7 @@ function PerfilInfoPessoal() {
                                 setInputNome(values.nome);
                                 setInputEmail(values.email);
                                 setInputTelefone(inputTelefone);
+                                setInputCPF(values.cpf); // Adicionado para atualizar o campo CPF
 
                                 atualizarUsuario(values)
                                     .then((success) => {
@@ -173,8 +208,8 @@ function PerfilInfoPessoal() {
                         >
                             {({ values, setFieldValue, submitForm, errors }) => (
                                 <Form className="flex flex-col space-y-6 w-full items-start ml-16 mt-2">
-                                    <div className="flex flex-col mt-4 mb-4">
-                                        <label className="text-lg mb-2">Nome:</label>
+                                    <div className="flex flex-col mt-2 mb-2">
+                                        <label className="text-lg">Nome:</label>
                                         {isEditing ? (
                                             <>
                                                 <Field
@@ -192,7 +227,7 @@ function PerfilInfoPessoal() {
                                             <p>{nome}</p>
                                         )}
                                     </div>
-                                    <div className="flex flex-col mt-4 mb-4">
+                                    <div className="flex flex-col mt-2 mb-2">
                                         <label className="text-lg mb-2">Email:</label>
                                         {isEditing ? (
                                             <>
@@ -211,7 +246,28 @@ function PerfilInfoPessoal() {
                                             <p>{email}</p>
                                         )}
                                     </div>
-                                    <div className="flex flex-col mt-4 mb-4">
+                                    <div className="flex flex-col mt-2 mb-2">
+                                        <label className="text-lg mb-2">CPF:</label>
+                                        {isEditing ? (
+                                            <>
+                                                <Field
+                                                    type="text"
+                                                    name="cpf"
+                                                    maxLength="14"
+                                                    value={inputCPF}
+                                                    className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
+                                                    onChange={(e) => {
+                                                        handleCPFChange(e);
+                                                        setFieldValue("cpf", e.target.value);
+                                                    }}
+                                                />
+                                                {errors.cpf && <ErrorMessage name="cpf" component="div" className="text-red-500 text-sm" />}
+                                            </>
+                                        ) : (
+                                            <p>{cpf}</p>
+                                        )}
+                                    </div>
+                                    <div className="flex flex-col mt-2 mb-2">
                                         <label className="text-lg mb-2">Telefone:</label>
                                         {isEditing ? (
                                             <>
