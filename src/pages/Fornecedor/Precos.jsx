@@ -1,43 +1,72 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FiEdit, FiInfo } from "react-icons/fi";
 import Swal from "sweetalert2";
 import CurrencyInput from 'react-currency-masked-input'
 import HeaderCliente from "../../components/Cliente/HeaderCliente/HeaderCliente";
+import api from "../../api/api";
 
 function Precos() {
     const [isEditing, setIsEditing] = useState(false);
     const [showTooltip, setShowTooltip] = useState(false);
-    const [precoCarnes, setPrecoCarnes] = useState("R$00,00");
-    const [precoPeixes, setPrecoPeixes] = useState("R$00,00");
-    const [precoVegano, setPrecoVegano] = useState("R$00,00");
-    const [precoVegetariano, setPrecoVegetariano] = useState("R$00,00");
-    const [precoRapido, setPrecoRapido] = useState("R$00,00");
-    const [precoFit, setPrecoFit] = useState("R$00,00");
+    const [precos, setPrecos] = useState([]);
+
+    useEffect(() => {
+        buscarPrecos();
+    }, []);
 
     const toggleTooltip = () => {
         setShowTooltip(!showTooltip);
     };
 
-    const atualizarPrecos = () => {
-        const carne = document.getElementById("Carnes").value
-        const peixe = document.getElementById("Pescetariano").value
-        const vegano = document.getElementById("Vegano").value
-        const vegetariano = document.getElementById("Vegetariano").value
-        const rapido = document.getElementById("Rápido e Fácil").value
-        const fit = document.getElementById("Fit e Saudável").value
-        if (carne == "" || peixe == "" || vegano == "" || vegetariano == "" || rapido == "" || fit == ""
-            || carne == null || peixe == null || vegano == null || vegetariano == null || rapido == null || fit == null
-        ) {
-            alertaValoresInválidos();
-        } else {
-            setPrecoCarnes("R$" + (document.getElementById("Carnes").value).replaceAll(".", ","));
-            setPrecoVegetariano("R$" + (document.getElementById("Vegetariano").value).replaceAll(".", ","));
-            setPrecoVegano("R$" + (document.getElementById("Vegano").value).replaceAll(".", ","));
-            setPrecoRapido("R$" + (document.getElementById("Rápido e Fácil").value).replaceAll(".", ","));
-            setPrecoFit("R$" + (document.getElementById("Fit e Saudável").value).replaceAll(".", ","));
-            setPrecoPeixes("R$" + (document.getElementById("Pescetariano").value).replaceAll(".", ","));
-            setIsEditing(false);
-        }
+    const buscarPrecos = () => {
+        // api
+        //     .get(`/categorias`, {
+        //         headers: {
+        //             Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
+        //         },
+        //     })
+        //     .then((response) => {
+        //         console.log("Resposta", response);
+        //         setPrecos(response.data)
+        //     })
+        //     .catch((erro) => {
+        //         console.log("Erro", erro);
+        //     });
+
+        const response = [
+            {
+                id: 1,
+                nome: "Carnes",
+                preco: 'R$10,00'
+            },
+            {
+                id: 2,
+                nome: "Vegetariano",
+                preco: 'R$10,00'
+            },
+            {
+                id: 3,
+                nome: "Vegano",
+                preco: 'R$10,00'
+            },
+            {
+                id: 4,
+                nome: "Rápido e Fácil",
+                preco: 'R$10,00'
+            },
+            {
+                id: 5,
+                nome: "Fit e Saudável",
+                preco: 'R$10,00'
+            },
+            {
+                id: 6,
+                nome: "Pescetariano",
+                preco: 'R$10,00'
+            },
+        ];
+
+        setPrecos(response);
     }
 
     const alertaValoresInválidos = () => {
@@ -50,6 +79,42 @@ function Precos() {
     const cancelarEdicao = () => {
         setIsEditing(false);
     };
+
+    const atualizarPreco = () => {
+        const updatedPrecos = precos.map((item) => ({
+            ...item,
+            preco: "R$" + document.getElementById(item.nome).value.replaceAll(".", ","),
+        }));
+
+        setPrecos(updatedPrecos);
+        setIsEditing(false);
+
+        // api
+        //     .put(`/categorias`, corpoRequisicao, {
+        //         headers: {
+        //             Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
+        //         },
+        //     })
+        //     .then((response) => {
+        //         console.log("Resposta", response);
+        //         setPrecos(updatedPrecos);
+        //         setIsEditing(false);
+        //         Swal.fire({
+        //             title: "Preços atualizados com sucesso!",
+        //             icon: "success",
+        //             iconColor: "#00AE9E",
+        //         })
+        //     })
+        //     .catch((erro) => {
+        //         console.log("Erro", erro);
+        //         Swal.fire({
+        //             title: "Erro ao atualizar os preços. Por favor, tente novamente.",
+        //             icon: "error",
+        //             confirmButtonColor: "#00AE9E",
+        //         });
+        //     });
+    };
+
 
     return (
         <>
@@ -72,7 +137,7 @@ function Precos() {
                                 Na seleção de categorias, os valores não são cumulativos. O usuário é cobrado pelo preço mais elevado entre as categorias escolhidas.
                             </div>
                         )}
-                </div>
+                    </div>
                 </div>
             </div>
             <div className="flex h-screen">
@@ -103,22 +168,15 @@ function Precos() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {[
-                                    { categoria: "Carnes", preco: precoCarnes },
-                                    { categoria: "Vegetariano", preco: precoVegetariano },
-                                    { categoria: "Vegano", preco: precoVegano },
-                                    { categoria: "Rápido e Fácil", preco: precoRapido },
-                                    { categoria: "Fit e Saudável", preco: precoFit },
-                                    { categoria: "Pescetariano", preco: precoPeixes },
-                                ].map((item, index) => (
+                                {precos.map((item, index) => (
                                     <tr key={index}>
-                                        <td className="py-2 pl-4 sm:pl-8 border-b">{item.categoria}</td>
+                                        <td className="py-2 pl-4 sm:pl-8 border-b">{item.nome}</td>
                                         <td className="py-2 pl-4 sm:pl-8 border-b">
                                             {isEditing ? (
                                                 <CurrencyInput
                                                     decimalSeparator=","
                                                     defaultValue={(((item.preco).replaceAll("R$", "")).replaceAll(",", "."))}
-                                                    id={item.categoria}
+                                                    id={item.nome}
                                                     required
                                                     className="w-20 sm:w-24 border border-gray-600 p-1 rounded"
                                                 />
@@ -142,7 +200,7 @@ function Precos() {
                                     <button
                                         type="submit"
                                         className={`bg-[#F29311] text-white px-5 py-1 rounded-lg`}
-                                        onClick={atualizarPrecos}
+                                        onClick={atualizarPreco}
                                     >
                                         Confirmar
                                     </button>
