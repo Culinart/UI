@@ -21,7 +21,7 @@ function Precos() {
         const rapido = document.getElementById("Rápido e Fácil").value
         const fit = document.getElementById("Fit e Saudável").value
         if (carne == "" || peixe == "" || vegano == "" || vegetariano == "" || rapido == "" || fit == ""
-        || carne == null || peixe == null ||  vegano == null || vegetariano == null || rapido == null || fit == null
+            || carne == null || peixe == null || vegano == null || vegetariano == null || rapido == null || fit == null
         ) {
             alertaValoresInválidos();
         } else {
@@ -39,7 +39,7 @@ function Precos() {
         Swal.fire({
             title: "Valores inválidos, por favor verifique-os e tente novamente.",
             confirmButtonColor: "#F29311",
-          });
+        });
     }
 
     const cancelarEdicao = () => {
@@ -59,7 +59,7 @@ function Precos() {
             <div className="flex h-screen">
                 <div className="flex-grow p-6 flex items-start justify-center mt-8">
                     <div
-                        className="flex-col justify-center items-center w-2/4 bg-white py-8 px-32 rounded-lg relative"
+                        className="flex-col justify-center items-center w-full sm:w-4/5 md:w-3/5 lg:w-2/4 bg-white py-8 px-4 sm:px-8 lg:px-32 rounded-lg relative"
                         style={{
                             boxShadow: "2px 2px 2px 0px rgba(0, 0, 0, 0.25)",
                         }}
@@ -93,14 +93,15 @@ function Precos() {
                                     { categoria: "Pescetariano", preco: precoPeixes },
                                 ].map((item, index) => (
                                     <tr key={index}>
-                                        <td className="p-2 pr-4 border-b">{item.categoria}</td>
-                                        <td className="p-2 border-b">
+                                        <td className="py-2 pl-4 sm:pl-8 border-b">{item.categoria}</td>
+                                        <td className="py-2 pl-4 sm:pl-8 border-b">
                                             {isEditing ? (
                                                 <CurrencyInput
-                                                decimalSeparator="," 
-                                                defaultValue={(((item.preco).replaceAll("R$", "")).replaceAll(",", "."))}
-                                                id={item.categoria}
-                                                required
+                                                    decimalSeparator=","
+                                                    defaultValue={(((item.preco).replaceAll("R$", "")).replaceAll(",", "."))}
+                                                    id={item.categoria}
+                                                    required
+                                                    className="w-20 sm:w-24 border border-gray-600 p-1 rounded"
                                                 />
                                             ) : (
                                                 item.preco
