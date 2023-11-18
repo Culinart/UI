@@ -11,13 +11,14 @@ function Checkout() {
 
     const handleButtonClick = () => {
             api
-          .put(`/usuarios/ativar/${sessionStorage.getItem("idUsuario")}`, null,{
+          .put(`/usuarios/permissionar/cliente/${sessionStorage.getItem("idUsuario")}`, null,{
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
             }
         })
           .then((response) => {
             console.log("Resposta", response);
+            sessionStorage.setItem('permissao', response.data.permissao)
             navigate('/cliente/pedidos');
         })
         .catch((erro) => {

@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import HeaderCliente from "../../../components/Cliente/HeaderCliente/HeaderCliente";
 import SidebarPerfil from "../../../components/Cliente/Perfil/SidebarPerfil";
 import api from "../../../api/api";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Swal from "sweetalert2";
+import { useNavigate } from 'react-router-dom';
 
 const validationSchema = Yup.object().shape({
   senhaNova: Yup.string()
@@ -16,9 +17,20 @@ const validationSchema = Yup.object().shape({
 });
 
 function PerfilSenhaAutenticacao() {
+
+  const navigate = useNavigate();
+
   const [inputSenhaNova, setInputSenhaNova] = useState("");
   const [inputSenhaNovaConfirmacao, setInputSenhaNovaConfirmacao] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (sessionStorage.getItem('permissao') == null || sessionStorage.getItem('permissao') == '') {
+        navigate('/')
+    } else if (sessionStorage.getItem('permissao') == 'USUARIO') {
+        navigate('/cadastro/endereco')
+    }
+}, []);
 
   function atualizarSenha(values) {
 

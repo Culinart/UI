@@ -1,8 +1,20 @@
-import React from "react";
+import React,  { useEffect } from "react";
 import HeaderCliente from "../../../components/Cliente/HeaderCliente/HeaderCliente";
 import SidebarPerfil from "../../../components/Cliente/Perfil/SidebarPerfil";
+import { useNavigate } from 'react-router-dom';
 
 function PerfilPagamento() {
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (sessionStorage.getItem('permissao') == null || sessionStorage.getItem('permissao') == '') {
+            navigate('/')
+        } else if (sessionStorage.getItem('permissao') == 'USUARIO') {
+            navigate('/cadastro/endereco')
+        }
+    }, []);
+
     return (
         <>
             <HeaderCliente />

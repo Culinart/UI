@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Swal from "sweetalert2";
 import { useNavigate } from 'react-router-dom';
 
 function AlertaClienteInativo(props) {
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+      if (props.permissao == null || !props.permissao || props.permissao == "") {
+        navigate("/")
+      }
+  }, []);
     
     const alertaFinalizarCadastro = () => {
         Swal.fire({
@@ -24,7 +30,7 @@ function AlertaClienteInativo(props) {
 
     return (
        <>
-       {!props.isAtivo && 
+       { props.permissao == 'USUARIO' && 
             <div onClick={alertaFinalizarCadastro} className=" absolute w-full h-full z-20">
             </div>
             }

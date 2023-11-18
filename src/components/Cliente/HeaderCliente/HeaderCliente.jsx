@@ -8,6 +8,11 @@ import perfil from '../../../assets/Institucional/header/profile.svg';
 import logout from '../../../assets/Institucional/header/logout.svg';
 
 function HeaderCliente() {
+
+    const limparSessao = () => {
+        sessionStorage.clear();
+    }
+
     return (
         <>
             <header className={style.header}>
@@ -35,7 +40,7 @@ function HeaderCliente() {
                             <img src={perfil} alt="Icone perfil" />
                             <span>Perfil</span>
                         </a>
-                        <a href="/" className={style.item}>
+                        <a href="/" onClick={limparSessao} className={style.item}>
                             <img src={logout} alt="Icone de logout" />
                             <span>Logout</span>
                         </a>

@@ -20,6 +20,7 @@ import AdicionarEndereco from './pages/Cliente/Perfil/AdicionarEndereco.jsx';
 import MeuPlano from './pages/Cliente/MeuPlano.jsx';
 import PerfilInfoPessoalFornecedor from './pages/Fornecedor/Perfil/PerfilFornecedor.jsx';
 import PerfilSenhaAutenticacaoFornecedor from './pages/Fornecedor/Perfil/PerfilSenhaAutenticacaoFornecedor.jsx';
+import PedidosFornecedor from './pages/Fornecedor/PedidosFornecedor.jsx';
 
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.minimal.css";
@@ -62,6 +63,7 @@ function App() {
           <Route path="/cliente/meu-plano" element={<MeuPlano />} />
           <Route path="/fornecedor/perfil/info-pessoal" element={<PerfilInfoPessoalFornecedor />} />
           <Route path="/fornecedor/perfil/senha-autenticacao" element={<PerfilSenhaAutenticacaoFornecedor />} />
+          <Route path="/fornecedor/pedidos" element={<PedidosFornecedor />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
