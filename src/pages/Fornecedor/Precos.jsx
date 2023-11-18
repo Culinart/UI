@@ -1,17 +1,22 @@
 import React, { useState } from "react";
-import { FiEdit } from "react-icons/fi";
+import { FiEdit, FiInfo } from "react-icons/fi";
 import Swal from "sweetalert2";
 import CurrencyInput from 'react-currency-masked-input'
 import HeaderCliente from "../../components/Cliente/HeaderCliente/HeaderCliente";
 
 function Precos() {
     const [isEditing, setIsEditing] = useState(false);
+    const [showTooltip, setShowTooltip] = useState(false);
     const [precoCarnes, setPrecoCarnes] = useState("R$00,00");
     const [precoPeixes, setPrecoPeixes] = useState("R$00,00");
     const [precoVegano, setPrecoVegano] = useState("R$00,00");
     const [precoVegetariano, setPrecoVegetariano] = useState("R$00,00");
     const [precoRapido, setPrecoRapido] = useState("R$00,00");
     const [precoFit, setPrecoFit] = useState("R$00,00");
+
+    const toggleTooltip = () => {
+        setShowTooltip(!showTooltip);
+    };
 
     const atualizarPrecos = () => {
         const carne = document.getElementById("Carnes").value
@@ -50,14 +55,28 @@ function Precos() {
         <>
             <HeaderCliente />
             <div className="items-center justify-center w-full flex mt-10">
-                <div className="items-center justify-between w-4/5 flex border-b border-gray-300">
-                    <h1 className="text-2xl font-semibold text-[#DC7726] mb-4">
+                <div className="w-4/5 flex border-b border-gray-300">
+                    <h1
+                        className="text-2xl font-semibold text-[#DC7726] mb-4 mr-2 relative"
+                    >
                         Preços por Categoria
                     </h1>
+                    <div className="relative">
+                        <FiInfo
+                            className="text-[#DC7726] font-bold text-base cursor-pointer"
+                            onMouseEnter={toggleTooltip}
+                            onMouseLeave={toggleTooltip}
+                        />
+                        {showTooltip && (
+                            <div className="bg-orange-100 text-gray-800 text-sm p-2 rounded-md absolute top-0 left-1/2 transform -translate-x-1/2 mt-2 z-20 w-56">
+                                Na seleção de categorias, os valores não são cumulativos. O usuário é cobrado pelo preço mais elevado entre as categorias escolhidas.
+                            </div>
+                        )}
+                </div>
                 </div>
             </div>
             <div className="flex h-screen">
-                <div className="flex-grow p-6 flex items-start justify-center mt-8">
+                <div className="flex-grow p-6 flex items-start justify-center mt-6">
                     <div
                         className="flex-col justify-center items-center w-full sm:w-4/5 md:w-3/5 lg:w-2/4 bg-white py-8 px-4 sm:px-8 lg:px-32 rounded-lg relative"
                         style={{
