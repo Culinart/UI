@@ -39,14 +39,14 @@ function PerfilInfoPessoal() {
     const [inputCPF, setInputCPF] = useState("");
     const [cpf, setCPF] = useState("");
 
-    // useEffect(() => {
-    //     buscarInfoPessoal();
-    //     if (sessionStorage.getItem('permissao') == null || sessionStorage.getItem('permissao') == '') {
-    //         navigate('/')
-    //     } else if (sessionStorage.getItem('permissao') == 'USUARIO') {
-    //         navigate('/cadastro/endereco')
-    //     }
-    // }, []);
+    useEffect(() => {
+        buscarInfoPessoal();
+        if (sessionStorage.getItem('permissao') == null || sessionStorage.getItem('permissao') == '') {
+            navigate('/')
+        } else if (sessionStorage.getItem('permissao') == 'USUARIO') {
+            navigate('/cadastro/endereco')
+        }
+    }, []);
 
     const alertaErro = () => {
         Swal.fire({
@@ -130,12 +130,14 @@ function PerfilInfoPessoal() {
         }
 
         const telefoneNumerico = values.telefone.replace(/\D/g, "");
+        const cpfNumerico = values.cpf.replace(/\D/g, "");
+
 
         const corpoRequisicao = {
             nome: values.nome,
             email: values.email,
             telefone: telefoneNumerico,
-            cpf: values.cpf,
+            cpf: values.cpfNumerico,
         };
         console.log(corpoRequisicao);
 
