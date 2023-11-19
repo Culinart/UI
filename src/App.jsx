@@ -22,6 +22,7 @@ import PerfilInfoPessoalFornecedor from './pages/Fornecedor/Perfil/PerfilFornece
 import PerfilSenhaAutenticacaoFornecedor from './pages/Fornecedor/Perfil/PerfilSenhaAutenticacaoFornecedor.jsx';
 import PedidosFornecedor from './pages/Fornecedor/PedidosFornecedor.jsx';
 import Precos from './pages/Fornecedor/Precos.jsx'
+import Dashboard from './pages/Fornecedor/Dashboard/Dashboard.jsx'
 
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.minimal.css";
@@ -66,6 +67,7 @@ function App() {
           <Route path="/fornecedor/perfil/senha-autenticacao" element={<PerfilSenhaAutenticacaoFornecedor />} />
           <Route path="/fornecedor/pedidos" element={<PedidosFornecedor />} />
           <Route path="/fornecedor/precos" element={<Precos />} />
+          <Route path="/fornecedor/dashboard" element={<Dashboard />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
