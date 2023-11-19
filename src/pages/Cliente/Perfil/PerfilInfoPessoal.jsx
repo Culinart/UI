@@ -120,51 +120,7 @@ function PerfilInfoPessoal() {
         }
     };
 
-    const handleCPFChange = (event) => {
-        const inputCPF = event.target.value.replace(/\D/g, "");
-        let cpfFormatado = "";
-
-        if (inputCPF.length > 0) {
-            cpfFormatado = `${inputCPF.slice(0, 3)}.`;
-
-            if (inputCPF.length > 3) {
-                cpfFormatado += `${inputCPF.slice(3, 6)}.`;
-
-                if (inputCPF.length > 6) {
-                    cpfFormatado += `${inputCPF.slice(6, 9)}-`;
-
-                    if (inputCPF.length > 9) {
-                        cpfFormatado += `${inputCPF.slice(9, 11)}`;
-                    }
-                }
-            }
-
-            setInputCPF(cpfFormatado);
-        }
-    };
-
-    const cpfChange = (valor) => {
-        const inputCPF = valor.replace(/\D/g, "");
-        let cpfFormatado = "";
-
-        if (inputCPF.length > 0) {
-            cpfFormatado = `${inputCPF.slice(0, 3)}.`;
-
-            if (inputCPF.length > 3) {
-                cpfFormatado += `${inputCPF.slice(3, 6)}.`;
-
-                if (inputCPF.length > 6) {
-                    cpfFormatado += `${inputCPF.slice(6, 9)}-`;
-
-                    if (inputCPF.length > 9) {
-                        cpfFormatado += `${inputCPF.slice(9, 11)}`;
-                    }
-                }
-            }
-
-            setInputCPF(cpfFormatado);
-        }
-    };
+   ;
 
     const atualizarUsuario = (values) => {
         if (!isEditing) {
@@ -233,7 +189,7 @@ function PerfilInfoPessoal() {
                                 setInputNome(values.nome);
                                 setInputEmail(values.email);
                                 setInputTelefone(inputTelefone);
-                                setInputCPF(values.cpf); // Adicionado para atualizar o campo CPF
+                                setInputCPF(values.cpf);
 
                                 atualizarUsuario(values)
                                     .then((success) => {
@@ -341,9 +297,12 @@ function PerfilInfoPessoal() {
                                                     setInputNome(nome);
                                                     setInputEmail(email);
                                                     setInputTelefone(telefone);
+                                                    setInputCPF(cpf);
                                                     setFieldValue("nome", nome);
                                                     setFieldValue("email", email);
                                                     setFieldValue("telefone", telefone);
+                                                    setFieldValue("cpf", cpf);
+
                                                 }}
                                                 className="border border-gray-300 rounded-md px-4 py-2 bg-gray-400 hover:bg-gray-500 text-white"
                                             >

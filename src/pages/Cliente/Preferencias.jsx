@@ -3,6 +3,7 @@ import HeaderCliente from "../../components/Cliente/HeaderCliente/HeaderCliente"
 import Preferencia from "../../components/Cliente/Receitas/Preferencia";
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { BiTrash } from 'react-icons/bi';
+import Swal from "sweetalert2";
 import api from "../../api/api";
 
 function Preferencias() {
@@ -15,11 +16,20 @@ function Preferencias() {
     }, []);
 
     const formatTipoPreferenciaEnum = (tipoPreferenciaEnum) => {
-        return tipoPreferenciaEnum
+        const formattedType = tipoPreferenciaEnum
             .split('_')
             .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
             .join(' ');
+
+        if (tipoPreferenciaEnum === 'Caracteristica') {
+            return 'Característica';
+        } else if (tipoPreferenciaEnum === 'Refeicao') {
+            return 'Refeição';
+        }
+
+        return formattedType;
     };
+
 
     const buscarPreferencias = () => {
         api.get('/preferencias', {
@@ -51,25 +61,28 @@ function Preferencias() {
 
     const addPreference = (preferenceId) => {
         if (userPreferences.length >= 12) {
-            alert('maior que 12')
+            Swal.fire({
+                title: "Limite de 12 Preferências Atingidos. Por favor remova uma das preferências atuais antes de adicionar outra.",
+                confirmButtonColor: "#F29311",
+            });
         } else {
             api
-            .post(`/usuarios/preferencias/${preferenceId}/${sessionStorage.getItem("idUsuario")}`, null, {
-                headers: {
-                    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
-                }
-            })
-            .then((response) => {
-                location.reload();
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+                .post(`/usuarios/preferencias/${preferenceId}/${sessionStorage.getItem("idUsuario")}`, null, {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+                    }
+                })
+                .then((response) => {
+                    location.reload();
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         }
     }
-        
-        const removePreference = (preferenceId) => {
-            api
+
+    const removePreference = (preferenceId) => {
+        api
             .delete(`/usuarios/preferencias/${preferenceId}/${sessionStorage.getItem("idUsuario")}`, {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
@@ -99,7 +112,6 @@ function Preferencias() {
         }, {})
         : {};
 
-
     return (
         <>
             <HeaderCliente />
@@ -127,7 +139,7 @@ function Preferencias() {
                     <div className="flex flex-wrap w-4/5">
                         {Object.keys(preferenciasAgrupadas).map((tipoPreferenciaEnum) => (
                             <div key={tipoPreferenciaEnum} className="w-1/5 p-4">
-                                <h2 className="text-md text-[#045D53] mb-2 text-center">{tipoPreferenciaEnum}</h2>
+                                <h2 className="text-md text-[#045D53] mb-2 text-center">{formatTipoPreferenciaEnum(tipoPreferenciaEnum)}</h2>
                                 <ul className="space-y-4">
                                     {preferenciasAgrupadas[tipoPreferenciaEnum].map((item) => (
                                         <div className="text-center" key={item.id}>

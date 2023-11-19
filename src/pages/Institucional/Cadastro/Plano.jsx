@@ -61,23 +61,23 @@ function Plano() {
     const diasSemanaData = [
         {
             label: "S",
-            data: "Segunda",
+            data: "SEGUNDA",
         },
         {
             label: "T",
-            data: "Terça",
+            data: "TERCA",
         },
         {
             label: "Q",
-            data: "Quarta",
+            data: "QUARTA",
         },
         {
             label: "Q",
-            data: "Quinta",
+            data: "QUINTA",
         },
         {
             label: "S",
-            data: "Sexta",
+            data: "SEXTA",
         },
     ];
 
