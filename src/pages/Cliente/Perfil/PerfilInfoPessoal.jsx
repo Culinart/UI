@@ -70,8 +70,8 @@ function PerfilInfoPessoal() {
                 console.log("Resposta", response);
                 setInputNome(response.data.nome);
                 setInputEmail(response.data.email);
-                setInputTelefone(response.data.telefone);
-                setInputCPF(response.data.cpf);
+                setInputTelefone(telefoneChange(response.data.telefone));
+                setInputCPF(cpfChange(response.data.cpf));
                 setNome(response.data.nome);
                 setEmail(response.data.email);
                 setTelefone(response.data.telefone);
@@ -84,6 +84,25 @@ function PerfilInfoPessoal() {
 
     const handleTelefoneChange = (event) => {
         const inputTelefone = event.target.value.replace(/\D/g, "");
+        let telefoneFormatado = "";
+
+        if (inputTelefone.length > 0) {
+            telefoneFormatado = `(${inputTelefone.slice(0, 2)}`;
+
+            if (inputTelefone.length > 2) {
+                telefoneFormatado += `) ${inputTelefone.slice(2, 7)}`;
+
+                if (inputTelefone.length > 7) {
+                    telefoneFormatado += `-${inputTelefone.slice(7, 11)}`;
+                }
+            }
+
+            setInputTelefone(telefoneFormatado);
+        }
+    };
+
+    const telefoneChange = (valor) => {
+        const inputTelefone = valor.replace(/\D/g, "");
         let telefoneFormatado = "";
 
         if (inputTelefone.length > 0) {
@@ -124,6 +143,29 @@ function PerfilInfoPessoal() {
         }
     };
 
+    const cpfChange = (valor) => {
+        const inputCPF = valor.replace(/\D/g, "");
+        let cpfFormatado = "";
+
+        if (inputCPF.length > 0) {
+            cpfFormatado = `${inputCPF.slice(0, 3)}.`;
+
+            if (inputCPF.length > 3) {
+                cpfFormatado += `${inputCPF.slice(3, 6)}.`;
+
+                if (inputCPF.length > 6) {
+                    cpfFormatado += `${inputCPF.slice(6, 9)}-`;
+
+                    if (inputCPF.length > 9) {
+                        cpfFormatado += `${inputCPF.slice(9, 11)}`;
+                    }
+                }
+            }
+
+            setInputCPF(cpfFormatado);
+        }
+    };
+
     const atualizarUsuario = (values) => {
         if (!isEditing) {
             return Promise.resolve(true);
@@ -137,7 +179,7 @@ function PerfilInfoPessoal() {
             nome: values.nome,
             email: values.email,
             telefone: telefoneNumerico,
-            cpf: values.cpfNumerico,
+            cpf: cpfNumerico,
         };
         console.log(corpoRequisicao);
 
