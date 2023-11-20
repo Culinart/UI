@@ -25,7 +25,7 @@ function Plano() {
     const [error, setError] = useState("");
 
     useEffect(() => {
-        // buscarPlanoUsuario();
+        buscarPlanoUsuario();
         buscarCategorias();
     }, []);
 
@@ -217,7 +217,6 @@ function Plano() {
                 return "";
         }
     };
-
 
 
     return (
