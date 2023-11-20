@@ -139,7 +139,7 @@ function Plano() {
     const cadastrarPlano = () => {
         if (validateConstants()) {
             const corpoRequisicao = {
-                preferencias: preferenciasSelecionadas,
+                categorias: preferenciasSelecionadas,
                 qtdPessoas: pessoasSelecionadas,
                 qtdRefeicoesDia: refeicoesSelecionadas,
                 qtdDiasSemana: diasSelecionados,
