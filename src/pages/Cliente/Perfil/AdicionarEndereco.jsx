@@ -6,6 +6,7 @@ import api from "../../../api/api";
 import HeaderCliente from "../../../components/Cliente/HeaderCliente/HeaderCliente";
 import imgEndereco from "../../../assets/Institucional/Cadastro/imgEndereco.svg"
 import styles from "../../Institucional/Cadastro/CadastroStyles.module.css";
+import Swal from "sweetalert2";
 
 const validationSchema = Yup.object().shape({
     cep: Yup.string()
@@ -143,7 +144,10 @@ function AdicionarEndereco() {
                                             cadastrarEndereco();
                                             setSubmitting(false);
                                         } else {
-                                            alert('cep inválido')
+                                            Swal.fire({
+                                                title: "CEP inválido. Por favor digite um CEP válido e tente novamente.",
+                                                confirmButtonColor: "#F29311",
+                                            });
                                         }
 
                                     }}

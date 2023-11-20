@@ -6,6 +6,8 @@ import { BiTrash } from 'react-icons/bi';
 import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import api from "../../../api/api";
+import Swal from "sweetalert2";
+
 
 function PerfilEndereco() {
 
@@ -33,7 +35,11 @@ function PerfilEndereco() {
             })
             .then((response) => {
                 console.log("Resposta DELETE:", response);
-                window.location.reload();
+                buscarEnderecos();
+                Swal.fire({
+                    title: "Endereço deletado com sucesso.",
+                    confirmButtonColor: "#F29311",
+                });
             })
             .catch((erro) => {
                 console.log("Erro", erro);
@@ -69,6 +75,10 @@ function PerfilEndereco() {
             .then((response) => {
                 console.log('Endereço ativo:', response);
                 setActiveEnderecoId(id); 
+                Swal.fire({
+                    title: "Endereço ativo alterado com sucesso.",
+                    confirmButtonColor: "#F29311",
+                });
                 buscarEnderecos();
             })
             .catch((erro) => {
