@@ -10,6 +10,7 @@ import iconeMaca from "../../assets/Institucional/Cadastro/iconeMaca.svg";
 import styles from "./MeuPlano.module.css";
 import api from "../../api/api";
 import AlertaClienteInativo from "../../components/Cliente/AlertaClienteInativo";
+import Swal from "sweetalert2";
 
 function MeuPlano() {
 
@@ -29,12 +30,12 @@ function MeuPlano() {
     }, []);
 
     const handlePreferencias = (preferencia) => {
-        if (preferenciasSelecionadas.includes(preferencia)) {
+        if (preferenciasSelecionadas && preferenciasSelecionadas.includes(preferencia)) {
             setPreferenciasSelecionadas(preferenciasSelecionadas.filter((item) => item !== preferencia));
         } else {
             setPreferenciasSelecionadas([...preferenciasSelecionadas, preferencia]);
         }
-    };
+    };    
 
     const preferenciasData = [
         {
@@ -66,23 +67,23 @@ function MeuPlano() {
     const diasSemanaData = [
         {
             label: "S",
-            data: "Segunda",
+            data: "SEGUNDA",
         },
         {
             label: "T",
-            data: "Terça",
+            data: "TERCA",
         },
         {
             label: "Q",
-            data: "Quarta",
+            data: "QUARTA",
         },
         {
             label: "Q",
-            data: "Quinta",
+            data: "QUINTA",
         },
         {
             label: "S",
-            data: "Sexta",
+            data: "SEXTA",
         },
     ];
 
@@ -127,7 +128,8 @@ function MeuPlano() {
 
     const validateConstants = () => {
         if (
-            preferenciasSelecionadas == "" ||
+            !Array.isArray(preferenciasSelecionadas) ||
+            preferenciasSelecionadas.length === 0 ||
             pessoasSelecionadas === 0 ||
             refeicoesSelecionadas === 0 ||
             diasSelecionados === 0 ||
@@ -139,7 +141,7 @@ function MeuPlano() {
         }
         setError("");
         return true;
-    };
+    };    
 
     const buscarPlano = () => {
         api
@@ -150,7 +152,7 @@ function MeuPlano() {
             })
             .then((response) => {
                 console.log("Resposta", response);
-                setPreferenciasSelecionadas(response.data.categoria);
+                setPreferenciasSelecionadas(response.data.categoria || []);
                 setPessoasSelecionadas(response.data.qtdPessoas);
                 setRefeicoesSelecionadas(response.data.qtdRefeicoesDia);
                 setDiasSelecionados(response.data.qtdDiasSemana);
@@ -180,6 +182,11 @@ function MeuPlano() {
                 })
                 .then((response) => {
                     console.log("Resposta", response);
+                    setIsEditing(false);
+                    Swal.fire({
+                        title: "Plano atualizado com sucesso.",
+                        confirmButtonColor: "#F29311",
+                    });
                     buscarPlano();
                 })
                 .catch((erro) => {
@@ -200,12 +207,15 @@ function MeuPlano() {
                 <HeaderCliente />
                 <AlertaClienteInativo permissao={permissao} />
                 <div className={`bg ${styles.bg} mt-10 mb-10`}>
-                <div className={`card ${styles.card} flex relative`}>
+                    <div className={`card ${styles.card} flex relative`}>
                         {!isEditing && (
                             <FiEdit
                                 onClick={() => setIsEditing(true)}
-                                className="cursor-pointer text-[#DC7726] text-2xl absolute top-10 right-14"
+                                className="cursor-pointer text-[#DC7726] text-2xl absolute top-10 right-14 z-20"
                             />
+                        )}
+                        { !isEditing && (
+                            <div className="flex absolute w-full h-full bg-transparent z-10"></div>
                         )}
                         <div className="flex flex-col w-full items-center">
                             <div className="flex items-center">
@@ -362,20 +372,20 @@ function MeuPlano() {
                                         </div>
                                     </div>
                                     <div className="flex space-x-12 mt-4 mb-4">
-                                    <button
-                                        className={` bg-gray-400 ${styles.btnCadastroCancelar}`}
-                                        onClick={cancelarEdicao}
+                                        <button
+                                            className={` bg-gray-400 ${styles.btnCadastroCancelar}`}
+                                            onClick={cancelarEdicao}
                                         >
-                                        Cancelar
-                                    </button>
-                                    <button
-                                        type="submit"
-                                        className={`bg-[#F29311] ${styles.btnCadastro}`}
-                                        onClick={atualizarPlano}
+                                            Cancelar
+                                        </button>
+                                        <button
+                                            type="submit"
+                                            className={`bg-[#F29311] ${styles.btnCadastro}`}
+                                            onClick={atualizarPlano}
                                         >
-                                        Confirmar
-                                    </button>
-                                        </div>
+                                            Confirmar
+                                        </button>
+                                    </div>
                                 </>
                             )}
 
