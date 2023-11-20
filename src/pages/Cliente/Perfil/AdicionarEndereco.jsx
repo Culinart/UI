@@ -35,6 +35,7 @@ function AdicionarEndereco() {
     const [inputLogradouro, setInputLogradouro] = useState("");
     const [inputNumero, setInputNumero] = useState("");
     const [inputComplemento, setInputComplemento] = useState("");
+    const [cepApi, setCepApi] = useState("");
 
     useEffect(() => {
         if (sessionStorage.getItem('permissao') == null || sessionStorage.getItem('permissao') == '') {
@@ -69,9 +70,8 @@ function AdicionarEndereco() {
     };
 
     function cadastrarEndereco() {
-        console.log(corpoRequisicao);
         api
-            .post(`/enderecos/${sessionStorage.getItem('idUsuario')}?cep=${inputCep}&numero=${inputNumero}&complemento=${inputComplemento}`, {
+            .post(`/enderecos/${sessionStorage.getItem('idUsuario')}?cep=${inputCep}&numero=${inputNumero}&complemento=${inputComplemento}`, null, {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
                 }
@@ -93,6 +93,7 @@ function AdicionarEndereco() {
                 }
             })
             .then((resposta) => {
+                setCepApi(resposta.data.cep);
                 console.log(resposta.data);
                 setFieldValue("cep", cep);
                 setFieldValue("bairro", resposta.data.bairro);
@@ -106,7 +107,7 @@ function AdicionarEndereco() {
                 setInputLogradouro(resposta.data.logradouro);
             })
             .catch((erro) => {
-                console.log(erro);
+                console.log("ERRO", erro);
             });
     }
 
@@ -138,11 +139,13 @@ function AdicionarEndereco() {
                                         setInputLogradouro(values.logradouro);
                                         setInputNumero(values.numero);
                                         setInputComplemento(values.complemento);
-                                        if (values.cep && values.estado && values.cidade && values.bairro && values.logradouro && values.numero) {
+                                        if (cepApi != null && values.cep && values.estado && values.cidade && values.bairro && values.logradouro && values.numero) {
                                             cadastrarEndereco();
+                                            setSubmitting(false);
+                                        } else {
+                                            alert('cep inválido')
                                         }
 
-                                        setSubmitting(false);
                                     }}
                                 >
                                     {({ setFieldValue }) => (
