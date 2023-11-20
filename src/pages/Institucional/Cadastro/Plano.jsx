@@ -15,7 +15,8 @@ function Plano() {
 
     const navigate = useNavigate();
 
-    const [preferenciasSelecionadas, setPreferenciasSelecionadas] = useState([]);
+    const [categoriasSelecionadas, setCategoriasSelecionadas] = useState([]);
+    const [categorias, setCategorias] = useState([]);
     const [pessoasSelecionadas, setPessoasSelecionadas] = useState(0);
     const [refeicoesSelecionadas, setRefeicoesSelecionadas] = useState(0);
     const [diasSelecionados, setDiasSelecionados] = useState(0);
@@ -24,43 +25,59 @@ function Plano() {
     const [error, setError] = useState("");
 
     useEffect(() => {
-        buscarPlanoUsuario();
+        // buscarPlanoUsuario();
+        buscarCategorias();
     }, []);
 
     const handlePreferencias = (preferencia) => {
-        if (preferenciasSelecionadas.includes(preferencia)) {
-            setPreferenciasSelecionadas(preferenciasSelecionadas.filter((item) => item !== preferencia));
+        if (categoriasSelecionadas.includes(preferencia)) {
+            setCategoriasSelecionadas(categoriasSelecionadas.filter((item) => item !== preferencia));
         } else {
-            setPreferenciasSelecionadas([...preferenciasSelecionadas, preferencia]);
+            setCategoriasSelecionadas([...categoriasSelecionadas, preferencia]);
         }
     };
+    
+    const buscarCategorias = () => {
 
-    const preferenciasData = [
-        {
-            label: "Carnes",
-            image: iconeCarne,
-        },
-        {
-            label: "Pescetariano",
-            image: iconePeixe,
-        },
-        {
-            label: "Rápido e Fácil",
-            image: iconeRelogio,
-        },
-        {
-            label: "Vegetariano",
-            image: iconeSuco,
-        },
-        {
-            label: "Vegano",
-            image: iconePlanta,
-        },
-        {
-            label: "Fit e Saudável",
-            image: iconeMaca,
-        },
-    ];
+        const response = {
+            data: [
+            {
+                id: 1,
+                nome: "Carnes",
+                valor: '10.00',
+            },
+            {
+                id: 2,
+                nome: "Pescetariano",
+                valor: '10.00',
+            },
+            {
+                id: 3,
+                nome: "Rápido e Fácil",
+                valor: '10.00',
+            },
+            {
+                id: 4,
+                nome: "Vegetariano",
+                valor: '10.00',
+            },
+            {
+                id: 5,
+                nome: "Vegano",
+                valor: '10.00',
+            },
+            {
+                id: 6,
+                nome: "Fit e Saudável",
+                valor: '10.00',
+            },
+    
+        ]
+    }
+
+        setCategorias(response.data);
+    
+    }
 
     const diasSemanaData = [
         {
@@ -99,7 +116,7 @@ function Plano() {
         "18:00", "19:00", "20:00", "21:00", "22:00"
     ];
 
-    const splitPreferenciasData = preferenciasData.reduce((result, item, index) => {
+    const splitCategorias = categorias.reduce((result, item, index) => {
         if (index % 3 === 0) {
             result.push([item]);
         } else {
@@ -126,7 +143,7 @@ function Plano() {
 
     const validateConstants = () => {
         if (
-            preferenciasSelecionadas == "" ||
+            categoriasSelecionadas === "" ||
             pessoasSelecionadas === 0 ||
             refeicoesSelecionadas === 0 ||
             diasSelecionados === 0 ||
@@ -143,7 +160,7 @@ function Plano() {
     const cadastrarPlano = () => {
         if (validateConstants()) {
             const corpoRequisicao = {
-                categorias: preferenciasSelecionadas,
+                categoria: categoriasSelecionadas,
                 qtdPessoas: pessoasSelecionadas,
                 qtdRefeicoesDia: refeicoesSelecionadas,
                 qtdDiasSemana: diasSelecionados,
@@ -182,6 +199,26 @@ function Plano() {
             });
     }
 
+    const getIconByCategoriaNome = (nome) => {
+        switch (nome) {
+            case "Carnes":
+                return iconeCarne;
+            case "Pescetariano":
+                return iconePeixe;
+            case "Rápido e Fácil":
+                return iconeRelogio;
+            case "Vegetariano":
+                return iconeSuco;
+            case "Vegano":
+                return iconePlanta;
+            case "Fit e Saudável":
+                return iconeMaca;
+            default:
+                return "";
+        }
+    };
+
+
 
     return (
         <>
@@ -198,22 +235,23 @@ function Plano() {
                                 <div className="px-8 ml-12 mr-12">
                                     <h3 className="text-center">1. Selecione suas preferências</h3>
                                     <div className="flex w-full items-center justify-center">
-                                        {splitPreferenciasData.map((columnData, columnIndex) => (
-                                            <div className="flex-col items-center justify-center" key={columnIndex}>
-                                                {columnData.map((preferenciaData, index) => (
-                                                    <div
-                                                        key={index}
-                                                        className={`card ${styles.card_plano} flex-col items-center justify-center ${preferenciasSelecionadas.includes(preferenciaData.label) ? styles.card_plano_selecionado : ''}`}
-                                                        onClick={() => handlePreferencias(preferenciaData.label)}
-                                                    >
-                                                        <img
-                                                            src={preferenciaData.image}
-                                                            className="mx-auto my-auto w-10"
-                                                            alt={preferenciaData.label}
-                                                        />
-                                                        <div className={`${styles.texto_card_plano}`}>{preferenciaData.label}</div>
-                                                    </div>
-                                                ))}
+                                    {splitCategorias.map((columnData, columnIndex) => (
+                                                <div className="flex-col items-center justify-center" key={columnIndex}>
+                                                    {columnData.map((categoria, index) => (
+                                                        <div
+                                                            key={index}
+                                                            className={`card ${styles.card_plano} flex-col items-center justify-center ${categoriasSelecionadas.includes(categoria) ? styles.card_plano_selecionado : ''
+                                                                }`}
+                                                            onClick={() => handlePreferencias(categoria)}
+                                                        >
+                                                            <img
+                                                                src={getIconByCategoriaNome(categoria.nome)}
+                                                                className="mx-auto my-auto w-10"
+                                                                alt={categoria.nome}
+                                                            />
+                                                            <div className={`${styles.texto_card_plano}`}>{categoria.nome}</div>
+                                                        </div>
+                                                    ))}
                                             </div>
                                         ))}
                                     </div>
