@@ -6,7 +6,7 @@ import imgCadastro from "../../../assets/Institucional/Cadastro/imgCadastro.svg"
 import Header from "../../../components/Institucional/Header/Header";
 import api from "../../../api/api";
 import styles from "./CadastroStyles.module.css";
-
+import Swal from "sweetalert2";
 
 const validationSchema = Yup.object().shape({
   nome: Yup.string()
@@ -105,6 +105,10 @@ function InformacoesPessoais() {
         navigate('/login');
       })
       .catch((erro) => {
+        Swal.fire({
+          title: "Cadastro inválido ou já existente. Por favor tente novamente.",
+          confirmButtonColor: "#F29311",
+      });
         console.log("Erro", erro);
       });
   }

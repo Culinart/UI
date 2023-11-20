@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import CadastroPassos from "../../../components/Institucional/Cadastro/CadastroPassos";
 import HeaderCliente from "../../../components/Cliente/HeaderCliente/HeaderCliente";
@@ -22,6 +22,10 @@ function Plano() {
     const [diaSemanaSelecionado, setDiaSemanaSelecionado] = useState(0);
     const [selectedTime, setSelectedTime] = useState("");
     const [error, setError] = useState("");
+
+    useEffect(() => {
+        buscarPlanoUsuario();
+    }, []);
 
     const handlePreferencias = (preferencia) => {
         if (preferenciasSelecionadas.includes(preferencia)) {
@@ -147,20 +151,36 @@ function Plano() {
                 diaSemana: diaSemanaSelecionado,
             };
             api
-          .post(`/planos/${sessionStorage.getItem("idUsuario")}`, corpoRequisicao, {
-            headers: {
-                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
-            }
-        })
-          .then((response) => {
-            console.log("Resposta", response);
-            navigate('/cadastro/checkout');
-        })
-        .catch((erro) => {
-            console.log("Erro", erro);
-        });
-      }
+                .post(`/planos/${sessionStorage.getItem("idUsuario")}`, corpoRequisicao, {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+                    }
+                })
+                .then((response) => {
+                    console.log("Resposta", response);
+                    navigate('/cadastro/checkout');
+                })
+                .catch((erro) => {
+                    console.log("Erro", erro);
+                });
+        }
     };
+
+    const buscarPlanoUsuario = () => {
+        api
+            .get(`/planos/${sessionStorage.getItem("idUsuario")}`, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+                }
+            })
+            .then((response) => {
+                console.log("Usuário já possui plano cadastrado: ", response);
+                navigate('/cadastro/checkout');
+            })
+            .catch((erro) => {
+                console.log("Usuário ainda não possui um plano. ", erro);
+            });
+    }
 
 
     return (
