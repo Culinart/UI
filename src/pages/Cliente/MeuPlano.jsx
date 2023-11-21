@@ -25,6 +25,7 @@ function MeuPlano() {
     const [error, setError] = useState("");
     const [isAtivo, setAtivo] = useState(sessionStorage.getItem('isAtivo'));
     const [permissao, setPermissao] = useState(sessionStorage.getItem('permissao'));
+    const [planId, setPlanId] = useState("");
 
     useEffect(() => {
         buscarPlano();
@@ -40,45 +41,19 @@ function MeuPlano() {
     };
     
     const buscarCategorias = () => {
-
-        const response = {
-            data: [
-            {
-                id: 1,
-                nome: "Carnes",
-                valor: '10.00',
-            },
-            {
-                id: 2,
-                nome: "Pescetariano",
-                valor: '10.00',
-            },
-            {
-                id: 3,
-                nome: "Rápido e Fácil",
-                valor: '10.00',
-            },
-            {
-                id: 4,
-                nome: "Vegetariano",
-                valor: '10.00',
-            },
-            {
-                id: 5,
-                nome: "Vegano",
-                valor: '10.00',
-            },
-            {
-                id: 6,
-                nome: "Fit e Saudável",
-                valor: '10.00',
-            },
-    
-        ]
-    }
-
-        setCategorias(response.data);
-    
+        api
+        .get(`/categorias`, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+            }
+        })
+        .then((response) => {
+            console.log("Resposta", response);
+            setCategorias(response.data)
+        })
+        .catch((erro) => {
+            console.log("Erro", erro);
+        });
     }    
 
     const diasSemanaData = [
@@ -160,57 +135,85 @@ function MeuPlano() {
         return true;
     };    
 
-    const buscarPlano = () => {
-        api
-            .get(`/planos/${sessionStorage.getItem('idUsuario')}`, {
+    const buscarPlano = async () => {
+        try {
+            const response = await api.get(`/planos/${sessionStorage.getItem('idUsuario')}`, {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
                 }
-            })
-            .then((response) => {
-                console.log("Resposta", response);
-                setCategoriasSelecionadas(response.data.categoria || []);
-                setPessoasSelecionadas(response.data.qtdPessoas);
-                setRefeicoesSelecionadas(response.data.qtdRefeicoesDia);
-                setDiasSelecionados(response.data.qtdDiasSemana);
-                setDiaSemanaSelecionado(response.data.diaSemana);
-                setSelectedTime(response.data.horaEntrega);
-            })
-            .catch((erro) => {
-                console.log("Erro", erro);
             });
-    }
 
-    const atualizarPlano = () => {
-        if (validateConstants()) {
-            const corpoRequisicao = {
-                categoria: categoriasSelecionadas,
-                qtdPessoas: pessoasSelecionadas,
-                qtdRefeicoesDia: refeicoesSelecionadas,
-                qtdDiasSemana: diasSelecionados,
-                horaEntrega: selectedTime,
-                diaSemana: diaSemanaSelecionado,
-            };
-            api
-                .put(`/planos/${sessionStorage.getItem('idUsuario')}`, corpoRequisicao, {
-                    headers: {
-                        Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
-                    }
-                })
-                .then((response) => {
-                    console.log("Resposta", response);
-                    setIsEditing(false);
-                    Swal.fire({
-                        title: "Plano atualizado com sucesso.",
-                        confirmButtonColor: "#F29311",
-                    });
-                    buscarPlano();
-                })
-                .catch((erro) => {
-                    console.log("Erro", erro);
-                });
+            console.log("Resposta", response);
+            setPessoasSelecionadas(response.data.qtdPessoas);
+            setRefeicoesSelecionadas(response.data.qtdRefeicoesDia);
+            setDiasSelecionados(response.data.qtdDiasSemana);
+            setDiaSemanaSelecionado(response.data.diaSemana);
+            setSelectedTime(response.data.horaEntrega);
+            setPlanId(response.data.id);
+
+            await buscarCategoriasPlano();
+        } catch (erro) {
+            console.log("Erro", erro);
         }
     };
+
+    const buscarCategoriasPlano = async () => {
+        try {
+            const response = await api.get(`/planos/categorias/${planId}`, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+                }
+            });
+
+            console.log("Resposta", response);
+            setCategoriasSelecionadas(response.data.categoria || []);
+        } catch (erro) {
+            console.log("Erro", erro);
+        }
+    };
+
+    const atualizarPlano = async () => {
+        if (validateConstants()) {
+            try {
+                const responsePlano = await api.put(
+                    `/planos/${sessionStorage.getItem("idUsuario")}`,
+                    {
+                        categoria: categoriasSelecionadas,
+                        qtdPessoas: pessoasSelecionadas,
+                        qtdRefeicoesDia: refeicoesSelecionadas,
+                        qtdDiasSemana: diasSelecionados,
+                        horaEntrega: selectedTime,
+                        diaSemana: diaSemanaSelecionado,
+                    },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
+                        },
+                    }
+                );
+    
+                const planoId = responsePlano.data.id;
+    
+                const categoriaIds = categoriasSelecionadas.map(categoria => ({ idCategoria: categoria.id }));
+    
+                const responsePlanoCategoria = await api.put(
+                    '/planos/categorias',
+                    { planoId, categoriaId: categoriaIds },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
+                        },
+                    }
+                );
+    
+                console.log("Resposta", responsePlanoCategoria);
+    
+                navigate('/cadastro/checkout');
+            } catch (error) {
+                console.error("Erro", error);
+            }
+        }
+    };    
 
     const cancelarEdicao = () => {
         window.location.reload();

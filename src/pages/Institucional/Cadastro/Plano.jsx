@@ -36,47 +36,21 @@ function Plano() {
             setCategoriasSelecionadas([...categoriasSelecionadas, preferencia]);
         }
     };
-    
+
     const buscarCategorias = () => {
-
-        const response = {
-            data: [
-            {
-                id: 1,
-                nome: "Carnes",
-                valor: '10.00',
-            },
-            {
-                id: 2,
-                nome: "Pescetariano",
-                valor: '10.00',
-            },
-            {
-                id: 3,
-                nome: "Rápido e Fácil",
-                valor: '10.00',
-            },
-            {
-                id: 4,
-                nome: "Vegetariano",
-                valor: '10.00',
-            },
-            {
-                id: 5,
-                nome: "Vegano",
-                valor: '10.00',
-            },
-            {
-                id: 6,
-                nome: "Fit e Saudável",
-                valor: '10.00',
-            },
-    
-        ]
-    }
-
-        setCategorias(response.data);
-    
+        api
+            .get(`/categorias`, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+                }
+            })
+            .then((response) => {
+                console.log("Resposta", response);
+                setCategorias(response.data)
+            })
+            .catch((erro) => {
+                console.log("Erro", erro);
+            });
     }
 
     const diasSemanaData = [
@@ -157,31 +131,48 @@ function Plano() {
         return true;
     };
 
-    const cadastrarPlano = () => {
+    const cadastrarPlano = async () => {
         if (validateConstants()) {
-            const corpoRequisicao = {
-                categoria: categoriasSelecionadas,
-                qtdPessoas: pessoasSelecionadas,
-                qtdRefeicoesDia: refeicoesSelecionadas,
-                qtdDiasSemana: diasSelecionados,
-                horaEntrega: selectedTime,
-                diaSemana: diaSemanaSelecionado,
-            };
-            api
-                .post(`/planos/${sessionStorage.getItem("idUsuario")}`, corpoRequisicao, {
-                    headers: {
-                        Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+            try {
+                const responsePlano = await api.post(
+                    `/planos/${sessionStorage.getItem("idUsuario")}`,
+                    {
+                        categoria: categoriasSelecionadas,
+                        qtdPessoas: pessoasSelecionadas,
+                        qtdRefeicoesDia: refeicoesSelecionadas,
+                        qtdDiasSemana: diasSelecionados,
+                        horaEntrega: selectedTime,
+                        diaSemana: diaSemanaSelecionado,
+                    },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
+                        },
                     }
-                })
-                .then((response) => {
-                    console.log("Resposta", response);
-                    navigate('/cadastro/checkout');
-                })
-                .catch((erro) => {
-                    console.log("Erro", erro);
-                });
+                );
+    
+                const planoId = responsePlano.data.id;
+    
+                const categoriaIds = categoriasSelecionadas.map(categoria => ({ idCategoria: categoria.id }));
+    
+                const responsePlanoCategoria = await api.post(
+                    '/planos/categorias',
+                    { planoId, categoriaId: categoriaIds },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
+                        },
+                    }
+                );
+    
+                console.log("Resposta", responsePlanoCategoria);
+    
+                navigate('/cadastro/checkout');
+            } catch (error) {
+                console.error("Erro", error);
+            }
         }
-    };
+    };    
 
     const buscarPlanoUsuario = () => {
         api
@@ -234,23 +225,23 @@ function Plano() {
                                 <div className="px-8 ml-12 mr-12">
                                     <h3 className="text-center">1. Selecione suas preferências</h3>
                                     <div className="flex w-full items-center justify-center">
-                                    {splitCategorias.map((columnData, columnIndex) => (
-                                                <div className="flex-col items-center justify-center" key={columnIndex}>
-                                                    {columnData.map((categoria, index) => (
-                                                        <div
-                                                            key={index}
-                                                            className={`card ${styles.card_plano} flex-col items-center justify-center ${categoriasSelecionadas.includes(categoria) ? styles.card_plano_selecionado : ''
-                                                                }`}
-                                                            onClick={() => handlePreferencias(categoria)}
-                                                        >
-                                                            <img
-                                                                src={getIconByCategoriaNome(categoria.nome)}
-                                                                className="mx-auto my-auto w-10"
-                                                                alt={categoria.nome}
-                                                            />
-                                                            <div className={`${styles.texto_card_plano}`}>{categoria.nome}</div>
-                                                        </div>
-                                                    ))}
+                                        {splitCategorias.map((columnData, columnIndex) => (
+                                            <div className="flex-col items-center justify-center" key={columnIndex}>
+                                                {columnData.map((categoria, index) => (
+                                                    <div
+                                                        key={index}
+                                                        className={`card ${styles.card_plano} flex-col items-center justify-center ${categoriasSelecionadas.includes(categoria) ? styles.card_plano_selecionado : ''
+                                                            }`}
+                                                        onClick={() => handlePreferencias(categoria)}
+                                                    >
+                                                        <img
+                                                            src={getIconByCategoriaNome(categoria.nome)}
+                                                            className="mx-auto my-auto w-10"
+                                                            alt={categoria.nome}
+                                                        />
+                                                        <div className={`${styles.texto_card_plano}`}>{categoria.nome}</div>
+                                                    </div>
+                                                ))}
                                             </div>
                                         ))}
                                     </div>

@@ -23,16 +23,9 @@ function PedidosFornecedor() {
                 <div className="items-center justify-between w-4/5 flex border-b border-gray-300">
                     <h1 className="text-2xl text-[#045D53] mb-4">Pedidos</h1>
                     <div className="flex">
-                        <select className="mr-2">
-                            <option value="hoje">Hoje</option>
-                            <option value="semana">Esta Semana</option>
-                            <option value="semana">Semana Passada</option>
-                            <option value="mes">Este Mês</option>
-                            <option value="mes">Mês Passado</option>
-                        </select>
                         <select>
                             <option value="pendente">Pendente</option>
-                            <option value="finalizado">Finalizado</option>
+                            <option value="finalizado">Entregue</option>
                             <option value="cancelado">Cancelado</option>
                         </select>
                     </div>
