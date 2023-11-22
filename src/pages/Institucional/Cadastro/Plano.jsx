@@ -165,7 +165,7 @@ function Plano() {
                     }
                 );
     
-                console.log("Resposta", responsePlanoCategoria);
+                console.log("Resposta Plano Categorias", responsePlanoCategoria);
     
                 navigate('/cadastro/checkout');
             } catch (error) {
