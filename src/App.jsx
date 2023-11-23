@@ -23,6 +23,8 @@ import PerfilSenhaAutenticacaoFornecedor from './pages/Fornecedor/Perfil/PerfilS
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.minimal.css";
 import ReceitasFornecedor from './pages/Fornecedor/Receitas/Receitas.jsx';
+import AdicionarReceita from './pages/Fornecedor/AdicionarReceita/AdicionarReceita.jsx';
+import EditarReceita from './pages/Fornecedor/EditarReceita/EditarReceita.jsx';
 
 function App() {
 
@@ -61,6 +63,8 @@ function App() {
           <Route path="/fornecedor/perfil/info-pessoal" element={<PerfilInfoPessoalFornecedor />} />
           <Route path="/fornecedor/perfil/senha-autenticacao" element={<PerfilSenhaAutenticacaoFornecedor />} />
           <Route path="/fornecedor/receitas" element={<ReceitasFornecedor />} />
+          <Route path="/fornecedor/adicionar-receita" element={<AdicionarReceita />} />
+          <Route path="/fornecedor/editar-receita/:id" element={<EditarReceita />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>

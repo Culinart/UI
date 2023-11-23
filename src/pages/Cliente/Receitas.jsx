@@ -15,7 +15,7 @@ function Receitas() {
   const [searchInput, setSearchInput] = useState('');
 
   useEffect(() => {
-    buscarPreferencias();
+    // buscarPreferencias();
     buscarReceitasPedidos();
   }, []);
 
@@ -27,13 +27,19 @@ function Receitas() {
     });
   }
 
+
+
   const buscarReceitasPedidos = () => {
     api.get('/receitas').then((response) => {
       setReceitasPedido(response.data);
+      // console.log(receitasPedido[0].preferenciaDTO);
     }).catch((error) => {
       console.log(error);
     });
   }
+
+  // console.log("Console log solto" + receitasPedido)
+
 
   const navegarPreferencias = () => {
     navigate("/cliente/preferencias");
@@ -99,7 +105,19 @@ function Receitas() {
       <div className="flex justify-between mt-4" style={{ marginRight: "10%", marginLeft: "10%" }}>
         {receitasPedido.length > 0 ? (
           receitasPedido.map((receita, index) => (
-            <CardReceita key={index} receita={receita} pedidosReceita={receitasPedido} />
+            <CardReceita
+              // key={index}
+              receita={receita}
+              // pedidosReceita={receitasPedido}
+
+              key={receita.id}
+              id={receita.id}
+              nome={receita.receitaDTO.nome}
+              // tempoPreparo={receita.receitaDTO.tempoPreparo}
+              categoria={receita.categoriaDTO[0].nome}
+              preferencia={receita.preferenciaDTO}
+              imagem={receita.imagem}
+            />
           ))
         ) : (
           <div className="text-gray-600 text-2xl w-full text-center">

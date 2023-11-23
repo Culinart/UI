@@ -2,27 +2,30 @@ import React, { useState } from "react";
 import { FaHeart, FaStar, FaPlusCircle, FaCheckCircle } from 'react-icons/fa';
 import Preferencia from "./Preferencia";
 import ModalPedido from "../Pedido/ModalPedido";
-import ModalReceita from "./ModalReceita";
+import ModalReceita from "./ModalReceita/ModalReceita";
 import api from "../../../api/api";
 
-function CardReceita(props) {
+function CardReceita(/*props*/{ nome, tempoPreparo, categoria, preferencia, imagem }) {
 
-    const {
-        id,
-        imagem,
-        nome,
-        categorias,
-        preferencias,
-        nota,
-        qtdAvaliacoes,
-        favorito,
-        pedido,
-    } = props.receita;
+    // const {
+    //     id,
+    //     imagem,
+    //     nome,
+    //     categorias,
+    //     preferencias,
+    //     nota,
+    //     qtdAvaliacoes,
+    //     favorito,
+    //     pedido,
+    // } = props.receita;
 
-    const [isFavorito, setIsFavorito] = useState(favorito);
-    const [isReceitaNoPedido, setIsReceitaNoPedido] = useState(pedido);
+    // console.log(preferencia)
+
+    // const [isFavorito, setIsFavorito] = useState(favorito);
+    // const [isReceitaNoPedido, setIsReceitaNoPedido] = useState(pedido);
     const [isModalReceitaOpen, setIsModalReceitaOpen] = useState(false);
     const [isModalPedidoOpen, setIsModalPedidoOpen] = useState(false);
+    const [preferenciasDTO, setPreferenciaDTO] = useState(preferencia);
 
     const handleFavoritedClick = async (e) => {
         e.stopPropagation();
@@ -36,12 +39,13 @@ function CardReceita(props) {
         }
     }
 
+
     const handleAdicionarClick = (e) => {
         e.stopPropagation();
         if (isReceitaNoPedido) {
             setIsReceitaNoPedido(!isReceitaNoPedido);
         }
-        setIsModalPedidoOpen(true); 
+        setIsModalPedidoOpen(true);
     };
 
     const openModalReceita = () => {
@@ -64,40 +68,52 @@ function CardReceita(props) {
                     onClick={handleFavoritedClick}
                 >
                     <FaHeart
-                        className={isFavorito ? "text-red-500 text-2xl" : "text-gray-400 text-2xl"}
+                        className={/*isFavorito ? "text-red-500 text-2xl" : */"text-gray-400 text-2xl"}
                     />
                 </button>
                 <img src={imagem} alt="Imagem da Receita" style={{ width: '280px', height: '160px', borderRadius: '1.2rem' }} />
             </div>
             <h2 className=" text-lg font-semibold mt-2">{nome}</h2>
             <div>
-                {categorias.map((categoria) => (
-                    <span key={categoria} className=" text-sm mr-2 text-gray-600">
-                        {categoria}
-                    </span>
-                ))}
+                {/* {categorias.map((categoria) => (
+                    <span key={categoria} className=" text-sm mr-2 text-gray-600"> */}
+                <span className=" text-sm mr-2 text-gray-600">
+                    {categoria}
+                </span>
+                {/* ))} */}
             </div>
             <div className="flex items-center mt-2">
-                {preferencias.map((preferencia) => (
-                    <Preferencia key={preferencia.nome} preferencia={preferencia} />
+                {/* {preferencias.map((preferencia) => (
+                    <Preferencia key={preferencia.nome} preferencia={preferencia} /> */}
+                {/* ))} */}
+
+                {/* <Preferencia /> */}
+
+                {/* {preferencias.map((preferencia) => (
+                    <Preferencia key={preferencia.id} preferencia={preferencia} />
+                ))} */}
+
+                {preferenciasDTO.map((preferencia) => (
+                    <Preferencia key={preferencia.id} preferencia={preferencia} />
                 ))}
             </div>
             <div className="flex items-center mt-2">
                 <div className="flex items-center">
                     <FaStar className="text-yellow-400 text-xl mr-2" />
-                    <span className="text-sm">{nota}</span>
+                    <span className="text-sm">/5.0</span>
                 </div>
                 <div className="ml-2 mr-4 items-center">
-                    <span className="text-sm">({qtdAvaliacoes} Avaliações)</span>
+                    <span className="text-sm">Avaliações</span>
                 </div>
             </div>
             <div className="flex justify-end">
                 <button onClick={handleAdicionarClick}>
-                    {isReceitaNoPedido ? (
+                    {/* {isReceitaNoPedido ? (
                         <FaCheckCircle className="text-green-500 text-2xl hover:text-green-700" />
                     ) : (
                         <FaPlusCircle className="text-green-500 text-2xl hover:text-green-700" />
-                    )}
+                    )} */}
+                    <FaPlusCircle className="text-green-500 text-2xl hover:text-green-700" />
                 </button>
             </div>
             {isModalReceitaOpen && (

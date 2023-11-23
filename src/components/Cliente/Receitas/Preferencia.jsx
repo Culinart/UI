@@ -7,7 +7,7 @@ function Preferencia({ preferencia }) {
             style={{
                 backgroundColor: preferencia.corFundo,
                 border: "1px solid black",
-                color: preferencia.corTexto,
+                color: preferencia.corTexto
             }}
         >
             {preferencia.nome}
