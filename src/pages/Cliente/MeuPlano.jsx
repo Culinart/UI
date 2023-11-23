@@ -10,7 +10,6 @@ import iconeMaca from "../../assets/Institucional/Cadastro/iconeMaca.svg";
 import styles from "./MeuPlano.module.css";
 import api from "../../api/api";
 import AlertaClienteInativo from "../../components/Cliente/AlertaClienteInativo";
-import Swal from "sweetalert2";
 
 function MeuPlano() {
 
@@ -26,6 +25,7 @@ function MeuPlano() {
     const [isAtivo, setAtivo] = useState(sessionStorage.getItem('isAtivo'));
     const [permissao, setPermissao] = useState(sessionStorage.getItem('permissao'));
     const [planId, setPlanId] = useState("");
+    const [categoriasSelecionadasAntigas, setCategoriasSelecionadasAntigas] = useState([]);
 
     useEffect(() => {
         buscarPlano();
@@ -34,12 +34,19 @@ function MeuPlano() {
     }, []);
 
     const handlePreferencias = (preferencia) => {
-        if (categoriasSelecionadas.includes(preferencia)) {
-            setCategoriasSelecionadas(categoriasSelecionadas.filter((item) => item !== preferencia));
+        const isCategoriaSelected = categoriasSelecionadas.some(
+          (selectedCategoria) => selectedCategoria.id === preferencia.id
+        );
+    
+        if (isCategoriaSelected) {
+          setCategoriasSelecionadas((prevCategorias) =>
+            prevCategorias.filter((categoria) => categoria.id !== preferencia.id)
+          );
         } else {
-            setCategoriasSelecionadas([...categoriasSelecionadas, preferencia]);
+          setCategoriasSelecionadas((prevCategorias) => [...prevCategorias, preferencia]);
         }
-    };
+      };
+    
 
     const buscarCategorias = () => {
         api
@@ -51,6 +58,7 @@ function MeuPlano() {
             .then((response) => {
                 console.log("Resposta", response);
                 setCategorias(response.data)
+                setCategoriasSelecionadasAntigas(response.data)
             })
             .catch((erro) => {
                 console.log("Erro", erro);
@@ -184,12 +192,14 @@ function MeuPlano() {
     const atualizarPlano = async () => {
         if (validateConstants()) {
             try {
+    
                 const responsePlano = await api.put(
                     `/planos/${sessionStorage.getItem("idUsuario")}`,
                     {
-                        categoria: categoriasSelecionadas,
                         qtdPessoas: pessoasSelecionadas,
                         qtdRefeicoesDia: refeicoesSelecionadas,
+                        valorPlano: 0.0,
+                        valorAjuste: 0.0,
                         qtdDiasSemana: diasSelecionados,
                         horaEntrega: selectedTime,
                         diaSemana: diaSemanaSelecionado,
@@ -200,29 +210,50 @@ function MeuPlano() {
                         },
                     }
                 );
-
+    
                 const planoId = responsePlano.data.id;
 
-                const categoriaIds = categoriasSelecionadas.map(categoria => ({ idCategoria: categoria.id }));
-
-                const responsePlanoCategoria = await api.put(
-                    '/planos/categorias',
-                    { planoId, categoriaId: categoriaIds },
-                    {
-                        headers: {
-                            Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
-                        },
-                    }
-                );
-
-                console.log("Resposta", responsePlanoCategoria);
-
-                navigate('/cadastro/checkout');
+                const categoriasAtuais = categoriasSelecionadas.map(categoria => categoria.id);
+    
+                const categoriasNovas = categoriasAtuais.filter(categoria => !categoriasSelecionadasAntigas.includes(categoria));
+                const categoriasRemovidas = categoriasSelecionadasAntigas.filter(categoria => !categoriasAtuais.includes(categoria));
+    
+                if (categoriasNovas.length > 0) {
+                    const newPlanoCategorias = {
+                        planoId,
+                        categoriaId: categoriasNovas,
+                    };
+    
+                    await api.post(
+                        `/planos/categorias`,
+                        newPlanoCategorias,
+                        {
+                            headers: {
+                                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
+                            },
+                        }
+                    );
+                }
+    
+                for (const categoriaId of categoriasRemovidas) {
+                    await api.delete(
+                        `/planos/categorias/${categoriaId}`,
+                        {
+                            headers: {
+                                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
+                            },
+                        }
+                    );
+                }
+    
+                console.log("Plano atualizado com sucesso!");
             } catch (error) {
                 console.error("Erro", error);
-            }
+            } 
         }
     };
+    
+
 
     const cancelarEdicao = () => {
         window.location.reload();
@@ -278,8 +309,8 @@ function MeuPlano() {
                                                     <div
                                                         key={index}
                                                         className={`card ${styles.card_plano} flex-col items-center justify-center ${categoriasSelecionadas.some((selectedCategoria) => selectedCategoria.id === categoria.id)
-                                                                ? styles.card_plano_selecionado
-                                                                : ''
+                                                            ? styles.card_plano_selecionado
+                                                            : ''
                                                             }`}
                                                         onClick={() => handlePreferencias(categoria)}
                                                     >
