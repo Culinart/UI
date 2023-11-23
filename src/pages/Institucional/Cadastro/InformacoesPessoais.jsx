@@ -8,13 +8,18 @@ import api from "../../../api/api";
 import styles from "./CadastroStyles.module.css";
 import Swal from "sweetalert2";
 
+import { toast } from 'react-toastify';
+import { injectStyle } from "react-toastify/dist/inject-style";
+
 const validationSchema = Yup.object().shape({
   nome: Yup.string()
     .required("Insira o seu nome completo")
     .test("two-words", "Insira o seu nome completo", (value) => {
       const words = value.split(" ");
       return words.filter((word) => word.replace(/\W/g, "").length >= 1).length >= 2;
-    }),
+    })
+    .matches(/^[a-zA-Z]+$/, "Insira somente letras"),
+
   email: Yup.string().email("Email inválido").required("Insira o seu email"),
   telefone: Yup.string()
     .matches(
@@ -32,6 +37,7 @@ const validationSchema = Yup.object().shape({
     .matches(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, "Insira um CPF válido")
     .required("Insira o seu CPF"),
 });
+
 
 function InformacoesPessoais() {
 
@@ -103,8 +109,8 @@ function InformacoesPessoais() {
       .then((response) => {
         console.log("Resposta", response);
         navigate('/login');
-      })
-      .catch((erro) => {
+         toast.success('Cadastro realizado com sucesso!');
+      }).catch((erro) => {
         Swal.fire({
           title: "Cadastro inválido ou já existente. Por favor tente novamente.",
           confirmButtonColor: "#F29311",
