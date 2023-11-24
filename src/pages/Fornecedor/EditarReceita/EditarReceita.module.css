@@ -48,7 +48,7 @@
     height: 12rem;
     border-radius: 12px;
     background-color: lightslategray;
-    box-shadow: 0px 3px 10px 3px rgba(0,0,0,0.2);
+    box-shadow: 0px 3px 10px 3px rgba(0, 0, 0, 0.2);
 }
 
 .container_titulo_categoria {
@@ -82,12 +82,20 @@
     display: flex;
 }
 
+.inputs_medida .icone {
+    width: 25px;
+    height: 25px;
+    background-color: #fff;
+    cursor: pointer;
+    position: absolute;
+    right: -30px;
+}
+
 .icone {
-    width: 20px;
-    height: 20px;
-    border-radius: 10px;
-    background-color: lightslategray;
-    margin-right: 10px;
+    width: 25px;
+    height: 25px;
+    border-radius: 15px;
+    cursor: pointer;
 }
 
 .container_medida_rendimento {
@@ -158,7 +166,9 @@
 .inputs_medida {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin: 5px 0px;
+    position: relative;
 }
 
 .titulos_medida>h1 {
@@ -208,7 +218,7 @@
     border: solid 1px #000;
 }
 
-.adicionar_ingrediente{
+.adicionar_ingrediente {
     width: 100%;
     height: 2rem;
     background-color: rgba(234, 240, 240, 0.77);
@@ -217,37 +227,45 @@
     margin: 5px 0px;
 }
 
-.container_modo_preparo{
+.container_modo_preparo {
     width: 70rem;
     margin: 40px 0px;
 }
 
-.titulo_preparo{
+.titulo_preparo {
     color: #DC7726;
     font-size: 24px;
     font-weight: 600;
     text-align: center;
 }
 
-.passo{
+.passo {
     display: flex;
     flex-direction: column;
     margin: 10px 0px;
+    position: relative;
 }
 
-.passo>span{
+.passo .icone{
+    background-color: #fff;
+    position: absolute;
+    top: 50%;
+    right: -30px;
+}
+
+.passo>span {
     color: #DC7726;
     font-size: 20px;
     font-weight: 600;
 }
 
-.passo>textarea{
+.passo>textarea {
     border-radius: 12px;
     padding: 2px;
     border: solid 1px #000;
 }
 
-.adicionar_passo{
+.adicionar_passo {
     width: 100%;
     height: 2rem;
     background-color: rgba(234, 240, 240, 0.77);
@@ -256,14 +274,14 @@
     margin: 20px 0px;
 }
 
-.container_botoes{
+.container_botoes {
     height: 2rem;
     width: 70rem;
     display: flex;
     justify-content: space-evenly;
 }
 
-.container_botoes>button{
+.container_botoes>button {
     height: 2.4rem;
     width: 7.1rem;
     background-color: #c5c5c5;
