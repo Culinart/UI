@@ -13,8 +13,6 @@ function ReceitasFornecedor() {
 
     const [modalAberto, setModalAberto] = useState(false);
 
-    // console.log(receitasPedido);
-
     const handleFecharModal = () => {
         setModalAberto(false);
     }
