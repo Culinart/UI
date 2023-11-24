@@ -66,6 +66,7 @@ function App() {
           <Route path="/fornecedor/perfil/senha-autenticacao" element={<PerfilSenhaAutenticacaoFornecedor />} />
           <Route path="/fornecedor/pedidos" element={<PedidosFornecedor />} />
           <Route path="/fornecedor/precos" element={<Precos />} />
+          <Route path="/fornecedor/pedidos" element={<PedidosFornecedor />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
