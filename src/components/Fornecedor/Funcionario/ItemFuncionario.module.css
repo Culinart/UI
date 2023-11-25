@@ -8,7 +8,7 @@
     border-bottom: solid 1px #3f3f3f;
 }
 
-.item_nome{
+.item_nome {
     color: rgb(31, 31, 31);
     width: 30%;
     height: 2rem;
@@ -21,7 +21,7 @@
     align-items: center;
 }
 
-.item_email{
+.item_email {
     color: rgb(31, 31, 31);
     width: 30%;
     height: 2rem;
@@ -35,7 +35,7 @@
     text-transform: lowercase;
 }
 
-.item_permissao{
+.item_permissao {
     color: rgb(31, 31, 31);
     width: 15%;
     height: 2rem;
@@ -46,9 +46,15 @@
     font-size: 13px;
     display: flex;
     align-items: center;
+    text-transform: lowercase;
 }
 
-.item_icones{
+.item_permissao>span:first-letter {
+    text-transform: capitalize;
+    /* background-color: red; */
+}
+
+.item_icones {
     width: 10%;
     height: 2rem;
     max-width: 20%;
@@ -57,13 +63,13 @@
     align-items: center;
 }
 
-.item_icones>img{
+.item_icones>img {
     height: 20px;
     cursor: pointer;
 }
 
 
-.fundo_modal{
+.fundo_modal {
     width: 100vw;
     height: 100vh;
     background-color: #00000012;

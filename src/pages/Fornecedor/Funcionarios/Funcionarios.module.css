@@ -38,12 +38,12 @@
 }
 
 .acoes {
-    /* background-color: #ffdabb; */
     width: 80%;
     height: 2rem;
     display: flex;
     justify-content: space-between;
     margin-bottom: 2rem;
+    z-index: 50;
 }
 
 .acoes>button {
@@ -106,9 +106,6 @@ input[type="file"] {
     display: flex;
     justify-content: center;
 }
-
-
-
 
 .input_buscar {
     position: relative;

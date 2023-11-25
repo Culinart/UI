@@ -5,13 +5,14 @@ import style from "./AdicionarFuncionario.module.css"
 import x from "../../../assets/Institucional/Funcionarios/x.svg";
 import user from "../../../assets/Institucional/Funcionarios/user.svg"
 import icon_email from "../../../assets/Institucional/Funcionarios/email.svg"
+import api from "../../../api/api";
+import Swal from 'sweetalert2';
 
 function AdicionarFuncionario({ handleFecharModal }) {
     const [novoFuncionario, setNovoFuncionario] = useState({
         nome: "",
         email: "",
-        permissao: "Comum",
-        id: ""
+        permissao: "FUNCIONARIO",
     });
 
     const handleNomeChange = (event) => {
@@ -25,24 +26,55 @@ function AdicionarFuncionario({ handleFecharModal }) {
     const handlePermissaoChange = (event) => {
         let permissao
         if (event.target.checked) {
-            permissao = "Administrador"
+            permissao = "ADMINISTRADOR"
         }
         setNovoFuncionario({ ...novoFuncionario, permissao: permissao });
     };
 
     const adicionarFunc = () => {
-        axios.post("https://653dc13df52310ee6a9a4ab7.mockapi.io/funcionario", novoFuncionario)
-            .then(response => {
-                console.log("Novo funcionário adicionado:", response.data);
-                window.location.reload();
-            })
-            .catch(error => {
-                console.error("Erro ao adicionar funcionário:", error);
+
+        const validarEmail = (email) => {
+            const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return regexEmail.test(email);
+        };
+
+        const emailValido = validarEmail(novoFuncionario.email);
+
+        if (novoFuncionario.nome.length >= 3 && emailValido) {
+            api.post(`/funcionarios`, novoFuncionario)
+                .then(response => {
+
+                    console.log("Novo funcionário adicionado:", response.data);
+                    window.location.reload();
+                })
+                .catch(error => {
+                    Swal.fire({
+                        title: 'Erro',
+                        text: 'Email já cadastrado',
+                        icon: 'error',
+                        timer: 1800,
+                        showConfirmButton: false,
+                    });
+                });
+        } else {
+            Swal.fire({
+                title: 'Atenção',
+                text: 'Nome do funcionário ou e-mail estão inválidos',
+                icon: 'warning',
+                timer: 1800,
+                showConfirmButton: false,
             });
+        }
+    };
+
+    const handleCliqueForaModal = (event) => {
+        if (event.target === event.currentTarget) {
+            handleFecharModal();
+        }
     };
 
     return (
-        <>
+        <div className={style.fundo_modal} onClick={handleCliqueForaModal}>
             <section className={style.card}>
                 <img onClick={handleFecharModal} src={x} alt="Sair" className={style.x} />
                 <h1 className={style.titulo}>Adicionar Funcionário</h1>
@@ -88,7 +120,7 @@ function AdicionarFuncionario({ handleFecharModal }) {
                     </button>
                 </div>
             </section>
-        </>
+        </ div>
     );
 }
 

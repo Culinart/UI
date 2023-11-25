@@ -4,6 +4,8 @@ import x from "../../../assets/Institucional/Funcionarios/x.svg";
 import user from "../../../assets/Institucional/Funcionarios/user.svg";
 import icon_email from "../../../assets/Institucional/Funcionarios/email.svg";
 import apiMock from "../../../api/mockapi";
+import api from "../../../api/api";
+import Swal from 'sweetalert2';
 
 function EditarFuncionario({ id, nome, email, permissao, handleFecharModal }) {
     const [inputNome, setInputNome] = useState(nome);
@@ -17,20 +19,42 @@ function EditarFuncionario({ id, nome, email, permissao, handleFecharModal }) {
             permissao: inputPermissao,
         };
 
-        apiMock
-            .put(`/${id}`, corpoRequisicao)
-            .then((response) => {
-                console.log("Resposta", response);
-                window.location.reload();
-            })
-            .catch((erro) => {
-                alert("Erro ao atualizar funcionario!");
-                console.log("Erro", erro);
+        const validarEmail = (email) => {
+            const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return regexEmail.test(email);
+        };
+
+        const emailValido = validarEmail(corpoRequisicao.email);
+
+        if (corpoRequisicao.nome.length >= 3 && emailValido) {
+            api.put(`funcionarios/${id}`, corpoRequisicao)
+                .then((response) => {
+                    console.log("Resposta", response);
+                    handleFecharModal();
+                    window.location.reload();
+                })
+                .catch((erro) => {
+                    console.log("Erro", erro);
+                });
+        } else {
+            Swal.fire({
+                title: 'Atenção',
+                text: 'Nome do funcionário ou e-mail estão inválidos',
+                icon: 'warning',
+                timer: 1800,
+                showConfirmButton: false,
             });
+        }
     }
 
+    const handleCliqueForaModal = (event) => {
+        if (event.target === event.currentTarget) {
+            handleFecharModal();
+        }
+    };
+
     return (
-        <>
+        <div className={style.fundo_modal} onClick={handleCliqueForaModal}>
             <section className={style.card}>
                 <img onClick={handleFecharModal} src={x} alt="Sair" className={style.x} />
                 <h1 className={style.titulo}>Editar Funcionário</h1>
@@ -61,10 +85,10 @@ function EditarFuncionario({ id, nome, email, permissao, handleFecharModal }) {
                     <label>
                         <input
                             type="radio"
-                            value="Administrador"
-                            checked={inputPermissao === "Administrador"}
+                            value="ADMINISTRADOR"
+                            checked={inputPermissao === "ADMINISTRADOR"}
                             onChange={() => {
-                                setInputPermissao("Administrador");
+                                setInputPermissao("ADMINISTRADOR");
                             }}
                         />
                         <span className={style.adm}>Administrador</span>
@@ -72,10 +96,10 @@ function EditarFuncionario({ id, nome, email, permissao, handleFecharModal }) {
                     <label>
                         <input
                             type="radio"
-                            value="Comum"
-                            checked={inputPermissao === "Comum"}
+                            value="FUNCIONARIO"
+                            checked={inputPermissao === "FUNCIONARIO"}
                             onChange={() => {
-                                setInputPermissao("Comum");
+                                setInputPermissao("FUNCIONARIO");
                             }}
                         />
                         <span className={style.adm}>Comum</span>
@@ -88,11 +112,10 @@ function EditarFuncionario({ id, nome, email, permissao, handleFecharModal }) {
                     <button onClick={handleFecharModal} className={style.cancelar}>Cancelar</button>
                     <button className={style.confirmar} onClick={() => {
                         atualizarFuncionario(id);
-                        handleFecharModal();
                     }}>Confirmar</button>
                 </div>
             </section>
-        </>
+        </ div>
     );
 }
 

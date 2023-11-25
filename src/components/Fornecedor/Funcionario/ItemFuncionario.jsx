@@ -1,11 +1,10 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import estilo from './ItemFuncionario.module.css';
 import EditarFuncionario from "../EditarFuncionario/EditarFuncionario";
-import apiMock from "../../../api/mockapi";
-import axios from 'axios';
 
 import editar from '../../../assets/Institucional/Funcionarios/edit.svg';
 import lixo from '../../../assets/Institucional/Funcionarios/trash.svg';
+import api from "../../../api/api";
 
 function ItemFuncionario({ id, nome, email, permissao }) {
     const [exibirEditar, setExibirEditar] = useState(false);
@@ -19,7 +18,7 @@ function ItemFuncionario({ id, nome, email, permissao }) {
     }
 
     const excluirFuncionario = () => {
-        axios.delete(`https://653dc13df52310ee6a9a4ab7.mockapi.io/funcionario/${id}`)
+        api.delete(`/funcionarios/${id}`)
             .then((response) => {
                 console.log('Funcionário excluído com sucesso:', response);
                 window.location.reload();
@@ -50,6 +49,7 @@ function ItemFuncionario({ id, nome, email, permissao }) {
                     id={id}
                     nome={nome}
                     email={email}
+                    permissao={permissao}
                 />}
             </section>
         </>
