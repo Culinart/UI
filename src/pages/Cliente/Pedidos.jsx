@@ -345,7 +345,7 @@ function Pedidos() {
                         </div>
                         <div className="flex w-full h-auto justify-center mt-6">
                             <div className="grid grid-cols-3 gap-10 gap-y-16 w-10/12 h-[27rem] mt-8 ml-6 overflow-hidden overflow-y-scroll">
-                                {receitas.map((receita) => (
+                            {receitas && receitas.map((receita) => (
                                     <CardPedido
                                         key={receita.id}
                                         nome={receita.nome}
