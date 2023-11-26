@@ -18,8 +18,8 @@ function Pedidos() {
     });
     const [categorias, setCategorias] = useState([]);
     const [selectedDateIndex, setSelectedDateIndex] = useState(0);
-    // const [statusPedido, setStatusPedido] = useState("ATIVO");
-    const [statusPedido, setStatusPedido] = useState("");
+    const [statusPedido, setStatusPedido] = useState("ATIVO");
+    // const [statusPedido, setStatusPedido] = useState("");
     const [isModalAvaliarOpen, setIsModalAvaliarOpen] = useState(false);
     const [datasPedidos, setDatasPedidos] = useState([]);
     const [dataPedidoAtual, setDataPedidoAtual] = useState("");
@@ -33,9 +33,14 @@ function Pedidos() {
     useEffect(() => {
         buscarEnderecoAtivo();
         buscarDatasPedidos();
-        buscarPedido();
     }, []);
-    
+
+    useEffect(() => {
+        if (datasPedidos.length > 0) {
+            setDataPedidoAtual(datasPedidos[selectedDateIndex].datasPedidos);
+            buscarPedido();
+        }
+    }, [selectedDateIndex, datasPedidos]);
 
     const openModalAvaliacao = () => {
         setIsModalAvaliarOpen(true);
@@ -46,11 +51,39 @@ function Pedidos() {
     };
 
     const confirmarEntrega = () => {
-        alert('entrega confirmada')
+
+        // api.put(`/pedidos/entregue/${pedidoAtual.id}`, null, {
+        //     headers: {
+        //         Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+        //     }
+        // })
+        //     .then((response) => {
+
+        //         window.location.reload();
+
+        //     })
+        //     .catch((error) => {
+        //         console.log(error);
+        //     });
+
     }
 
     const pularEntrega = () => {
-        alert('entrega pulada')
+
+        // api.put(`/pedidos/pularEntrega/${pedidoAtual.id}`, null, {
+        //     headers: {
+        //         Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+        //     }
+        // })
+        //     .then((response) => {
+
+        //         window.location.reload();
+
+        //     })
+        //     .catch((error) => {
+        //         console.log(error);
+        //     });
+
     }
 
     const buscarEnderecoAtivo = () => {
@@ -69,6 +102,24 @@ function Pedidos() {
     }
 
     const buscarDatasPedidos = () => {
+
+        // api.get(`/pedidos/datas/${sessionStorage.getItem("idUsuario")}`, {
+        //     headers: {
+        //         Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+        //     }
+        // })
+        //     .then((response) => {
+        //         setDatasPedidos(response.data);
+
+        //         setDataPedidoAtual(response.data[response.data.length - 1].datasPedidos);
+
+        //         buscarPedido();
+
+        //     })
+        //     .catch((error) => {
+        //         console.log(error);
+        //     });
+
         const response = {
             data: [
                 {
@@ -93,9 +144,33 @@ function Pedidos() {
 
         setDataPedidoAtual(response.data[response.data.length - 1].datasPedidos);
 
+        buscarPedido();
+
     }
 
     const buscarPedido = () => {
+
+        // const corpoRequisicao = {
+        //     dataEntrega: dataPedidoAtual
+        // }
+
+        // api.get(`/pedidos/entrega/${sessionStorage.getItem("idUsuario")}`, corpoRequisicao, {
+        //     headers: {
+        //         Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+        //     }
+        // })
+        //     .then((response) => {
+
+        //         setPedidoAtual(response.data);
+        //         setReceitas(response.data.listaReceitas);
+        //         setStatusPedido(response.data.status);
+
+        //     })
+        //     .catch((error) => {
+        //         console.log(error);
+        //     });
+
+
         const response = {
             data:
             {
@@ -182,6 +257,14 @@ function Pedidos() {
 
     }
 
+    const handleDateNavigation = (direction) => {
+        if (direction === "left" && selectedDateIndex > 0) {
+            setSelectedDateIndex((prevIndex) => prevIndex - 1);
+        } else if (direction === "right" && selectedDateIndex < datasPedidos.length - 1) {
+            setSelectedDateIndex((prevIndex) => prevIndex + 1);
+        }
+    };
+
 
     return (
         <>
@@ -191,18 +274,20 @@ function Pedidos() {
                     <div className="items-center justify-center w-4/5 flex border-b border-gray-300">
                         <div className="flex items-center">
                             <button
-                                className="px-16 py-1 text-2xl text-[#045D53]"
+                                className={`px-16 py-1 text-2xl text-[#045D53] ${selectedDateIndex === 0 ? 'text-[#b1cac7] disabled' : ''}`}
+                                disabled={selectedDateIndex === 0}
+                                onClick={() => handleDateNavigation("left")}
                             >
                                 &lt;
                             </button>
                             <h1 className="text-2xl text-[#045D53] mx-4">Pedido</h1>
                             <button
-                                className={statusPedido == "ATIVO" ? "px-16 py-1 text-2xl text-[#b1cac7]" : "px-16 py-1 text-2xl text-[#045D53]"}
-                                disabled={statusPedido == "ATIVO"}
+                                className={`px-16 py-1 text-2xl text-[#b1cac7] ${selectedDateIndex === datasPedidos.length - 1 ? 'text-[#b1cac7] disabled' : ''}`}
+                                disabled={selectedDateIndex === datasPedidos.length - 1}
+                                onClick={() => handleDateNavigation("right")}
                             >
                                 &gt;
                             </button>
-
                         </div>
                     </div>
                     <div className="flex  justify-center items-center w-full bg-[#E1F0EF] mt-16 h-48">
@@ -266,7 +351,7 @@ function Pedidos() {
             </div>
             <footer className="w-full h-20" />
             {isModalAvaliarOpen && (
-                <ModalAvaliarReceitas oncloseModal={closeModalAvaliacao} />
+                <ModalAvaliarReceitas recipes={receitas} oncloseModal={closeModalAvaliacao} />
             )}
         </>
     )
