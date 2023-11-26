@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import CardReceitaAvaliacao from "./CardReceitaAvaliacao";
 import api from "../../../api/api";
+import Swal from "sweetalert2";
 
 function ModalAvaliarReceitas({ recipes, oncloseModal }) {
     const [avaliacao, setAvaliacao] = useState({
@@ -27,7 +28,14 @@ function ModalAvaliarReceitas({ recipes, oncloseModal }) {
           },
         })
         .then((response) => {
+            
           closeModal();
+          
+          Swal.fire({
+            title: "Avaliação registrada com sucesso!",
+            confirmButtonColor: "#F29311",
+        });
+
         })
         .catch((error) => {
           console.log(error);

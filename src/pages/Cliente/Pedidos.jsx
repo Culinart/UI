@@ -4,6 +4,7 @@ import { FiEdit } from "react-icons/fi";
 import CardPedido from "../../components/Cliente/Pedido/CardPedido";
 import { useNavigate } from 'react-router-dom';
 import api from "../../api/api";
+import Swal from "sweetalert2";
 import ModalAvaliarReceitas from "../../components/Cliente/Pedido/ModalAvaliarReceitas";
 
 
@@ -59,7 +60,14 @@ function Pedidos() {
         // })
         //     .then((response) => {
 
-        //         window.location.reload();
+        Swal.fire({
+            title: "Entrega confirmada com sucesso!",
+            confirmButtonColor: "#F29311",
+        });
+
+        // setTimeout(() => {
+        //     window.location.reload();
+        // }, 2000);
 
         //     })
         //     .catch((error) => {
@@ -77,7 +85,14 @@ function Pedidos() {
         // })
         //     .then((response) => {
 
-        //         window.location.reload();
+        Swal.fire({
+            title: "Entrega pulada com sucesso!",
+            confirmButtonColor: "#F29311",
+        });
+
+        // setTimeout(() => {
+        //     window.location.reload();
+        // }, 2000);
 
         //     })
         //     .catch((error) => {

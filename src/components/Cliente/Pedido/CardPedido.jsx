@@ -3,11 +3,12 @@ import imgReceitaPedido from "../../../assets/Cliente/Pedidos/imgReceitaPedido.p
 import Preferencia from "../Receitas/Preferencia";
 import { FiTrash2 } from "react-icons/fi";
 import api from "../../../api/api";
+import Swal from "sweetalert2";
 
 function CardPedido({ nome, qtd_porcoes, preferencias, categorias, pedidoAtual, setPedidoAtual, idReceita, statusPedido }) {
 
     const handleRemoveRecipe = (recipeId) => {
-        
+
         const updatedRecipes = pedidoAtual.listaReceitas.filter((recipe) => recipe.id !== recipeId);
       
         setPedidoAtual((prevPedido) => ({
@@ -25,7 +26,13 @@ function CardPedido({ nome, qtd_porcoes, preferencias, categorias, pedidoAtual, 
             }
         })
           .then((response) => {
-            console.log("Pedido updated successfully:", response.data);
+
+            Swal.fire({
+                title: "Pedido atualizado com sucesso!",
+                confirmButtonColor: "#F29311",
+            });
+
+            console.log("Pedido atualizado: ", response.data);
           })
           .catch((error) => {
             console.error("Error updating pedido:", error);
