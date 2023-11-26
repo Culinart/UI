@@ -20,7 +20,7 @@ function Pedidos() {
     const [categorias, setCategorias] = useState([]);
     const [selectedDateIndex, setSelectedDateIndex] = useState(0);
     // const [statusPedido, setStatusPedido] = useState("ATIVO");
-    const [statusPedido, setStatusPedido] = useState("");
+    // const [statusPedido, setStatusPedido] = useState("");
     const [isModalAvaliarOpen, setIsModalAvaliarOpen] = useState(false);
     const [datasPedidos, setDatasPedidos] = useState([]);
     const [dataPedidoAtual, setDataPedidoAtual] = useState("");
@@ -124,6 +124,7 @@ function Pedidos() {
             }
         })
             .then((response) => {
+                console.log(response);
                 setDatasPedidos(response.data);
 
                 setDataPedidoAtual(response.data[response.data.length - 1].datasPedidos);
@@ -175,10 +176,10 @@ function Pedidos() {
             }
         })
             .then((response) => {
-
+                console.log('PEDIDO ', response)
                 setPedidoAtual(response.data);
                 setReceitas(response.data.listaReceitas);
-                setStatusPedido(response.data.status);
+                // setStatusPedido(response.data.status);
 
             })
             .catch((error) => {
@@ -319,12 +320,12 @@ function Pedidos() {
                                 </span>
                                 <span className="flex">
                                     <p className="mr-2">Status Entrega: </p>
-                                    <p>{statusPedido}</p>
+                                    <p>{pedidoAtual.status}</p>
                                 </span>
                             </p>
                         </div>
                         <div className="flex w-3/12 h-auto mt-4">
-                            {statusPedido == "ATIVO" ? <span>
+                            {pedidoAtual.status == "ATIVO" ? <span>
                                 <button onClick={confirmarEntrega} className="mr-8 px-2 py-1 text-sm text-[#FFFFFF] bg-[#DC7726] rounded-md">
                                     Confirmar Entrega
                                 </button>
@@ -337,7 +338,7 @@ function Pedidos() {
                     <div className="flex items-center flex-col w-full h-auto mt-[4.5rem]">
                         <div className="flex w-10/12 justify-between mb-4 items-center">
                             <h2 className="text-xl font-medium ml-1">Receitas da Entrega</h2>
-                            {statusPedido == "ATIVO" ? <button className="px-2 py-1 text-sm text-[#FFFFFF] bg-[#DC7726] rounded-md" onClick={() => navigateToPage('/cliente/receitas')}>
+                            {pedidoAtual.status == "ATIVO" ? <button className="px-2 py-1 text-sm text-[#FFFFFF] bg-[#DC7726] rounded-md" onClick={() => navigateToPage('/cliente/receitas')}>
                                 Adicionar Receita
                             </button> : <button onClick={openModalAvaliacao} className="px-2 py-1 text-base text-[#FFFFFF] bg-[#008E80] rounded-md">
                                 Avaliar Receitas
@@ -355,7 +356,7 @@ function Pedidos() {
                                         pedidoAtual={pedidoAtual}
                                         setPedidoAtual={setPedidoAtual}
                                         idReceita={receita.id}
-                                        statusPedido={statusPedido}
+                                        statusPedido={pedidoAtual.status}
                                     />
                                 ))}
                             </div>
