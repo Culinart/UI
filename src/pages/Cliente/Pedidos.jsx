@@ -19,8 +19,8 @@ function Pedidos() {
     });
     const [categorias, setCategorias] = useState([]);
     const [selectedDateIndex, setSelectedDateIndex] = useState(0);
-    const [statusPedido, setStatusPedido] = useState("ATIVO");
-    // const [statusPedido, setStatusPedido] = useState("");
+    // const [statusPedido, setStatusPedido] = useState("ATIVO");
+    const [statusPedido, setStatusPedido] = useState("");
     const [isModalAvaliarOpen, setIsModalAvaliarOpen] = useState(false);
     const [datasPedidos, setDatasPedidos] = useState([]);
     const [dataPedidoAtual, setDataPedidoAtual] = useState("");
@@ -53,51 +53,51 @@ function Pedidos() {
 
     const confirmarEntrega = () => {
 
-        // api.put(`/pedidos/entregue/${pedidoAtual.id}`, null, {
-        //     headers: {
-        //         Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
-        //     }
-        // })
-        //     .then((response) => {
+        api.put(`/pedidos/entregue/${pedidoAtual.id}`, null, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+            }
+        })
+            .then((response) => {
 
         Swal.fire({
             title: "Entrega confirmada com sucesso!",
             confirmButtonColor: "#F29311",
         });
 
-        // setTimeout(() => {
-        //     window.location.reload();
-        // }, 2000);
+        setTimeout(() => {
+            window.location.reload();
+        }, 2000);
 
-        //     })
-        //     .catch((error) => {
-        //         console.log(error);
-        //     });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
 
     }
 
     const pularEntrega = () => {
 
-        // api.put(`/pedidos/pularEntrega/${pedidoAtual.id}`, null, {
-        //     headers: {
-        //         Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
-        //     }
-        // })
-        //     .then((response) => {
+        api.put(`/pedidos/pularEntrega/${pedidoAtual.id}`, null, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+            }
+        })
+            .then((response) => {
 
         Swal.fire({
             title: "Entrega pulada com sucesso!",
             confirmButtonColor: "#F29311",
         });
 
-        // setTimeout(() => {
-        //     window.location.reload();
-        // }, 2000);
+        setTimeout(() => {
+            window.location.reload();
+        }, 2000);
 
-        //     })
-        //     .catch((error) => {
-        //         console.log(error);
-        //     });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
 
     }
 
@@ -118,157 +118,157 @@ function Pedidos() {
 
     const buscarDatasPedidos = () => {
 
-        // api.get(`/pedidos/datas/${sessionStorage.getItem("idUsuario")}`, {
-        //     headers: {
-        //         Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
-        //     }
-        // })
-        //     .then((response) => {
-        //         setDatasPedidos(response.data);
+        api.get(`/pedidos/datas/${sessionStorage.getItem("idUsuario")}`, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+            }
+        })
+            .then((response) => {
+                setDatasPedidos(response.data);
 
-        //         setDataPedidoAtual(response.data[response.data.length - 1].datasPedidos);
+                setDataPedidoAtual(response.data[response.data.length - 1].datasPedidos);
 
-        //         buscarPedido();
+                buscarPedido();
 
-        //     })
-        //     .catch((error) => {
-        //         console.log(error);
-        //     });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
 
-        const response = {
-            data: [
-                {
-                    "datasPedidos": "2023-11-11"
-                },
-                {
-                    "datasPedidos": "2023-11-13"
-                },
-                {
-                    "datasPedidos": "2023-11-17"
-                },
-                {
-                    "datasPedidos": "2023-11-24"
-                },
-                {
-                    "datasPedidos": "2023-12-02"
-                }
-            ]
-        }
+        // const response = {
+        //     data: [
+        //         {
+        //             "datasPedidos": "2023-11-11"
+        //         },
+        //         {
+        //             "datasPedidos": "2023-11-13"
+        //         },
+        //         {
+        //             "datasPedidos": "2023-11-17"
+        //         },
+        //         {
+        //             "datasPedidos": "2023-11-24"
+        //         },
+        //         {
+        //             "datasPedidos": "2023-12-02"
+        //         }
+        //     ]
+        // }
 
-        setDatasPedidos(response.data);
+        // setDatasPedidos(response.data);
 
-        setDataPedidoAtual(response.data[response.data.length - 1].datasPedidos);
+        // setDataPedidoAtual(response.data[response.data.length - 1].datasPedidos);
 
-        buscarPedido();
+        // buscarPedido();
 
     }
 
     const buscarPedido = () => {
 
-        // const corpoRequisicao = {
-        //     dataEntrega: dataPedidoAtual
-        // }
-
-        // api.get(`/pedidos/entrega/${sessionStorage.getItem("idUsuario")}`, corpoRequisicao, {
-        //     headers: {
-        //         Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
-        //     }
-        // })
-        //     .then((response) => {
-
-        //         setPedidoAtual(response.data);
-        //         setReceitas(response.data.listaReceitas);
-        //         setStatusPedido(response.data.status);
-
-        //     })
-        //     .catch((error) => {
-        //         console.log(error);
-        //     });
-
-
-        const response = {
-            data:
-            {
-                "id": 12,
-                "valor": 150.0,
-                "dataEntrega": "2023-12-02",
-                "listaReceitas": [
-                    {
-                        "id": 2,
-                        "nome": "Salada Caesar",
-                        "horas": 0,
-                        "minutos": 20,
-                        "qtd_porcoes": 4,
-                        "preferencias": [
-                            {
-                                "nome": "Low Calorie",
-                                "corFundo": "1C84FF",
-                                "corTexto": "FFFFFF"
-                            },
-                            {
-                                "nome": "Brasileira",
-                                "corFundo": "009739",
-                                "corTexto": "FFFFFF"
-                            },
-                            {
-                                "nome": "Portuguesa",
-                                "corFundo": "DA291C",
-                                "corTexto": "FFFFFF"
-                            }
-                        ],
-                        "categorias": [
-                            {
-                                "nome": "Vegano"
-                            },
-                            {
-                                "nome": "Rápido e Fácil"
-                            },
-                            {
-                                "nome": "Fit e Saudável"
-                            }
-                        ]
-                    },
-                    {
-                        "id": 4,
-                        "nome": "Sopa de Legumes",
-                        "horas": 0,
-                        "minutos": 45,
-                        "qtd_porcoes": 6,
-                        "preferencias": [
-                            {
-                                "nome": "Húngara",
-                                "corFundo": "477050",
-                                "corTexto": "FFFFFF"
-                            },
-                            {
-                                "nome": "Portuguesa",
-                                "corFundo": "DA291C",
-                                "corTexto": "FFFFFF"
-                            },
-                            {
-                                "nome": "Gourmet",
-                                "corFundo": "A4D3FF",
-                                "corTexto": "000000"
-                            }
-                        ],
-                        "categorias": [
-                            {
-                                "nome": "Vegetariano"
-                            },
-                            {
-                                "nome": "Vegano"
-                            },
-                            {
-                                "nome": "Rápido e Fácil"
-                            }
-                        ]
-                    }
-                ]
-            }
+        const corpoRequisicao = {
+            dataEntrega: dataPedidoAtual
         }
 
-        setPedidoAtual(response.data);
-        setReceitas(response.data.listaReceitas);
+        api.get(`/pedidos/entrega/${sessionStorage.getItem("idUsuario")}`, corpoRequisicao, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+            }
+        })
+            .then((response) => {
+
+                setPedidoAtual(response.data);
+                setReceitas(response.data.listaReceitas);
+                setStatusPedido(response.data.status);
+
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+
+        // const response = {
+        //     data:
+        //     {
+        //         "id": 12,
+        //         "valor": 150.0,
+        //         "dataEntrega": "2023-12-02",
+        //         "listaReceitas": [
+        //             {
+        //                 "id": 2,
+        //                 "nome": "Salada Caesar",
+        //                 "horas": 0,
+        //                 "minutos": 20,
+        //                 "qtd_porcoes": 4,
+        //                 "preferencias": [
+        //                     {
+        //                         "nome": "Low Calorie",
+        //                         "corFundo": "1C84FF",
+        //                         "corTexto": "FFFFFF"
+        //                     },
+        //                     {
+        //                         "nome": "Brasileira",
+        //                         "corFundo": "009739",
+        //                         "corTexto": "FFFFFF"
+        //                     },
+        //                     {
+        //                         "nome": "Portuguesa",
+        //                         "corFundo": "DA291C",
+        //                         "corTexto": "FFFFFF"
+        //                     }
+        //                 ],
+        //                 "categorias": [
+        //                     {
+        //                         "nome": "Vegano"
+        //                     },
+        //                     {
+        //                         "nome": "Rápido e Fácil"
+        //                     },
+        //                     {
+        //                         "nome": "Fit e Saudável"
+        //                     }
+        //                 ]
+        //             },
+        //             {
+        //                 "id": 4,
+        //                 "nome": "Sopa de Legumes",
+        //                 "horas": 0,
+        //                 "minutos": 45,
+        //                 "qtd_porcoes": 6,
+        //                 "preferencias": [
+        //                     {
+        //                         "nome": "Húngara",
+        //                         "corFundo": "477050",
+        //                         "corTexto": "FFFFFF"
+        //                     },
+        //                     {
+        //                         "nome": "Portuguesa",
+        //                         "corFundo": "DA291C",
+        //                         "corTexto": "FFFFFF"
+        //                     },
+        //                     {
+        //                         "nome": "Gourmet",
+        //                         "corFundo": "A4D3FF",
+        //                         "corTexto": "000000"
+        //                     }
+        //                 ],
+        //                 "categorias": [
+        //                     {
+        //                         "nome": "Vegetariano"
+        //                     },
+        //                     {
+        //                         "nome": "Vegano"
+        //                     },
+        //                     {
+        //                         "nome": "Rápido e Fácil"
+        //                     }
+        //                 ]
+        //             }
+        //         ]
+        //     }
+        // }
+
+        // setPedidoAtual(response.data);
+        // setReceitas(response.data.listaReceitas);
 
     }
 
