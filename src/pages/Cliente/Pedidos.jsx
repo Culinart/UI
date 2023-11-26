@@ -39,8 +39,9 @@ function Pedidos() {
     }, [datasPedidos]);
     
     useEffect(() => {
-        buscarPedido(); 
-    }, [selectedDateIndex, dataPedidoAtual]);
+        buscarDatasPedidos();
+        buscarPedido();
+    }, [selectedDateIndex]);
     
 
     const openModalAvaliacao = () => {
@@ -117,24 +118,19 @@ function Pedidos() {
     }
 
     const buscarDatasPedidos = () => {
-
         api.get(`/pedidos/datas/${sessionStorage.getItem("idUsuario")}`, {
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
             }
         })
-            .then((response) => {
-                console.log(response);
-                setDatasPedidos(response.data);
-
-                setDataPedidoAtual(response.data[response.data.length - 1].datasPedidos);
-
-                buscarPedido();
-
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        .then((response) => {
+            setDatasPedidos(response.data);
+            setDataPedidoAtual(response.data[response.data.length - 1].datasPedidos);
+            buscarPedido();
+        })
+        .catch((error) => {
+            console.log(error);
+        });
 
         // const response = {
         //     data: [
@@ -165,9 +161,11 @@ function Pedidos() {
     }
 
     const buscarPedido = () => {
+
         const corpoRequisicao = {
-            dataEntrega: datasPedidos[selectedDateIndex].datasPedidos
+            dataEntrega: datasPedidos?.[selectedDateIndex]?.datasPedidos
         }
+        
     
         api.post(`/pedidos/entrega/${sessionStorage.getItem("idUsuario")}`, corpoRequisicao, {
             headers: {
