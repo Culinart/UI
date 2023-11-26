@@ -319,7 +319,7 @@ function Pedidos() {
                             </span> : ""}
                         </div>
                     </div>
-                    <div className="flex items-center flex-col w-full h-auto mt-[4.5rem] h-96">
+                    <div className="flex items-center flex-col w-full h-auto mt-[4.5rem]">
                         <div className="flex w-10/12 justify-between mb-4 items-center">
                             <h2 className="text-xl font-medium ml-1">Receitas da Entrega</h2>
                             {statusPedido == "ATIVO" ? <button className="px-2 py-1 text-sm text-[#FFFFFF] bg-[#DC7726] rounded-md" onClick={() => navigateToPage('/cliente/receitas')}>
