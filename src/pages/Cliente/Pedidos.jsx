@@ -38,10 +38,12 @@ function Pedidos() {
 
     useEffect(() => {
         if (datasPedidos.length > 0) {
-            setDataPedidoAtual(datasPedidos[selectedDateIndex].datasPedidos);
+            setSelectedDateIndex(datasPedidos.length - 1);
+            setDataPedidoAtual(datasPedidos[datasPedidos.length - 1].datasPedidos);
             buscarPedido();
         }
-    }, [selectedDateIndex, datasPedidos]);
+    }, [datasPedidos]);
+
 
     const openModalAvaliacao = () => {
         setIsModalAvaliarOpen(true);
@@ -60,14 +62,14 @@ function Pedidos() {
         })
             .then((response) => {
 
-        Swal.fire({
-            title: "Entrega confirmada com sucesso!",
-            confirmButtonColor: "#F29311",
-        });
+                Swal.fire({
+                    title: "Entrega confirmada com sucesso!",
+                    confirmButtonColor: "#F29311",
+                });
 
-        setTimeout(() => {
-            window.location.reload();
-        }, 2000);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
 
             })
             .catch((error) => {
@@ -85,14 +87,14 @@ function Pedidos() {
         })
             .then((response) => {
 
-        Swal.fire({
-            title: "Entrega pulada com sucesso!",
-            confirmButtonColor: "#F29311",
-        });
+                Swal.fire({
+                    title: "Entrega pulada com sucesso!",
+                    confirmButtonColor: "#F29311",
+                });
 
-        setTimeout(() => {
-            window.location.reload();
-        }, 2000);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
 
             })
             .catch((error) => {
@@ -168,7 +170,7 @@ function Pedidos() {
         const corpoRequisicao = {
             dataEntrega: datasPedidos[selectedDateIndex].datasPedidos
         }
-    
+
         api.post(`/pedidos/entrega/${sessionStorage.getItem("idUsuario")}`, corpoRequisicao, {
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
@@ -183,7 +185,7 @@ function Pedidos() {
             .catch((error) => {
                 console.log(error);
             });
-                
+
 
         // const response = {
         //     data:
@@ -288,7 +290,7 @@ function Pedidos() {
                     <div className="items-center justify-center w-4/5 flex border-b border-gray-300">
                         <div className="flex items-center">
                             <button
-                                className={`px-16 py-1 text-2xl text-[#045D53] ${selectedDateIndex === 0 ? 'text-[#b1cac7] disabled' : ''}`}
+                                className={`px-16 py-1 text-2xl ${selectedDateIndex === 0 ? 'text-[#b1cac7] cursor-not-allowed' : 'text-[#045D53]'} ${selectedDateIndex === 0 ? 'disabled' : ''}`}
                                 disabled={selectedDateIndex === 0}
                                 onClick={() => handleDateNavigation("left")}
                             >
@@ -296,7 +298,7 @@ function Pedidos() {
                             </button>
                             <h1 className="text-2xl text-[#045D53] mx-4">Pedido</h1>
                             <button
-                                className={`px-16 py-1 text-2xl text-[#b1cac7] ${selectedDateIndex === datasPedidos.length - 1 ? 'text-[#b1cac7] disabled' : ''}`}
+                                className={`px-16 py-1 text-2xl ${selectedDateIndex === datasPedidos.length - 1 ? 'text-[#b1cac7] cursor-not-allowed' : 'text-[#045D53]'} ${selectedDateIndex === datasPedidos.length - 1 ? 'disabled' : ''}`}
                                 disabled={selectedDateIndex === datasPedidos.length - 1}
                                 onClick={() => handleDateNavigation("right")}
                             >
@@ -344,7 +346,7 @@ function Pedidos() {
                         </div>
                         <div className="flex w-full h-auto justify-center mt-6">
                             <div className="grid grid-cols-3 gap-10 gap-y-16 w-10/12 h-[27rem] mt-8 ml-6 overflow-hidden overflow-y-scroll">
-                            {receitas && receitas.map((receita) => (
+                                {receitas && receitas.map((receita) => (
                                     <CardPedido
                                         key={receita.id}
                                         nome={receita.nome}
