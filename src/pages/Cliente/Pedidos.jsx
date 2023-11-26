@@ -32,18 +32,16 @@ function Pedidos() {
     }
 
     useEffect(() => {
-        buscarEnderecoAtivo();
-        buscarDatasPedidos();
-    }, []);
-
-    useEffect(() => {
         if (datasPedidos.length > 0) {
             setSelectedDateIndex(datasPedidos.length - 1);
             setDataPedidoAtual(datasPedidos[datasPedidos.length - 1].datasPedidos);
-            buscarPedido();
         }
     }, [datasPedidos]);
-
+    
+    useEffect(() => {
+        buscarPedido(); 
+    }, [selectedDateIndex, dataPedidoAtual]);
+    
 
     const openModalAvaliacao = () => {
         setIsModalAvaliarOpen(true);
@@ -170,7 +168,7 @@ function Pedidos() {
         const corpoRequisicao = {
             dataEntrega: datasPedidos[selectedDateIndex].datasPedidos
         }
-
+    
         api.post(`/pedidos/entrega/${sessionStorage.getItem("idUsuario")}`, corpoRequisicao, {
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
@@ -184,7 +182,7 @@ function Pedidos() {
             })
             .catch((error) => {
                 console.log(error);
-            });
+            });    
 
 
         // const response = {
