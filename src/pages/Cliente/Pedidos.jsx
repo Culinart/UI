@@ -272,12 +272,12 @@ function Pedidos() {
     const handleDateNavigation = (direction) => {
         if (direction === "left" && selectedDateIndex > 0) {
             setSelectedDateIndex((prevIndex) => prevIndex - 1);
-            setDataPedidoAtual(datasPedidos[selectedDateIndex - 1].datasPedidos);
+            setDataPedidoAtual(datasPedidos[prevIndex - 1].datasPedidos);
         } else if (direction === "right" && selectedDateIndex < datasPedidos.length - 1) {
             setSelectedDateIndex((prevIndex) => prevIndex + 1);
-            setDataPedidoAtual(datasPedidos[selectedDateIndex + 1].datasPedidos);
+            setDataPedidoAtual(datasPedidos[prevIndex + 1].datasPedidos);
         }
-    };    
+    };     
 
 
     return (
