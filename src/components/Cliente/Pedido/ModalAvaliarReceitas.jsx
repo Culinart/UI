@@ -11,7 +11,7 @@ function ModalAvaliarReceitas({ recipes, oncloseModal }) {
     });
   
     const closeModal = () => {
-      closeModalAvaliacao();
+      oncloseModal();
     };
   
     const avaliarReceitas = () => {
@@ -20,9 +20,9 @@ function ModalAvaliarReceitas({ recipes, oncloseModal }) {
         idReceita: recipe.id,
         nota: recipe.nota, 
       }));
-  
+      console.log("AVALIACAO ", corpoRequisicao)
       api
-        .post(`/avaliacoess`, corpoRequisicao, {
+        .post(`/avaliacoes`, corpoRequisicao, {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
           },
