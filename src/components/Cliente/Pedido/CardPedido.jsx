@@ -7,8 +7,7 @@ import api from "../../../api/api";
 function CardPedido({ nome, qtd_porcoes, preferencias, categorias, pedidoAtual, setPedidoAtual, idReceita, statusPedido }) {
 
     const handleRemoveRecipe = (recipeId) => {
-        alert("remover");
-      
+        
         const updatedRecipes = pedidoAtual.listaReceitas.filter((recipe) => recipe.id !== recipeId);
       
         setPedidoAtual((prevPedido) => ({
