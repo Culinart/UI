@@ -10,8 +10,7 @@ import TituloRankingMelhoresReceita from "../../../components/Fornecedor/Dashboa
 import TituloRankingPioresReceita from "../../../components/Fornecedor/Dashboard/TituloRankingPioresReceita";
 import ReceitaMelhorAvaliada from "../../../components/Fornecedor/Dashboard/ReceitaMelhorAvaliada";
 import ReceitaPiorAvaliada from "../../../components/Fornecedor/Dashboard/ReceitaPiorAvaliada";
-
-
+import Grafico from "../../../components/Fornecedor/Dashboard/Grafico";
 
 function Dashboard() {
 
@@ -27,14 +26,25 @@ function Dashboard() {
         "Melhor", "Pior"
     ];
 
+    const chartData = {
+        labels: ['A', 'B', 'C'],
+        datasets: [{
+          label: 'My data',
+          data: [10, 20, 30],
+          backgroundColor: '#112233'
+        }]
+       };
+
+    const [chartDataState, setChartDataState] = useState(chartData)
+
     return (
         <>
             <HeaderFornecedor />
             <div className="flex justify-center w-full h-auto mt-12 ">
                 <div className="flex w-full justify-center">
-                    <div className="flex w-11/12 justify-center h-auto">
+                    <div className="flex w-11/12 h-auto items-center flex-col">
                         <div className={`${style.container_kpis} flex justify-between h-auto mt-1`}>
-                            <div className={`${style.kpi_esquerda} bg-[#FFFFFF] drop-shadow-[0px_4px_4px_rgba(0,0,0,0.25)] rounded-md h-[27rem] h-auto`}>
+                            <div className={`${style.kpi_esquerda} bg-[#FFFFFF] drop-shadow-[0px_4px_4px_rgba(0,0,0,0.25)] rounded-md h-auto`}>
                                 <select
                                     className={`${style.combobox_horario_entrega} flex text-xs font-light pl-4 pr-4 ml-4 mt-6`}
                                     value={selectedOptionKpiEsquerda}
@@ -102,16 +112,14 @@ function Dashboard() {
                                 </div>
                             </div>
                         </div>
+                        <div className={`${style.container_kpis} flex h-auto mt-8`}>
+                            <Grafico chartData={chartDataState} />
+                        </div>
                     </div>
                 </div>
-
-
             </div>
-
-
         </>
     )
-
 }
 
 export default Dashboard;
