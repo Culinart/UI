@@ -165,11 +165,10 @@ function Pedidos() {
     }
 
     const buscarPedido = () => {
-
         const corpoRequisicao = {
-            dataEntrega: dataPedidoAtual
+            dataEntrega: datasPedidos[selectedDateIndex].datasPedidos
         }
-
+    
         api.post(`/pedidos/entrega/${sessionStorage.getItem("idUsuario")}`, corpoRequisicao, {
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
@@ -180,12 +179,11 @@ function Pedidos() {
                 setPedidoAtual(response.data);
                 setReceitas(response.data.listaReceitas);
                 // setStatusPedido(response.data.status);
-
             })
             .catch((error) => {
                 console.log(error);
             });
-
+                
 
         // const response = {
         //     data:
