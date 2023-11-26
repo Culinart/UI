@@ -32,6 +32,10 @@ function Pedidos() {
     }
 
     useEffect(() => {
+        buscarEnderecoAtivo();
+    }, []);
+
+    useEffect(() => {
         buscarDatasPedidos();
     }, [selectedDateIndex]);
     
@@ -125,6 +129,7 @@ function Pedidos() {
         .then((response) => {
             setDatasPedidos(response.data);
             setDataPedidoAtual(response.data[response.data.length - 1].datasPedidos);
+            setSelectedDateIndex(response.data[response.data.length - 1].datasPedidos);
             buscarPedido();
         })
         .catch((error) => {
