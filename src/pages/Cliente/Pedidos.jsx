@@ -169,7 +169,7 @@ function Pedidos() {
             dataEntrega: dataPedidoAtual
         }
 
-        api.get(`/pedidos/entrega/${sessionStorage.getItem("idUsuario")}`, corpoRequisicao, {
+        api.post(`/pedidos/entrega/${sessionStorage.getItem("idUsuario")}`, corpoRequisicao, {
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
             }
