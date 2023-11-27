@@ -27,13 +27,20 @@ function Dashboard() {
     ];
 
     const chartData = {
-        labels: ['A', 'B', 'C'],
+        labels: ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'NOV', 'DEZ'],
         datasets: [{
-          label: 'My data',
-          data: [10, 20, 30],
-          backgroundColor: '#112233'
+            label: 'Clientes Inativos',
+            data: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120],
+            backgroundColor: '#FF9F1C',
+        },
+        {
+            label: 'Clientes  Ativos',
+            data: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120],
+            backgroundColor: '#2EC4B6',
         }]
-       };
+    };
+
+    console.log(chartData.datasets)
 
     const [chartDataState, setChartDataState] = useState(chartData)
 
@@ -112,12 +119,14 @@ function Dashboard() {
                                 </div>
                             </div>
                         </div>
-                        <div className={`${style.container_kpis} flex h-auto mt-8`}>
+                        <div className={`${style.container_kpis} flex justify-center h-auto mt-12 bg-[#FFFFFF] drop-shadow-[0px_4px_4px_rgba(0,0,0,0.25)] rounded-2xl `}>
+                                        
                             <Grafico chartData={chartDataState} />
                         </div>
                     </div>
                 </div>
             </div>
+                <footer className="w-full h-12" />
         </>
     )
 }
