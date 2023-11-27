@@ -26,27 +26,53 @@ function MeuPlano() {
     const [permissao, setPermissao] = useState(sessionStorage.getItem('permissao'));
     const [planId, setPlanId] = useState("");
     const [categoriasSelecionadasAntigas, setCategoriasSelecionadasAntigas] = useState([]);
+    const [plano, setPlano] = useState([]);
+    const [highestValorCategoria, setHighestValorCategoria] = useState(0);
+    const [novoValorPlano, setNovoValorPlano] = useState(pessoasSelecionadas * refeicoesSelecionadas * diasSelecionados * 4 * highestValorCategoria);
 
     useEffect(() => {
         buscarPlano();
         buscarCategorias();
         buscarCategoriasPlano();
     }, []);
+    
+    useEffect(() => {
+        console.log("Categorias Selecionadas:", categoriasSelecionadas);
+        highestCategoria();
+    }, [categoriasSelecionadas, pessoasSelecionadas, refeicoesSelecionadas, diasSelecionados]);
+    
+    useEffect(() => {
+        console.log("Valor Plano:", categoriasSelecionadas);
+        atualizarValorPlano();
+    }, [categoriasSelecionadas, pessoasSelecionadas, refeicoesSelecionadas, diasSelecionados, highestValorCategoria]);
+
+    const atualizarValorPlano = () => {
+        setNovoValorPlano(pessoasSelecionadas * refeicoesSelecionadas * diasSelecionados * 4 * highestValorCategoria);
+    }
+    
+    const highestCategoria = () => {
+        const valoresCategorias = categoriasSelecionadas.map(
+            (categoria) => categoria.valor
+        );
+        const highestValorCategoria = valoresCategorias.length > 0 ? Math.max(...valoresCategorias) : 0;
+        setHighestValorCategoria(highestValorCategoria);
+        console.log("maior valor categoria", highestValorCategoria);
+    };    
 
     const handlePreferencias = (preferencia) => {
         const isCategoriaSelected = categoriasSelecionadas.some(
-          (selectedCategoria) => selectedCategoria.id === preferencia.id
+            (selectedCategoria) => selectedCategoria.id === preferencia.id
         );
-    
+
         if (isCategoriaSelected) {
-          setCategoriasSelecionadas((prevCategorias) =>
-            prevCategorias.filter((categoria) => categoria.id !== preferencia.id)
-          );
+            setCategoriasSelecionadas((prevCategorias) =>
+                prevCategorias.filter((categoria) => categoria.id !== preferencia.id)
+            );
         } else {
-          setCategoriasSelecionadas((prevCategorias) => [...prevCategorias, preferencia]);
+            setCategoriasSelecionadas((prevCategorias) => [...prevCategorias, preferencia]);
         }
-      };
-    
+    };
+
 
     const buscarCategorias = () => {
         api
@@ -159,6 +185,7 @@ function MeuPlano() {
                 setDiaSemanaSelecionado(response.data.diaSemana);
                 setSelectedTime(response.data.horaEntrega);
                 setPlanId(response.data.id);
+                setPlano(response.data);
 
                 buscarCategoriasPlano();
             })
@@ -198,7 +225,7 @@ function MeuPlano() {
                     {
                         qtdPessoas: pessoasSelecionadas,
                         qtdRefeicoesDia: refeicoesSelecionadas,
-                        valorPlano: 0.0,
+                        valorPlano: novoValorPlano,
                         valorAjuste: 0.0,
                         qtdDiasSemana: diasSelecionados,
                         horaEntrega: selectedTime,
@@ -210,20 +237,20 @@ function MeuPlano() {
                         },
                     }
                 );
-    
+
                 const planoId = responsePlano.data.id;
 
                 const categoriasAtuais = categoriasSelecionadas.map(categoria => categoria.id);
-    
+
                 const categoriasNovas = categoriasAtuais.filter(categoria => !categoriasSelecionadasAntigas.includes(categoria));
                 const categoriasRemovidas = categoriasSelecionadasAntigas.filter(categoria => !categoriasAtuais.includes(categoria));
-    
+
                 if (categoriasNovas.length > 0) {
                     const newPlanoCategorias = {
                         planoId,
                         categoriaId: categoriasNovas,
                     };
-    
+
                     await api.post(
                         `/planos/categorias`,
                         newPlanoCategorias,
@@ -234,7 +261,7 @@ function MeuPlano() {
                         }
                     );
                 }
-    
+
                 for (const categoriaId of categoriasRemovidas) {
                     await api.delete(
                         `/planos/categorias/${categoriaId}`,
@@ -245,14 +272,14 @@ function MeuPlano() {
                         }
                     );
                 }
-    
+
                 console.log("Plano atualizado com sucesso!");
             } catch (error) {
                 console.error("Erro", error);
-            } 
+            }
         }
     };
-    
+
 
 
     const cancelarEdicao = () => {
@@ -426,18 +453,10 @@ function MeuPlano() {
                                                 <div className="flex-col">
                                                     <div className="flex justify-between mb-6">
                                                         <div className="mr-8">
-                                                            + X Refeições por mês
+                                                            + {pessoasSelecionadas * refeicoesSelecionadas * diasSelecionados * 4} Refeições por mês
                                                         </div>
                                                         <div>
-                                                            R$ XXX,XX
-                                                        </div>
-                                                    </div>
-                                                    <div className="flex justify-between mb-4">
-                                                        <div className="mr-8">
-                                                            + Frete
-                                                        </div>
-                                                        <div>
-                                                            R$ XXX,XX
+                                                            R$ {novoValorPlano.toFixed(2).replace('.', ',')}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -447,7 +466,7 @@ function MeuPlano() {
                                                         Total à pagar
                                                     </div>
                                                     <div className="font-semibold">
-                                                        R$ XXX,XX
+                                                        R$ {novoValorPlano.toFixed(2).replace('.', ',')}
                                                     </div>
                                                 </div>
                                             </div>

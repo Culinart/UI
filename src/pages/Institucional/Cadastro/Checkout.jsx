@@ -110,7 +110,7 @@ function Checkout() {
                                             + {plano.qtdDiasSemana * plano.qtdPessoas * plano.qtdRefeicoesDia * 4} Refeições por mês
                                         </div>
                                         <div>
-                                            R$ {plano.valorPlano || '500,00'} 
+                                            R$ {plano.valorPlano.toFixed(2).replace('.', ',') || '500,00'} 
                                         </div>
                                     </div>
                                     <span className={`${styles.divisorTotalPreco}`}></span>
@@ -119,7 +119,7 @@ function Checkout() {
                                             Total à pagar
                                         </div>
                                         <div className="font-semibold">
-                                            R$ {plano.valorPlano || '500,00'} 
+                                            R$ {plano.valorPlano.toFixed(2).replace('.', ',') || '500,00'} 
                                         </div>
                                     </div>
                                 </div>
