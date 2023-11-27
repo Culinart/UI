@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import CadastroPassos from "../../../components/Institucional/Cadastro/CadastroPassos";
 import HeaderCliente from "../../../components/Cliente/HeaderCliente/HeaderCliente";
@@ -9,23 +9,88 @@ function Checkout() {
 
     const navigate = useNavigate();
 
-    const handleButtonClick = () => {
-            api
-          .put(`/usuarios/permissionar/cliente/${sessionStorage.getItem("idUsuario")}`, null,{
-            headers: {
-                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
-            }
-        })
-          .then((response) => {
-            console.log("Resposta", response);
-            sessionStorage.setItem('permissao', response.data.permissao)
-            navigate('/cliente/pedidos');
-        })
-        .catch((erro) => {
-            console.log("Erro ", erro);
-        });
-      }
+    const [endereco, setEndereco] = useState([]);
+    const [plano, setPlano] = useState([]);
+    const [precoMes, setPrecoMes] = useState([]);
 
+    useEffect(() => {
+        buscarEnderecoUsuario();
+        buscarPlanoUsuario();
+    }, []);
+
+    const buscarEnderecoUsuario = () => {
+        api
+            .get(`/enderecos/usuarios/${sessionStorage.getItem("idUsuario")}`, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+                }
+            })
+            .then((response) => {
+                setEndereco(response.data[0].endereco);
+                console.log("ENDERECO:", response)
+            })
+            .catch((erro) => {
+                console.log("Erro", erro);
+            });
+    }
+
+    const buscarPlanoUsuario = () => {
+        api
+            .get(`/planos/${sessionStorage.getItem("idUsuario")}`, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+                }
+            })
+            .then((response) => {
+                console.log(response.data)
+                setPlano(response.data);
+            })
+            .catch((erro) => {
+                console.log("Erro", erro);
+            });
+    }
+
+    const checkout = () => {
+        api
+            .put(`/usuarios/permissionar/cliente/${sessionStorage.getItem("idUsuario")}`, null, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+                }
+            })
+            .then((response) => {
+                console.log("Resposta", response);
+                sessionStorage.setItem('permissao', response.data.permissao)
+                criarPagamentoUsuario();
+
+            })
+            .catch((erro) => {
+                console.log("Erro ", erro);
+            });
+    }
+
+    const criarPagamentoUsuario = () => {
+        api
+            .post(`/pagamentos/solicitar/${sessionStorage.getItem("idUsuario")}`, null, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+                }
+            })
+            .then((response) => {
+                console.log("Resposta", response);
+                Swal.fire({
+                    title: "Checkout realizado com sucesso!",
+                    confirmButtonColor: "#F29311",
+                });
+            
+                setTimeout(() => {
+                    navigate('/cliente/pedidos');
+                }, 2000);
+
+            })
+            .catch((erro) => {
+                console.log("Erro ", erro);
+            });
+    }
 
     return (
         <>
@@ -39,43 +104,33 @@ function Checkout() {
                                 <h2 className="text-[#DC7726] font-bold text-2xl mb-8">Checkout</h2>
                             </div>
                             <div className="flex">
-                            <div>
-                                <div className="flex-col">
+                                <div>
                                     <div className="flex justify-between mb-6">
                                         <div className="mr-8">
-                                            + X Refeições por mês
+                                            + {plano.qtdDiasSemana * plano.qtdPessoas * plano.qtdRefeicoesDia * 4} Refeições por mês
                                         </div>
                                         <div>
-                                            R$ XXX,XX
+                                            R$ {plano.valorPlano || '500,00'} 
                                         </div>
                                     </div>
-                                    <div className="flex justify-between mb-4">
-                                        <div className="mr-8">
-                                            + Frete
+                                    <span className={`${styles.divisorTotalPreco}`}></span>
+                                    <div className="flex justify-between mb-6 mt-2">
+                                        <div className="font-semibold">
+                                            Total à pagar
                                         </div>
-                                        <div>
-                                            R$ XXX,XX
+                                        <div className="font-semibold">
+                                            R$ {plano.valorPlano || '500,00'} 
                                         </div>
                                     </div>
-                                </div>
-                                <span className={`${styles.divisorTotalPreco}`}></span>
-                                <div className="flex justify-between mb-6 mt-2">
-                                    <div className="font-semibold">
-                                        Total à pagar
-                                    </div>
-                                    <div className="font-semibold">
-                                        R$ XXX,XX
-                                    </div>
-                                </div>
                                 </div>
                                 <span className={`${styles.divisor} ml-6 mr-6`}></span>
                                 <div className="flex-col">
                                     <div className="flex-col mt-4">
                                         <div className="font-medium">
-                                            Nome do Destinatário
+                                            Destinatário
                                         </div>
                                         <div>
-                                            Nome Completo
+                                            {sessionStorage.getItem('nome')}
                                         </div>
                                     </div>
                                     <div className="flex-col mt-4">
@@ -83,7 +138,7 @@ function Checkout() {
                                             Endereço de Entrega
                                         </div>
                                         <div>
-                                            Lorem ipsum dolor sit amet, ap 210
+                                            {`${endereco.logradouro}, ${endereco.numero}`}
                                         </div>
                                     </div>
                                 </div>
@@ -91,7 +146,7 @@ function Checkout() {
                             <button
                                 type="button"
                                 className={`bg-[#F29311] ${styles.btnCadastro} mt-8`}
-                                onClick={handleButtonClick}
+                                onClick={checkout}
                             >
                                 Confirmar
                             </button>
