@@ -4,43 +4,53 @@ import api from "../../../api/api";
 import Swal from "sweetalert2";
 
 function ModalAvaliarReceitas({ recipes, oncloseModal }) {
-    const [avaliacao, setAvaliacao] = useState({
+  const [avaliacoes, setAvaliacoes] = useState(
+    recipes.map((recipe) => ({
       idUsuario: sessionStorage.getItem("idUsuario"),
-      idReceita: null,
+      idReceita: recipe.id,
       nota: null,
-    });
-  
-    const closeModal = () => {
-      oncloseModal();
-    };
-  
-    const avaliarReceitas = () => {
-      const corpoRequisicao = recipes.map((recipe) => ({
-        idUsuario: sessionStorage.getItem("idUsuario"),
-        idReceita: recipe.id,
-        nota: recipe.nota, 
-      }));
-      console.log("AVALIACAO ", corpoRequisicao)
-      api
-        .post(`/avaliacoes`, corpoRequisicao, {
-          headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
-          },
-        })
-        .then((response) => {
-            
-          closeModal();
-          
-          Swal.fire({
-            title: "Avaliação registrada com sucesso!",
-            confirmButtonColor: "#F29311",
-        });
+    }))
+  );
 
-        })
-        .catch((error) => {
-          console.log(error);
+  const closeModal = () => {
+    oncloseModal();
+  };
+
+  const handleRate = (index, rating) => {
+    setAvaliacoes((prevAvaliacoes) =>
+      prevAvaliacoes.map((avaliacao, i) =>
+        i === index ? { ...avaliacao, nota: rating } : avaliacao
+      )
+    );
+  };
+
+  const avaliarReceitas = () => {
+    const corpoRequisicao = avaliacoes.map((avaliacao) => ({
+      idUsuario: avaliacao.idUsuario,
+      idReceita: avaliacao.idReceita,
+      nota: avaliacao.nota || 0,
+    }));
+
+    console.log("AVALIACAO ", corpoRequisicao);
+    
+    api
+      .post(`/avaliacoes`, corpoRequisicao, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
+        },
+      })
+      .then((response) => {
+        closeModal();
+
+        Swal.fire({
+          title: "Avaliação registrada com sucesso!",
+          confirmButtonColor: "#F29311",
         });
-    };
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <div
@@ -57,18 +67,8 @@ function ModalAvaliarReceitas({ recipes, oncloseModal }) {
             <CardReceitaAvaliacao
               key={index}
               recipe={recipe}
-              onSelect={(selectedRecipe) =>
-                setAvaliacao((prevAvaliacao) => ({
-                  ...prevAvaliacao,
-                  idReceita: selectedRecipe.id,
-                }))
-              }
-              onRate={(rating) =>
-                setAvaliacao((prevAvaliacao) => ({
-                  ...prevAvaliacao,
-                  nota: rating,
-                }))
-              }
+              onSelect={(selectedRecipe) => {}}
+              onRate={(rating) => handleRate(index, rating)}
             />
           ))}
         </div>

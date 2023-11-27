@@ -20,7 +20,7 @@ function Pedidos() {
     const [categorias, setCategorias] = useState([]);
     const [selectedDateIndex, setSelectedDateIndex] = useState(0);
     // const [statusPedido, setStatusPedido] = useState("ATIVO");
-    // const [statusPedido, setStatusPedido] = useState("");
+    const [statusPedido, setStatusPedido] = useState("");
     const [isModalAvaliarOpen, setIsModalAvaliarOpen] = useState(false);
     const [datasPedidos, setDatasPedidos] = useState([]);
     const [dataPedidoAtual, setDataPedidoAtual] = useState("");
@@ -30,22 +30,23 @@ function Pedidos() {
     const navigateToPage = (path) => {
         navigate(path);
     }
-
     useEffect(() => {
-        buscarEnderecoAtivo();
-    }, []);
+        setDataPedidoAtual(datasPedidos[selectedDateIndex]?.datasPedidos);
+        buscarPedido();
+    }, [selectedDateIndex, datasPedidos]);
 
-    useEffect(() => {
-        buscarDatasPedidos();
-    }, [selectedDateIndex]);
-    
     useEffect(() => {
         if (datasPedidos.length > 0) {
-            setDataPedidoAtual(datasPedidos[selectedDateIndex].datasPedidos);
+            setDataPedidoAtual(datasPedidos[selectedDateIndex]?.datasPedidos);
             buscarPedido();
         }
-    }, [datasPedidos, selectedDateIndex]);    
-    
+    }, [datasPedidos, selectedDateIndex]);
+    useEffect(() => {
+        buscarEnderecoAtivo();
+        buscarDatasPedidos();
+    }, []);
+
+
 
     const openModalAvaliacao = () => {
         setIsModalAvaliarOpen(true);
@@ -121,19 +122,31 @@ function Pedidos() {
     }
 
     const buscarDatasPedidos = () => {
-        api.get(`/pedidos/datas/${sessionStorage.getItem("idUsuario")}`, {
-            headers: {
-                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
-            }
-        })
-        .then((response) => {
-            setDatasPedidos(response.data);
-            setDataPedidoAtual(response.data[response.data.length - 1].datasPedidos);
-            buscarPedido();
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+        api
+            .get(`/pedidos/datas/${sessionStorage.getItem("idUsuario")}`, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
+                },
+            })
+            .then((response) => {
+                setDatasPedidos(response.data);
+
+                const ativoOrderIndex = response.data.findIndex(
+                    (order) => order.status === "ATIVO"
+                );
+
+                setSelectedDateIndex(ativoOrderIndex !== -1 ? ativoOrderIndex : response.data.length - 1);
+
+                setDataPedidoAtual(
+                    response.data[ativoOrderIndex !== -1 ? ativoOrderIndex : response.data.length - 1].datasPedidos
+                );
+
+                buscarPedido();
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
 
         // const response = {
         //     data: [
@@ -168,8 +181,8 @@ function Pedidos() {
         const corpoRequisicao = {
             dataEntrega: datasPedidos?.[selectedDateIndex]?.datasPedidos
         }
-        
-    
+
+
         api.post(`/pedidos/entrega/${sessionStorage.getItem("idUsuario")}`, corpoRequisicao, {
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
@@ -183,7 +196,7 @@ function Pedidos() {
             })
             .catch((error) => {
                 console.log(error);
-            });    
+            });
 
 
         // const response = {
@@ -275,12 +288,18 @@ function Pedidos() {
     const handleDateNavigation = (direction) => {
         if (direction === "left" && selectedDateIndex > 0) {
             setSelectedDateIndex((prevIndex) => prevIndex - 1);
-            setDataPedidoAtual(datasPedidos[selectedDateIndex - 1].datasPedidos);
         } else if (direction === "right" && selectedDateIndex < datasPedidos.length - 1) {
             setSelectedDateIndex((prevIndex) => prevIndex + 1);
-            setDataPedidoAtual(datasPedidos[selectedDateIndex + 1].datasPedidos);
         }
-    };    
+    };
+
+    const formatDate = (dateString) => {
+        const parsedDate = new Date(dateString);
+        const day = parsedDate.getDate();
+        const month = parsedDate.getMonth() + 1;
+        const year = parsedDate.getFullYear();
+        return `${day}/${month}/${year}`;
+    };
 
     return (
         <>
@@ -308,7 +327,7 @@ function Pedidos() {
                     </div>
                     <div className="flex  justify-center items-center w-full bg-[#E1F0EF] mt-16 h-48">
                         <div className="flex justify-center flex-col w-7/12 h-auto">
-                            <p className="flex-col text-[#3F4747] text-[1.1rem] ml-5">
+                            <div className="flex-col text-[#3F4747] text-[1.1rem] ml-5">
                                 Entrega
                                 <p className="flex items-center">
                                     {`${enderecoUsuario.endereco.logradouro}, ${enderecoUsuario.endereco.numero}`}
@@ -316,13 +335,13 @@ function Pedidos() {
                                 </p>
                                 <span className="flex">
                                     <p className=" mr-2">Data da entrega: </p>
-                                    <p>{dataPedidoAtual}</p>
+                                    <p>{formatDate(dataPedidoAtual)}</p>
                                 </span>
                                 <span className="flex">
                                     <p className="mr-2">Status Entrega: </p>
                                     <p>{pedidoAtual.status}</p>
                                 </span>
-                            </p>
+                            </div>
                         </div>
                         <div className="flex w-3/12 h-auto mt-4">
                             {pedidoAtual.status == "ATIVO" ? <span>
@@ -346,9 +365,9 @@ function Pedidos() {
                         </div>
                         <div className="flex w-full h-auto justify-center mt-6">
                             <div className="grid grid-cols-3 gap-10 gap-y-16 w-10/12 h-[27rem] mt-8 ml-6 overflow-hidden overflow-y-scroll">
-                                {receitas && receitas.map((receita) => (
+                                {receitas && receitas.map((receita, index) => (
                                     <CardPedido
-                                        key={receita.id}
+                                        key={`${receita.id}-${index}`}
                                         nome={receita.nome}
                                         qtd_porcoes={receita.qtd_porcoes}
                                         preferencias={receita.preferencias}

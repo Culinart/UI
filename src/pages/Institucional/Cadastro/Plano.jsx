@@ -140,6 +140,8 @@ function Plano() {
                         categoria: categoriasSelecionadas,
                         qtdPessoas: pessoasSelecionadas,
                         qtdRefeicoesDia: refeicoesSelecionadas,
+                        valorPlano: (pessoasSelecionadas * refeicoesSelecionadas * diasSelecionados * 4),
+                        valorAjuste: 0,
                         qtdDiasSemana: diasSelecionados,
                         horaEntrega: selectedTime,
                         diaSemana: diaSemanaSelecionado,
