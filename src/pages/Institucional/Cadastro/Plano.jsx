@@ -22,12 +22,24 @@ function Plano() {
     const [diasSelecionados, setDiasSelecionados] = useState(0);
     const [diaSemanaSelecionado, setDiaSemanaSelecionado] = useState(0);
     const [selectedTime, setSelectedTime] = useState("");
-    const [error, setError] = useState("");
+    const [highestValorCategoria, setHighestValorCategoria] = useState(1);
+    const [error, setError] = useState("");const [novoValorPlano, setNovoValorPlano] = useState(pessoasSelecionadas * refeicoesSelecionadas * diasSelecionados * 4 * highestValorCategoria);
+
 
     useEffect(() => {
         buscarPlanoUsuario();
         buscarCategorias();
     }, []);
+
+    useEffect(() => {
+        console.log("Categorias Selecionadas:", categoriasSelecionadas);
+        highestCategoria();
+    }, [categoriasSelecionadas, pessoasSelecionadas, refeicoesSelecionadas, diasSelecionados]);
+    
+    useEffect(() => {
+        console.log("Valor Plano:", categoriasSelecionadas);
+        atualizarValorPlano();
+    }, [categoriasSelecionadas, pessoasSelecionadas, refeicoesSelecionadas, diasSelecionados, highestValorCategoria]);
 
     const handlePreferencias = (preferencia) => {
         if (categoriasSelecionadas.includes(preferencia)) {
@@ -90,14 +102,14 @@ function Plano() {
         "18:00", "19:00", "20:00", "21:00", "22:00"
     ];
 
-    const splitCategorias = categorias.reduce((result, item, index) => {
+    const splitCategorias = categorias && Array.isArray(categorias) ? categorias.reduce((result, item, index) => {
         if (index % 3 === 0) {
             result.push([item]);
         } else {
             result[result.length - 1].push(item);
         }
         return result;
-    }, []);
+    }, []) : [];
 
     const handlePessoas = (count) => {
         setPessoasSelecionadas(count);
@@ -131,16 +143,31 @@ function Plano() {
         return true;
     };
 
+    const atualizarValorPlano = () => {
+        setNovoValorPlano(pessoasSelecionadas * refeicoesSelecionadas * diasSelecionados * 4 * highestValorCategoria);
+    }
+
+    const highestCategoria = () => {
+        const valoresCategorias = categoriasSelecionadas.map(
+            (categoria) => categoria.valor
+        );
+        const highestValorCategoria = valoresCategorias.length > 0 ? Math.max(...valoresCategorias) : 0;
+        setHighestValorCategoria(highestValorCategoria);
+        console.log("maior valor categoria", highestValorCategoria);
+    };   
+      
+
     const cadastrarPlano = async () => {
         if (validateConstants()) {
             try {
+
                 const responsePlano = await api.post(
                     `/planos/${sessionStorage.getItem("idUsuario")}`,
                     {
                         categoria: categoriasSelecionadas,
                         qtdPessoas: pessoasSelecionadas,
                         qtdRefeicoesDia: refeicoesSelecionadas,
-                        valorPlano: (pessoasSelecionadas * refeicoesSelecionadas * diasSelecionados * 4),
+                        valorPlano: novoValorPlano,
                         valorAjuste: 0,
                         qtdDiasSemana: diasSelecionados,
                         horaEntrega: selectedTime,

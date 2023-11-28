@@ -15,29 +15,20 @@ const validationSchema = Yup.object().shape({
             const words = value.split(" ");
             return words.filter((word) => word.replace(/\W/g, "").length >= 1).length >= 2;
         }),
-    email: Yup.string().email("Email inválido").required("Insira o seu email"),
     telefone: Yup.string()
         .matches(/^\(\d{2}\) \d{5}-\d{4}$/, "Insira o seu telefone com o DDD")
         .required("Insira o seu telefone com o DDD"),
-    cpf: Yup.string()
-        .matches(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, "Insira um CPF válido")
-        .required("Insira o seu CPF"),
 });
 
 function PerfilInfoPessoal() {
-
     const navigate = useNavigate();
 
     const [isEditing, setIsEditing] = useState(false);
     const [inputNome, setInputNome] = useState("");
-    const [inputEmail, setInputEmail] = useState("");
     const [inputTelefone, setInputTelefone] = useState("");
     const [nome, setNome] = useState("");
-    const [email, setEmail] = useState("");
     const [telefone, setTelefone] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [inputCPF, setInputCPF] = useState("");
-    const [cpf, setCPF] = useState("");
 
     useEffect(() => {
         buscarInfoPessoal();
@@ -53,7 +44,7 @@ function PerfilInfoPessoal() {
             icon: "error",
             iconColor: "#FF9F1C",
             title: "<b>Erro ao atualizar as informações!</b>",
-            text: "Confira suas credênciais e tente novamente",
+            text: "Confira suas informações e tente novamente",
             position: "center",
             confirmButtonColor: "#FF9F1C"
         })
@@ -69,13 +60,8 @@ function PerfilInfoPessoal() {
             .then((response) => {
                 console.log("Resposta", response);
                 setInputNome(response.data.nome);
-                setInputEmail(response.data.email);
-                setInputTelefone(telefoneChange(response.data.telefone));
-                setInputCPF(cpfChange(response.data.cpf));
                 setNome(response.data.nome);
-                setEmail(response.data.email);
-                setTelefone(response.data.telefone);
-                setCPF(response.data.cpf);
+                telefoneChange(response.data.telefone);
             })
             .catch((erro) => {
                 console.log("Erro", erro);
@@ -98,6 +84,7 @@ function PerfilInfoPessoal() {
             }
 
             setInputTelefone(telefoneFormatado);
+            setTelefone(telefoneFormatado);
         }
     };
 
@@ -117,10 +104,10 @@ function PerfilInfoPessoal() {
             }
 
             setInputTelefone(telefoneFormatado);
+            setTelefone(telefoneFormatado);
         }
     };
 
-   ;
 
     const atualizarUsuario = (values) => {
         if (!isEditing) {
@@ -128,14 +115,11 @@ function PerfilInfoPessoal() {
         }
 
         const telefoneNumerico = values.telefone.replace(/\D/g, "");
-        const cpfNumerico = values.cpf.replace(/\D/g, "");
 
 
         const corpoRequisicao = {
             nome: values.nome,
-            email: values.email,
             telefone: telefoneNumerico,
-            cpf: cpfNumerico,
         };
         console.log(corpoRequisicao);
 
@@ -148,13 +132,8 @@ function PerfilInfoPessoal() {
             .then((response) => {
                 console.log("Resposta", response);
                 setInputNome(response.data.nome);
-                setInputEmail(response.data.email);
-                setInputTelefone(response.data.telefone);
-                setInputCPF(response.data.cpf);
                 setNome(response.data.nome);
-                setEmail(response.data.email);
-                setTelefone(response.data.telefone);
-                setCPF(response.data.cpf);
+                telefoneChange(response.data.telefone);
                 return true;
             })
             .catch((erro) => {
@@ -179,17 +158,13 @@ function PerfilInfoPessoal() {
                         <Formik
                             initialValues={{
                                 nome: nome,
-                                email: email,
                                 telefone: telefone,
-                                cpf: cpf,
                             }}
                             validationSchema={validationSchema}
                             onSubmit={(values, { setSubmitting }) => {
                                 setIsSubmitting(true);
                                 setInputNome(values.nome);
-                                setInputEmail(values.email);
                                 setInputTelefone(inputTelefone);
-                                setInputCPF(values.cpf);
 
                                 atualizarUsuario(values)
                                     .then((success) => {
@@ -228,46 +203,6 @@ function PerfilInfoPessoal() {
                                         )}
                                     </div>
                                     <div className="flex flex-col mt-2 mb-2">
-                                        <label className="text-lg mb-2">Email:</label>
-                                        {isEditing ? (
-                                            <>
-                                                <Field
-                                                    type="text"
-                                                    name="email"
-                                                    onChange={(e) => {
-                                                        setInputEmail(e.target.value);
-                                                        setFieldValue("email", e.target.value);
-                                                    }}
-                                                    className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
-                                                />
-                                                {errors.email && <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />}
-                                            </>
-                                        ) : (
-                                            <p>{email}</p>
-                                        )}
-                                    </div>
-                                    <div className="flex flex-col mt-2 mb-2">
-                                        <label className="text-lg mb-2">CPF:</label>
-                                        {isEditing ? (
-                                            <>
-                                                <Field
-                                                    type="text"
-                                                    name="cpf"
-                                                    maxLength="14"
-                                                    value={inputCPF}
-                                                    className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
-                                                    onChange={(e) => {
-                                                        handleCPFChange(e);
-                                                        setFieldValue("cpf", e.target.value);
-                                                    }}
-                                                />
-                                                {errors.cpf && <ErrorMessage name="cpf" component="div" className="text-red-500 text-sm" />}
-                                            </>
-                                        ) : (
-                                            <p>{cpf}</p>
-                                        )}
-                                    </div>
-                                    <div className="flex flex-col mt-2 mb-2">
                                         <label className="text-lg mb-2">Telefone:</label>
                                         {isEditing ? (
                                             <>
@@ -295,13 +230,9 @@ function PerfilInfoPessoal() {
                                                 onClick={() => {
                                                     setIsEditing(false);
                                                     setInputNome(nome);
-                                                    setInputEmail(email);
                                                     setInputTelefone(telefone);
-                                                    setInputCPF(cpf);
                                                     setFieldValue("nome", nome);
-                                                    setFieldValue("email", email);
                                                     setFieldValue("telefone", telefone);
-                                                    setFieldValue("cpf", cpf);
 
                                                 }}
                                                 className="border border-gray-300 rounded-md px-4 py-2 bg-gray-400 hover:bg-gray-500 text-white"

@@ -4,6 +4,7 @@ import CadastroPassos from "../../../components/Institucional/Cadastro/CadastroP
 import HeaderCliente from "../../../components/Cliente/HeaderCliente/HeaderCliente";
 import styles from "./CadastroStyles.module.css";
 import api from "../../../api/api";
+import Swal from "sweetalert2";
 
 function Checkout() {
 
@@ -76,12 +77,14 @@ function Checkout() {
                 }
             })
             .then((response) => {
-                console.log("Resposta", response);
+                console.log("Resposta Pagamento: ", response);
                 Swal.fire({
                     title: "Checkout realizado com sucesso!",
                     confirmButtonColor: "#F29311",
                 });
-            
+
+                window.open(`${response.data.linkCobranca}`, '_blank');
+
                 setTimeout(() => {
                     navigate('/cliente/pedidos');
                 }, 2000);
@@ -89,6 +92,10 @@ function Checkout() {
             })
             .catch((erro) => {
                 console.log("Erro ", erro);
+                Swal.fire({
+                    title: "Erro ao realizar o checkout! Confira se as informações inseridas são válidas.",
+                    confirmButtonColor: "#F29311",
+                });
             });
     }
 
@@ -110,7 +117,7 @@ function Checkout() {
                                             + {plano.qtdDiasSemana * plano.qtdPessoas * plano.qtdRefeicoesDia * 4} Refeições por mês
                                         </div>
                                         <div>
-                                            R$ {plano.valorPlano.toFixed(2).replace('.', ',') || '500,00'} 
+                                            R$ {plano.valorPlano ? plano.valorPlano.toFixed(2).replace('.', ',') : '500,00'}
                                         </div>
                                     </div>
                                     <span className={`${styles.divisorTotalPreco}`}></span>
@@ -119,7 +126,7 @@ function Checkout() {
                                             Total à pagar
                                         </div>
                                         <div className="font-semibold">
-                                            R$ {plano.valorPlano.toFixed(2).replace('.', ',') || '500,00'} 
+                                            R$ {plano.valorPlano ? plano.valorPlano.toFixed(2).replace('.', ',') : '500,00'}
                                         </div>
                                     </div>
                                 </div>

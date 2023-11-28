@@ -27,7 +27,7 @@ function MeuPlano() {
     const [planId, setPlanId] = useState("");
     const [categoriasSelecionadasAntigas, setCategoriasSelecionadasAntigas] = useState([]);
     const [plano, setPlano] = useState([]);
-    const [highestValorCategoria, setHighestValorCategoria] = useState(0);
+    const [highestValorCategoria, setHighestValorCategoria] = useState(1);
     const [novoValorPlano, setNovoValorPlano] = useState(pessoasSelecionadas * refeicoesSelecionadas * diasSelecionados * 4 * highestValorCategoria);
 
     useEffect(() => {
