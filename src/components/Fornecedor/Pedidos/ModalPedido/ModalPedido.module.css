@@ -38,12 +38,19 @@
     align-items: center;
 }
 
-.icone {
+.container_icone {
     width: 25px;
     height: 25px;
-    background-color: darkorchid;
+    /* background-color: darkorchid; */
     margin-right: 5px;
     border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icone{
+    height: 25px;
 }
 
 .container_infos_pedidos {
@@ -52,13 +59,13 @@
     gap: 10px;
 }
 
-.container_botao{
+.container_botao {
     margin-top: 40px;
     display: flex;
     justify-content: center;
 }
 
-.container_botao>button{
+.container_botao>button {
     background-color: #c5c5c5;
     padding: 10px 40px;
     border-radius: 8px;

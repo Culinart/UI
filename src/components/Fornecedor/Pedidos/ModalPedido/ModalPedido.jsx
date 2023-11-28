@@ -2,6 +2,9 @@ import React from 'react';
 import style from './ModalPedido.module.css';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { FaUserAlt } from "react-icons/fa";
+import { IoLocationSharp } from "react-icons/io5";
+
 
 
 function ModalPedido({ id, usuario, logradouro, numero, data, qtdReceitas, qtdPorcoes, receitas, categorias, fecharModal }) {
@@ -22,11 +25,15 @@ function ModalPedido({ id, usuario, logradouro, numero, data, qtdReceitas, qtdPo
                     <h1 className={style.titulo}>Cliente</h1>
                     <div className={style.container_cliente}>
                         <div className={style.info_cliente}>
-                            <div className={style.icone} />
+                            <div className={style.container_icone}>
+                                <FaUserAlt className={style.icone} />
+                            </div>
                             <span>{usuario}</span>
                         </div>
                         <div className={style.info_cliente}>
-                            <div className={style.icone} />
+                            <div className={style.container_icone}>
+                                <IoLocationSharp className={style.icone} />
+                            </div>
                             <span>{logradouro}, {numero}</span>
                         </div>
                     </div>
