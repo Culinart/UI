@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import CadastroPassos from "../../../components/Institucional/Cadastro/CadastroPassos";
 import HeaderCliente from "../../../components/Cliente/HeaderCliente/HeaderCliente";
@@ -15,48 +15,55 @@ function Plano() {
 
     const navigate = useNavigate();
 
-    const [preferenciasSelecionadas, setPreferenciasSelecionadas] = useState([]);
+    const [categoriasSelecionadas, setCategoriasSelecionadas] = useState([]);
+    const [categorias, setCategorias] = useState([]);
     const [pessoasSelecionadas, setPessoasSelecionadas] = useState(0);
     const [refeicoesSelecionadas, setRefeicoesSelecionadas] = useState(0);
     const [diasSelecionados, setDiasSelecionados] = useState(0);
     const [diaSemanaSelecionado, setDiaSemanaSelecionado] = useState(0);
     const [selectedTime, setSelectedTime] = useState("");
-    const [error, setError] = useState("");
+    const [highestValorCategoria, setHighestValorCategoria] = useState(1);
+    const [error, setError] = useState("");const [novoValorPlano, setNovoValorPlano] = useState(pessoasSelecionadas * refeicoesSelecionadas * diasSelecionados * 4 * highestValorCategoria);
+
+
+    useEffect(() => {
+        buscarPlanoUsuario();
+        buscarCategorias();
+    }, []);
+
+    useEffect(() => {
+        console.log("Categorias Selecionadas:", categoriasSelecionadas);
+        highestCategoria();
+    }, [categoriasSelecionadas, pessoasSelecionadas, refeicoesSelecionadas, diasSelecionados]);
+    
+    useEffect(() => {
+        console.log("Valor Plano:", categoriasSelecionadas);
+        atualizarValorPlano();
+    }, [categoriasSelecionadas, pessoasSelecionadas, refeicoesSelecionadas, diasSelecionados, highestValorCategoria]);
 
     const handlePreferencias = (preferencia) => {
-        if (preferenciasSelecionadas.includes(preferencia)) {
-            setPreferenciasSelecionadas(preferenciasSelecionadas.filter((item) => item !== preferencia));
+        if (categoriasSelecionadas.includes(preferencia)) {
+            setCategoriasSelecionadas(categoriasSelecionadas.filter((item) => item !== preferencia));
         } else {
-            setPreferenciasSelecionadas([...preferenciasSelecionadas, preferencia]);
+            setCategoriasSelecionadas([...categoriasSelecionadas, preferencia]);
         }
     };
 
-    const preferenciasData = [
-        {
-            label: "Carnes",
-            image: iconeCarne,
-        },
-        {
-            label: "Pescetariano",
-            image: iconePeixe,
-        },
-        {
-            label: "Rápido e Fácil",
-            image: iconeRelogio,
-        },
-        {
-            label: "Vegetariano",
-            image: iconeSuco,
-        },
-        {
-            label: "Vegano",
-            image: iconePlanta,
-        },
-        {
-            label: "Fit e Saudável",
-            image: iconeMaca,
-        },
-    ];
+    const buscarCategorias = () => {
+        api
+            .get(`/categorias`, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+                }
+            })
+            .then((response) => {
+                console.log("Resposta", response);
+                setCategorias(response.data)
+            })
+            .catch((erro) => {
+                console.log("Erro", erro);
+            });
+    }
 
     const diasSemanaData = [
         {
@@ -95,14 +102,14 @@ function Plano() {
         "18:00", "19:00", "20:00", "21:00", "22:00"
     ];
 
-    const splitPreferenciasData = preferenciasData.reduce((result, item, index) => {
+    const splitCategorias = categorias && Array.isArray(categorias) ? categorias.reduce((result, item, index) => {
         if (index % 3 === 0) {
             result.push([item]);
         } else {
             result[result.length - 1].push(item);
         }
         return result;
-    }, []);
+    }, []) : [];
 
     const handlePessoas = (count) => {
         setPessoasSelecionadas(count);
@@ -122,7 +129,7 @@ function Plano() {
 
     const validateConstants = () => {
         if (
-            preferenciasSelecionadas == "" ||
+            categoriasSelecionadas === "" ||
             pessoasSelecionadas === 0 ||
             refeicoesSelecionadas === 0 ||
             diasSelecionados === 0 ||
@@ -136,30 +143,99 @@ function Plano() {
         return true;
     };
 
-    const cadastrarPlano = () => {
+    const atualizarValorPlano = () => {
+        setNovoValorPlano(pessoasSelecionadas * refeicoesSelecionadas * diasSelecionados * 4 * highestValorCategoria);
+    }
+
+    const highestCategoria = () => {
+        const valoresCategorias = categoriasSelecionadas.map(
+            (categoria) => categoria.valor
+        );
+        const highestValorCategoria = valoresCategorias.length > 0 ? Math.max(...valoresCategorias) : 0;
+        setHighestValorCategoria(highestValorCategoria);
+        console.log("maior valor categoria", highestValorCategoria);
+    };   
+      
+
+    const cadastrarPlano = async () => {
         if (validateConstants()) {
-            const corpoRequisicao = {
-                categorias: preferenciasSelecionadas,
-                qtdPessoas: pessoasSelecionadas,
-                qtdRefeicoesDia: refeicoesSelecionadas,
-                qtdDiasSemana: diasSelecionados,
-                horaEntrega: selectedTime,
-                diaSemana: diaSemanaSelecionado,
-            };
-            api
-          .post(`/planos/${sessionStorage.getItem("idUsuario")}`, corpoRequisicao, {
-            headers: {
-                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+            try {
+
+                const responsePlano = await api.post(
+                    `/planos/${sessionStorage.getItem("idUsuario")}`,
+                    {
+                        categoria: categoriasSelecionadas,
+                        qtdPessoas: pessoasSelecionadas,
+                        qtdRefeicoesDia: refeicoesSelecionadas,
+                        valorPlano: novoValorPlano,
+                        valorAjuste: 0,
+                        qtdDiasSemana: diasSelecionados,
+                        horaEntrega: selectedTime,
+                        diaSemana: diaSemanaSelecionado,
+                    },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
+                        },
+                    }
+                );
+    
+                const planoId = responsePlano.data.id;
+    
+                const categoriaIds = categoriasSelecionadas.map(categoria => ({ idCategoria: categoria.id }));
+    
+                const responsePlanoCategoria = await api.post(
+                    '/planos/categorias',
+                    { planoId, categoriaId: categoriaIds },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
+                        },
+                    }
+                );
+    
+                console.log("Resposta Plano Categorias", responsePlanoCategoria);
+    
+                navigate('/cadastro/checkout');
+            } catch (error) {
+                console.error("Erro", error);
             }
-        })
-          .then((response) => {
-            console.log("Resposta", response);
-            navigate('/cadastro/checkout');
-        })
-        .catch((erro) => {
-            console.log("Erro", erro);
-        });
-      }
+        }
+    };    
+
+    const buscarPlanoUsuario = () => {
+        api
+            .get(`/planos/${sessionStorage.getItem("idUsuario")}`, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+                }
+            })
+            .then((response) => {
+                console.log("Usuário já possui plano cadastrado: ", response);
+                navigate('/cadastro/checkout');
+            })
+            .catch((erro) => {
+                console.log("Usuário ainda não possui um plano. ", erro);
+            });
+    }
+
+    const getIconByCategoriaNome = (nome) => {
+        switch (nome) {
+            case "Carnes":
+                return iconeCarne;
+            case "Pescetariano":
+                return iconePeixe;
+            case "Rápido e Fácil":
+                return iconeRelogio;
+            case "Vegetariano":
+                return iconeSuco;
+            case "Vegano":
+                return iconePlanta;
+            case "Fit e Saudável":
+                return iconeMaca;
+            default:
+                return "";
+        }
     };
 
 
@@ -178,20 +254,21 @@ function Plano() {
                                 <div className="px-8 ml-12 mr-12">
                                     <h3 className="text-center">1. Selecione suas preferências</h3>
                                     <div className="flex w-full items-center justify-center">
-                                        {splitPreferenciasData.map((columnData, columnIndex) => (
+                                        {splitCategorias.map((columnData, columnIndex) => (
                                             <div className="flex-col items-center justify-center" key={columnIndex}>
-                                                {columnData.map((preferenciaData, index) => (
+                                                {columnData.map((categoria, index) => (
                                                     <div
                                                         key={index}
-                                                        className={`card ${styles.card_plano} flex-col items-center justify-center ${preferenciasSelecionadas.includes(preferenciaData.label) ? styles.card_plano_selecionado : ''}`}
-                                                        onClick={() => handlePreferencias(preferenciaData.label)}
+                                                        className={`card ${styles.card_plano} flex-col items-center justify-center ${categoriasSelecionadas.includes(categoria) ? styles.card_plano_selecionado : ''
+                                                            }`}
+                                                        onClick={() => handlePreferencias(categoria)}
                                                     >
                                                         <img
-                                                            src={preferenciaData.image}
+                                                            src={getIconByCategoriaNome(categoria.nome)}
                                                             className="mx-auto my-auto w-10"
-                                                            alt={preferenciaData.label}
+                                                            alt={categoria.nome}
                                                         />
-                                                        <div className={`${styles.texto_card_plano}`}>{preferenciaData.label}</div>
+                                                        <div className={`${styles.texto_card_plano}`}>{categoria.nome}</div>
                                                     </div>
                                                 ))}
                                             </div>

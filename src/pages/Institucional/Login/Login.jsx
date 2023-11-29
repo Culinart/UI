@@ -101,7 +101,7 @@ function Login() {
         if (sessionStorage.getItem('permissao') == 'ADMINISTRADOR' || sessionStorage.getItem('permissao') == 'FUNCIONARIO') {
             navigate('/fornecedor/pedidos');
         } else {
-            navigate('/cliente/pedidos');
+            navigate('/cliente/perfil/info-pessoal');
         }
     }
 
