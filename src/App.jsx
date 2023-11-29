@@ -20,8 +20,8 @@ import AdicionarEndereco from './pages/Cliente/Perfil/AdicionarEndereco.jsx';
 import MeuPlano from './pages/Cliente/MeuPlano.jsx';
 import PerfilInfoPessoalFornecedor from './pages/Fornecedor/Perfil/PerfilFornecedor.jsx';
 import PerfilSenhaAutenticacaoFornecedor from './pages/Fornecedor/Perfil/PerfilSenhaAutenticacaoFornecedor.jsx';
-import PedidosFornecedor from './pages/Fornecedor/PedidosFornecedor.jsx';
 import Precos from './pages/Fornecedor/Precos.jsx'
+import PedidosFornecedor from './pages/Fornecedor/Pedidos/Pedidos.jsx';
 
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.minimal.css";
