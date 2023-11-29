@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
-import style from './Pedidos.module.css'
+import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
+import style from './Pedidos.module.css';
 import HeaderFornecedor from '../../../components/Fornecedor/HeaderFornecedor/HeaderFornecedor';
 import ItemPedido from '../../../components/Fornecedor/Pedidos/ItemPedido/ItemPedido';
-import api from '../../../api/api'
+import api from '../../../api/api';
 
 function PedidosFornecedor() {
     const [pedidos, setPedidos] = useState([]);
+    const PERMISSOES_PERMITIDAS = ['ADMINISTRADOR', 'FUNCIONARIO'];
+    const navigate = useNavigate();
 
     const buscarPedidosFornecedor = () => {
         api.get('/pedidos/proximas', {
@@ -13,7 +16,7 @@ function PedidosFornecedor() {
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
             }
         }).then((response) => {
-            console.log("Resposta: ",response);
+            console.log("Resposta: ", response);
             setPedidos(response.data);
         }).catch((error) => {
             console.log(error);
@@ -21,15 +24,24 @@ function PedidosFornecedor() {
     }
 
     useEffect(() => {
-        buscarPedidosFornecedor();
-        document.body.style.backgroundColor = '#fff'
-    }, []);
+        const usuarioPermissao = sessionStorage.getItem('permissao');
+        const possuiPermissao = PERMISSOES_PERMITIDAS.some(permissao =>
+            usuarioPermissao.includes(permissao)
+        );
+
+        if (!possuiPermissao) {
+            navigate('/cliente/pedidos'); // Utilize o navigate para a navegação
+        } else {
+            buscarPedidosFornecedor();
+            document.body.style.backgroundColor = '#fff';
+        }
+    }, [navigate]);
 
     return (
         <>
             <HeaderFornecedor />
             <div className={style.container_topo}>
-                <span>Entrega das proximas duas semanas</span>
+                <span>Entrega das próximas duas semanas</span>
                 <span>Próxima entrega - Sexta-feira, 4 de Agosto</span>
             </div>
             <div className={style.container_pedidos}>
@@ -53,10 +65,9 @@ function PedidosFornecedor() {
                         Nenhum resultado encontrado
                     </div>
                 )}
-
             </div>
         </>
     );
 }
 
-export default PedidosFornecedor; 3
+export default PedidosFornecedor;
