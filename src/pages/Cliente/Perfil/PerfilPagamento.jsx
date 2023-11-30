@@ -11,6 +11,7 @@ function PerfilPagamento() {
 
     const [plano, setPlano] = useState("");
     const [statusPlano, setStatusPlano] = useState("");
+    const [pagamento, setPagamento] = useState("");
 
     useEffect(() => {
         if (sessionStorage.getItem('permissao') == null || sessionStorage.getItem('permissao') == '') {
@@ -19,6 +20,7 @@ function PerfilPagamento() {
             navigate('/cadastro/endereco')
         }
         buscarPlano();
+        buscarPagamento();
     }, []);
 
     const buscarPlano = () => {
@@ -30,6 +32,19 @@ function PerfilPagamento() {
             .then((response) => {
                 setPlano(response.data);
                 setStatusPlano(response.data.isAtivo);
+            }).catch((error) => {
+                console.log(error);
+            });
+    }
+
+    const buscarPagamento = () => {
+        api.get(`/pagamentos/${sessionStorage.getItem('idUsuario')}`, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+            }
+        })
+            .then((response) => {
+                setPagamento(response.data);
             }).catch((error) => {
                 console.log(error);
             });
@@ -102,20 +117,7 @@ function PerfilPagamento() {
         })
             .then((response) => {
 
-                Swal.fire({
-                    title: "Assinatura cancelada com sucesso!",
-                    confirmButtonColor: "#F29311",
-                });
-
-                setTimeout(() => {
-                    window.location.reload();
-                }
-                    , 2000);
-
-                Swal.fire({
-                    title: "Plano reativado com sucesso!",
-                    confirmButtonColor: "#F29311",
-                });
+                console.log(response)
 
             }).catch((error) => {
                 console.log(error);
@@ -140,7 +142,20 @@ function PerfilPagamento() {
         })
             .then((response) => {
                 ativarPagamento();
-                console.log(response.data);
+                console.log(response);
+
+                
+                Swal.fire({
+                    title: "Assinatura ativada com sucesso!",
+                    confirmButtonColor: "#F29311",
+                });
+
+                setTimeout(() => {
+                    window.location.reload();
+                }
+                    , 2000);
+
+                    
             }).catch((error) => {
                 console.log(error);
             });
@@ -152,11 +167,31 @@ function PerfilPagamento() {
             <div className="flex h-screen">
                 <SidebarPerfil nome={sessionStorage.getItem('nome')} />
                 <div className="flex-grow p-6 flex items-start justify-center mt-12">
-                    <div className="flex-col justify-center items-center w-full max-w-md bg-white p-6 rounded-lg filter drop-shadow(0px 0px 8px rgba(0, 0, 0, 0.25))">
+                    <div className="flex-col justify-center items-center w-full max-w-lg bg-white p-6 rounded-lg filter drop-shadow(0px 0px 8px rgba(0, 0, 0, 0.25))">
                         <div className="w-full flex-col items-center justify-center">
                             <h1 className="text-[#DC7726] font-bold text-2xl mb-2 flex justify-center items-center w-full">
                                 Pagamento
                             </h1>
+                            {statusPlano === "ATIVO" ? (
+                                <span>
+                                    <p className="text-[#DC7726] font-medium mt-8 mb-6">
+                                        Status Plano: {statusPlano}
+                                    </p>
+                                    <a
+                                        className="text-[#00AE9E] font-medium mt-8 mb-8"
+                                        href={pagamento.linkCobranca}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        style={{ wordWrap: "break-word" }}
+                                    >
+                                        Link Cobrança: {pagamento.linkCobranca}
+                                    </a>
+                                </span>
+                            ) : (
+                                <p className="text-[#DC7726] font-medium mt-8 mb-6">
+                                    Status Plano: {statusPlano}
+                                </p>
+                            )}
                             {statusPlano == "ATIVO" ? <span>
                                 <p className="mt-4 mb-4">
                                     Para cancelar sua assinatura, basta clicar na opção de cancelamento. Caso mude de ideia no futuro, a opção para reativar a assinatura estará disponível, permitindo que retorne ao seu plano anterior.
