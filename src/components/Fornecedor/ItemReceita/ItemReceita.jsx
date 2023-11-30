@@ -3,11 +3,16 @@ import { FaHeart, FaStar, FaPlusCircle, FaCheckCircle } from 'react-icons/fa';
 import ModalReceita from "../../Cliente/Receitas/ModalReceita/ModalReceita";
 import api from "../../../api/api";
 import Preferencia from "../../Cliente/Receitas/Preferencia";
+import style from './ItemReceita.module.css'
+import { useLocation } from 'react-router-dom';
 
 function ItemReceita({ id, nome, ingredientes, rendimento, preparo, horas, minutos, qtdAvaliacao, mediaAvaliacao, categoria, preferencia, imagem }) {
 
     const [preferenciasDTO, setPreferenciaDTO] = useState(preferencia);
     const [categoriasDTO, setcategoriaDTO] = useState(categoria);
+    const location = useLocation();
+
+    const isPaginaReceitasCliente = location.pathname === '/cliente/receitas';
 
     const handleFavoritedClick = async (e) => {
         e.stopPropagation();
@@ -48,25 +53,21 @@ function ItemReceita({ id, nome, ingredientes, rendimento, preparo, horas, minut
     }
 
     return (
-        <div className="p-4 border min-w-[300px] rounded-lg mb-4 bg-white hover:shadow-md hover:border-orange-400"
-            onClick={handleAbrirModal}
-        >
+        <div className={style.card} onClick={handleAbrirModal}>
             <div className="relative">
-                <button
-                    // className="absolute top-0 left-0 bg-white rounded-lg p-2"
-                    // onClick={handleFavoritedClick}
-                >
-                    {/* <FaHeart
-                        // className={isFavorito ? "text-red-500 text-2xl" : "text-gray-400 text-2xl"}
-                        className={"text-gray-400 text-2xl"}
-                    /> */}
-                </button>
-                <img src={imagem} alt="Imagem da Receita" style={{ width: '280px', height: '160px', borderRadius: '1.2rem' }} />
+                {isPaginaReceitasCliente && (
+                    <button className="absolute top-0 left-0 bg-white rounded-lg p-2" onClick={handleFavoritedClick}>
+                        <FaHeart className={`text-gray-400 text-2xl`} />
+                    </button>
+                )}
+                <img src={imagem} alt="Imagem da Receita" className={style.imagem} />
             </div>
-            <h2 className="max-w-md text-lg font-semibold mt-2 max-w-[280px]">{nome}</h2>
-            <div>
-                {categoriasDTO.map((categoria) => (
-                    <span key={categoria.id} className="text-sm mr-2 text-gray-600">
+            <h2 className={style.nome_receita}>{nome}</h2>
+            <div className={style.container_categorias}>
+                {categoriasDTO.map((categoria, index, array) => (
+                    <span className={style.nome_categoria} key={categoria.id}>
+                        {index > 0 && index < array.length - 1 ? ', ' : ''}
+                        {index === array.length - 1 && array.length > 1 ? ' e ' : ''}
                         {categoria.nome}
                     </span>
                 ))}
@@ -86,9 +87,11 @@ function ItemReceita({ id, nome, ingredientes, rendimento, preparo, horas, minut
                 </div>
             </div>
             <div className="flex justify-end">
-                <button onClick={(e) => { e.stopPropagation() }}>
-                    {/* <FaPlusCircle onClick={excluirReceita} className="text-blue-500 text-2xl hover:text-green-700" /> */}
-                </button>
+                {isPaginaReceitasCliente && (
+                    <button onClick={(e) => { e.stopPropagation() }}>
+                        <FaPlusCircle className="text-green-500 text-2xl hover:text-green-700" />
+                    </button>
+                )}
             </div>
             {exibirReceita && <ModalReceita
                 fecharModal={handleFecharModal}

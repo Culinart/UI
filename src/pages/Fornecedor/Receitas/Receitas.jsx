@@ -4,7 +4,7 @@ import iconeBusca from "../../../assets/Fornecedor/Receitas/search.svg";
 import { FiEdit } from "react-icons/fi";
 import ItemReceita from "../../../components/Fornecedor/ItemReceita/ItemReceita";
 import api from "../../../api/api";
-import ModalReceita from "../../../components/Cliente/Receitas/ModalReceita/ModalReceita";
+import style from './Receitas.module.css'
 
 function ReceitasFornecedor() {
     const [preferencias, setPreferencias] = useState([]);
@@ -24,6 +24,7 @@ function ReceitasFornecedor() {
     const buscarReceitasPedidos = () => {
         api.get('/receitas').then((response) => {
             setReceitasPedido(response.data);
+            console.log(response.data)
         }).catch((error) => {
             console.log(error);
         });
@@ -40,14 +41,16 @@ function ReceitasFornecedor() {
     return (
         <>
             <HeaderFornecedor />
-            <div className="items-center justify-center w-full flex mt-10">
-                <div className="items-center justify-between w-4/5 flex border-b border-gray-300">
-                    <h1 className="text-2xl text-[#045D53] mb-4">Você faz parte disso!</h1>
-                    <button>
-                        <a href="/fornecedor/adicionar-receita">
-                            Adicionar Receita +
-                        </a>
-                    </button>
+            <div className="items-center justify-center w-full flex mt-10 flex flex-col">
+                <div className="pb-3 items-end justify-between w-4/5 flex border-b border-gray-300 ">
+                    <div>
+                        <h1 className="text-2xl text-[#045D53] mb-4">Você faz parte disso!</h1>
+                        <button>
+                            <a href="/fornecedor/adicionar-receita" className="rounded-lg border border-black bg-white px-5 py-0.4">
+                                Adicionar Receita +
+                            </a>
+                        </button>
+                    </div>
                     <div className="relative flex items-center">
                         <div className="relative">
                             <input
@@ -65,34 +68,34 @@ function ReceitasFornecedor() {
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="flex gap-4 flex-wrap mt-4" style={{ marginRight: "10%", marginLeft: "10%" }}>
-                {receitasFiltradas.length > 0 ? (
-                    receitasFiltradas.map((receita) => (
-                        <ItemReceita
-                            key={receita.id}
-                            id={receita.id}
-                            nome={receita.receitaDTO.nome}
-                            horas={receita.receitaDTO.horas}
-                            minutos={receita.receitaDTO.minutos}
-                            descricao={receita.receitaDTO.descricao}
-                            qtdAvaliacao={receita.receitaDTO.qtdAvaliacoes}
-                            mediaAvaliacao={receita.receitaDTO.mediaAvaliacoes}
-                            ingredientes={receita.receitaDTO.ingredientes}
-                            rendimento={receita.receitaDTO.rendimento}
-                            preparo={receita.receitaDTO.modoPreparos}
-                            categoria={receita.categoriaDTO}
-                            preferencia={receita.preferenciaDTO}
-                            imagem={receita.imagem}
-                            abrirModal={() => setModalAberto(true)}
-                        />
-                    ))
-                ) : (
-                    <div className="text-gray-600 text-2xl w-full text-center">
-                        Nenhum resultado encontrado
-                    </div>
-                )}
-            </div>
+                <div className={style.container_receitas}>
+                    {receitasFiltradas.length > 0 ? (
+                        receitasFiltradas.map((receita) => (
+                            <ItemReceita
+                                key={receita.id}
+                                id={receita.id}
+                                nome={receita.receitaDTO.nome}
+                                horas={receita.receitaDTO.horas}
+                                minutos={receita.receitaDTO.minutos}
+                                descricao={receita.receitaDTO.descricao}
+                                qtdAvaliacao={receita.receitaDTO.qtdAvaliacoes}
+                                mediaAvaliacao={receita.receitaDTO.mediaAvaliacoes}
+                                ingredientes={receita.receitaDTO.ingredientes}
+                                rendimento={receita.receitaDTO.porcoes}
+                                preparo={receita.receitaDTO.modoPreparos}
+                                categoria={receita.categoriaDTO}
+                                preferencia={receita.preferenciaDTO}
+                                imagem={receita.receitaDTO.imagem}
+                                abrirModal={() => setModalAberto(true)}
+                            />
+                        ))
+                    ) : (
+                        <div className="text-gray-600 text-2xl w-full text-center">
+                            Nenhum resultado encontrado
+                        </div>
+                    )}
+                </div>
+            </div >
         </>
     );
 }

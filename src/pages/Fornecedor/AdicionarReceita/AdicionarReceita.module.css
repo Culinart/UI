@@ -17,7 +17,7 @@
 }
 
 .topo {
-    width: 100%;
+    width: 70rem;
     /* background-color: lightblue; */
 }
 
@@ -31,8 +31,7 @@
 .linha_horizontal {
     height: 1px;
     width: 100%;
-    /* background-color: #cacaca; */
-    background-color: red;
+    background-color: #cacaca;
 }
 
 .container_imagem_titulo {
@@ -43,7 +42,7 @@
     margin: 40px 0px;
 }
 
-.imagem {
+.container_imagem {
     width: 22rem;
     height: 12rem;
     border-radius: 12px;

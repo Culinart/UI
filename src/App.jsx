@@ -10,7 +10,7 @@ import Pedidos from './pages/Cliente/Pedidos.jsx';
 import ComoFunciona from './pages/Institucional/ComoFunciona/ComoFunciona.jsx';
 import Login from './pages/Institucional/Login/Login.jsx';
 import RedefinirSenha from './pages/Institucional/Login/RedefinirSenha.jsx';
-import Receitas from './pages/Cliente/Receitas.jsx';
+import ReceitasCliente from './pages/Cliente/Receitas/Receitas.jsx';
 import Preferencias from './pages/Cliente/Preferencias.jsx';
 import PerfilInfoPessoal from './pages/Cliente/Perfil/PerfilInfoPessoal.jsx';
 import PerfilSenhaAutenticacao from './pages/Cliente/Perfil/PerfilSenhaAutenticacao.jsx';
@@ -53,7 +53,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/redefinir-senha" element={<RedefinirSenha />} />
           <Route path="/cliente/pedidos" element={<Pedidos />} />
-          <Route path="/cliente/receitas" element={<Receitas />} />
+          <Route path="/cliente/receitas" element={<ReceitasCliente />} />
           <Route path="/cliente/preferencias" element={<Preferencias />} />
           <Route path="/cliente/perfil/info-pessoal" element={<PerfilInfoPessoal />} />
           <Route path="/cliente/perfil/senha-autenticacao" element={<PerfilSenhaAutenticacao />} />

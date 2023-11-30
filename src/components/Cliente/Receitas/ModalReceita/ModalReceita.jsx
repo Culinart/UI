@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import api from "../../../../api/api";
 import Preferencia from "../Preferencia";
-import { FaStar } from 'react-icons/fa';
 import style from "./ModalReceita.module.css"
+import { useLocation } from 'react-router-dom';
 
 import editar from "../../../../assets/Fornecedor/Receitas/Edit.svg"
 import lixo from "../../../../assets/Fornecedor/Receitas/trash.svg"
@@ -14,16 +14,17 @@ function ModalReceita({ id, nome, ingredientes, rendimento, horas, minutos, qtdA
     const [listaPreparo, setListaPreparo] = useState(preparo);
     const [listaPreferencia, setListaPreferencia] = useState(preferencia);
     const [listaCategoria, setListaCategoria] = useState(categoria);
+    const location = useLocation();
+
+    const isPaginaReceitasCliente = location.pathname === '/fornecedor/receitas';
 
     function atualizar() {
         console.log('icone de editar funcionando')
     }
 
     function exluir() {
-        alert('Icone de excluir funcionando')
         api.delete(`/receitas/${id}`)
             .then(response => {
-                alert("apagou a receita")
                 console.log(response.data)
             })
             .catch(error => {
@@ -45,14 +46,18 @@ function ModalReceita({ id, nome, ingredientes, rendimento, horas, minutos, qtdA
                             <div className={style.avaliacao}>
                                 <span>⭐{mediaAvaliacao} ({qtdAvaliacao} Avaliações)</span>
                             </div>
-                            <div className={style.editar_excluir}>
-                                <a href={`/fornecedor/editar-receita/${id}`}>
-                                    <img src={editar} onClick={atualizar} className={style.icone} alt="Icone de lápis" />
-                                </a>
-                                <img src={lixo} onClick={exluir} className={style.icone} alt="Icone de lixo" />
-                            </div>
+                            {isPaginaReceitasCliente && (
+                                <div className={style.editar_excluir}>
+                                    <a href={`/fornecedor/editar-receita/${id}`}>
+                                        <img src={editar} onClick={atualizar} className={style.icone} alt="Icone de lápis" />
+                                    </a>
+                                    <img src={lixo} onClick={exluir} className={style.icone} alt="Icone de lixo" />
+                                </div>
+                            )}
                         </div>
-                        <img src={imagem} className={style.imagem} alt="Foto da receita" />
+                        <div className={style.imagem}>
+                            <img src={imagem} alt="Foto da receita" />
+                        </div>
                         <div className={style.container_nome}>
                             <h1 className={style.nome_receita}>{nome}</h1>
                         </div>
@@ -87,8 +92,10 @@ function ModalReceita({ id, nome, ingredientes, rendimento, horas, minutos, qtdA
                         <div className={style.container_tempo_categoria_preferencia}>
                             <div className={style.categoria}>
                                 <b>Categoria: </b>
-                                {listaCategoria.map((categoria) => (
-                                    <span className={style.nome_categoria}>
+                                {listaCategoria.map((categoria, index, array) => (
+                                    <span className={style.nome_categoria} key={categoria.id}>
+                                        {index > 0 && index < array.length - 1 ? ', ' : ' '}
+                                        {index === array.length - 1 && array.length > 1 ? ' e ' : ' '}
                                         {categoria.nome}
                                     </span>
                                 ))}
