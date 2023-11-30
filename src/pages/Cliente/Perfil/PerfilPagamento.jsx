@@ -36,7 +36,7 @@ function PerfilPagamento() {
     }
 
     const cancelarAssinatura = () => {
-        api.delete(`/pagamentos/assinatura/${plano}`, {
+        api.delete(`/pagamentos/assinatura/${plano.id}`, {
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
             }
@@ -46,12 +46,18 @@ function PerfilPagamento() {
                     title: "Assinatura cancelada com sucesso!",
                     confirmButtonColor: "#F29311",
                 });
+
+                setTimeout(() => {
+                    window.location.reload();
+                }
+                    , 2000);
+
             }).catch((error) => {
                 console.log(error);
             });
     }
 
-    const desativarPlano = () => {
+    const desativarPlanoPagamento = () => {
         api.delete(`/pagamentos/plano/${plano.id}`, {
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
@@ -64,22 +70,77 @@ function PerfilPagamento() {
             });
     }
 
-    const ativarPlano = () => {
-        api.delete(`/pagamentos/solicitar/${sessionStorage.getItem('idUsuario')}`, {
+    const desativarPlano = () => {
+        const corpoRequisicao = {
+            qtdPessoas: plano.qtdPessoas,
+            qtdRefeicoesDia: plano.qtdRefeicoesDia,
+            valorPlano: plano.valorPlano,
+            valorAjuste: plano.valorAjuste,
+            qtdDiasSemana: plano.qtdDiasSemana,
+            horaEntrega: plano.horaEntrega,
+            isAtivo: 'INATIVO',
+            diaSemana: plano.diaSemana,
+        }
+        api.put(`/planos/${sessionStorage.getItem('idUsuario')}`, corpoRequisicao, {
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
             }
         })
             .then((response) => {
+                desativarPlanoPagamento();
+                console.log(response.data);
+            }).catch((error) => {
+                console.log(error);
+            });
+    }
+
+    const ativarPagamento = () => {
+        api.post(`/pagamentos/solicitar/${sessionStorage.getItem('idUsuario')}`, null, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+            }
+        })
+            .then((response) => {
+
+                Swal.fire({
+                    title: "Assinatura cancelada com sucesso!",
+                    confirmButtonColor: "#F29311",
+                });
+
+                setTimeout(() => {
+                    window.location.reload();
+                }
+                    , 2000);
+
                 Swal.fire({
                     title: "Plano reativado com sucesso!",
                     confirmButtonColor: "#F29311",
                 });
-        
-                setTimeout(() => {
-                    window.location.reload();
-                }, 2000);
 
+            }).catch((error) => {
+                console.log(error);
+            });
+    }
+
+    const ativarPlano = () => {
+        const corpoRequisicao = {
+            qtdPessoas: plano.qtdPessoas,
+            qtdRefeicoesDia: plano.qtdRefeicoesDia,
+            valorPlano: plano.valorPlano,
+            valorAjuste: plano.valorAjuste,
+            qtdDiasSemana: plano.qtdDiasSemana,
+            horaEntrega: plano.horaEntrega,
+            isAtivo: 'ATIVO',
+            diaSemana: plano.diaSemana,
+        }
+        api.put(`/planos/${sessionStorage.getItem('idUsuario')}`, corpoRequisicao, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+            }
+        })
+            .then((response) => {
+                ativarPagamento();
+                console.log(response.data);
             }).catch((error) => {
                 console.log(error);
             });
