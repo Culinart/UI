@@ -171,6 +171,7 @@ function Plano() {
                         valorAjuste: 0,
                         qtdDiasSemana: diasSelecionados,
                         horaEntrega: selectedTime,
+                        isAtivo: 'ATIVO',
                         diaSemana: diaSemanaSelecionado,
                     },
                     {
