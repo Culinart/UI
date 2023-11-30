@@ -5,7 +5,7 @@ import ModalPedido from "../Pedido/ModalPedido";
 import ModalReceita from "./ModalReceita/ModalReceita";
 import api from "../../../api/api";
 
-function CardReceita(/*props*/{ nome, tempoPreparo, categoria, preferencia, imagem }) {
+function CardReceita(/*props*/{ nome, tempoPreparo, categoria, preferencia, imagem , avaliacao}) {
 
     // const {
     //     id,
@@ -100,7 +100,7 @@ function CardReceita(/*props*/{ nome, tempoPreparo, categoria, preferencia, imag
             <div className="flex items-center mt-2">
                 <div className="flex items-center">
                     <FaStar className="text-yellow-400 text-xl mr-2" />
-                    <span className="text-sm">/5.0</span>
+                    <span className="text-sm">{avaliacao}</span>
                 </div>
                 <div className="ml-2 mr-4 items-center">
                     <span className="text-sm">Avaliações</span>
