@@ -10,6 +10,7 @@ import iconeMaca from "../../assets/Institucional/Cadastro/iconeMaca.svg";
 import styles from "./MeuPlano.module.css";
 import api from "../../api/api";
 import AlertaClienteInativo from "../../components/Cliente/AlertaClienteInativo";
+import Swal from "sweetalert2";
 
 function MeuPlano() {
 
@@ -35,12 +36,12 @@ function MeuPlano() {
         buscarCategorias();
         buscarCategoriasPlano();
     }, []);
-    
+
     useEffect(() => {
         console.log("Categorias Selecionadas:", categoriasSelecionadas);
         highestCategoria();
     }, [categoriasSelecionadas, pessoasSelecionadas, refeicoesSelecionadas, diasSelecionados]);
-    
+
     useEffect(() => {
         console.log("Valor Plano:", categoriasSelecionadas);
         atualizarValorPlano();
@@ -49,7 +50,7 @@ function MeuPlano() {
     const atualizarValorPlano = () => {
         setNovoValorPlano(pessoasSelecionadas * refeicoesSelecionadas * diasSelecionados * 4 * highestValorCategoria);
     }
-    
+
     const highestCategoria = () => {
         const valoresCategorias = categoriasSelecionadas.map(
             (categoria) => categoria.valor
@@ -57,7 +58,7 @@ function MeuPlano() {
         const highestValorCategoria = valoresCategorias.length > 0 ? Math.max(...valoresCategorias) : 0;
         setHighestValorCategoria(highestValorCategoria);
         console.log("maior valor categoria", highestValorCategoria);
-    };    
+    };
 
     const handlePreferencias = (preferencia) => {
         const isCategoriaSelected = categoriasSelecionadas.some(
@@ -219,7 +220,7 @@ function MeuPlano() {
     const atualizarPlano = async () => {
         if (validateConstants()) {
             try {
-    
+
                 const responsePlano = await api.put(
                     `/planos/${sessionStorage.getItem("idUsuario")}`,
                     {
@@ -239,8 +240,10 @@ function MeuPlano() {
                 );
 
                 const planoId = responsePlano.data.id;
+                console.log("PLANO ID: " + planoId);
 
                 const categoriasAtuais = categoriasSelecionadas.map(categoria => categoria.id);
+                console.log("CATEGORIAS ATUAIS ID: " + categoriasAtuais);
 
                 const categoriasNovas = categoriasAtuais.filter(categoria => !categoriasSelecionadasAntigas.includes(categoria));
                 const categoriasRemovidas = categoriasSelecionadasAntigas.filter(categoria => !categoriasAtuais.includes(categoria));
@@ -250,8 +253,8 @@ function MeuPlano() {
                         planoId,
                         categoriaId: categoriasNovas,
                     };
-
-                    await api.post(
+                    console.log(newPlanoCategorias);
+                    await api.put(
                         `/planos/categorias`,
                         newPlanoCategorias,
                         {
@@ -261,10 +264,10 @@ function MeuPlano() {
                         }
                     );
                 }
-
+                console.log(categoriasRemovidas);
                 for (const categoriaId of categoriasRemovidas) {
                     await api.delete(
-                        `/planos/categorias/${categoriaId}`,
+                        `/planos/categorias/${categoriaId.id}`,
                         {
                             headers: {
                                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
@@ -273,7 +276,14 @@ function MeuPlano() {
                     );
                 }
 
-                console.log("Plano atualizado com sucesso!");
+                Swal.fire({
+                    title: "Sucesso!",
+                    text: "Plano atualizado com sucesso!",
+                    icon: "success",
+                }).then(() => {
+                    // Redirecionar para outra tela aqui
+                    window.location.href = "/cliente/meu-plano";
+                });
             } catch (error) {
                 console.error("Erro", error);
             }

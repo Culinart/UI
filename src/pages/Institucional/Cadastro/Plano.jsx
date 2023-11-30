@@ -182,11 +182,13 @@ function Plano() {
     
                 const planoId = responsePlano.data.id;
     
-                const categoriaIds = categoriasSelecionadas.map(categoria => ({ idCategoria: categoria.id }));
+                const categoriaIds = categoriasSelecionadas.map(categoria => categoria.id );
+                console.log(categoriaIds)
     
                 const responsePlanoCategoria = await api.post(
                     '/planos/categorias',
-                    { planoId, categoriaId: categoriaIds },
+                    { planoId, 
+                    categoriaId: categoriaIds },
                     {
                         headers: {
                             Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
@@ -195,8 +197,11 @@ function Plano() {
                 );
     
                 console.log("Resposta Plano Categorias", responsePlanoCategoria);
+
+                if(responsePlano.status == 200 || responsePlano.status == 201 && responsePlanoCategoria.status == 200 || responsePlanoCategoria.status == 201){
+                    navigate('/cadastro/checkout');
+                }
     
-                navigate('/cadastro/checkout');
             } catch (error) {
                 console.error("Erro", error);
             }
