@@ -22,7 +22,7 @@ function AdicionarReceita() {
         mediaAvaliacoes: '',
         ingredientes: [{ quantidade: '', unidade: '', nome: '' }],
         modoPreparo: [{ passo: '' }]
-    }); /*Esse é o objeto final*/ 
+    });
 
 
     axios.get(`${api}/receita/${id}`)
@@ -99,7 +99,7 @@ function AdicionarReceita() {
                         <div className={style.container_titulo_categoria}>
                             <label>
                                 <span>Titulo</span>
-                                <input className={style.input_titulo} /> {/*Aqui tem setar o atributo nome do objeto receita*/}
+                                <input className={style.input_titulo} />
                             </label>
                             <div className={style.container_categoria}>
                                 <img src={editar} className={style.icone} alt="icone de lapis" />
@@ -114,7 +114,7 @@ function AdicionarReceita() {
                                 <h1>Rendimento</h1>
                                 <div className={style.rendimento}>
                                     <span>Ingredientes para render</span>
-                                    <input type="number" /> {/*Aqui tem setar o atributo rendimento do objeto receita*/}
+                                    <input type="number" />
                                     <span>porções</span>
                                 </div>
                             </div>
@@ -122,9 +122,9 @@ function AdicionarReceita() {
                                 <h1>Tempo de preparo</h1>
                                 <div className={style.tempo}>
                                     <input type="number" />
-                                    <span>Hora(s) e</span> {/*Aqui tem setar o atributo horas do objeto receita*/}
+                                    <span>Hora(s) e</span>
                                     <input type="number" />
-                                    <span>Minuto(s)</span> {/*Aqui tem setar o atributo nome do objeto receita*/}
+                                    <span>Minuto(s)</span>
                                 </div>
                             </div>
                         </div>
@@ -135,13 +135,13 @@ function AdicionarReceita() {
                                 <h1 className={style.titulo_ingrediente}>Ingrediente</h1>
                             </div>
                             {receita.ingredientes.map((ingrediente, index) => (
-                                <div className={style.inputs_medida} key={index}>{/*aqui é um map com os ingredientes, para poder repetir as inputs e inserir mais de um igrediente, lembre de inserir de maneira que seja compativel com o objeto que mandei*/}
+                                <div className={style.inputs_medida} key={index}>
                                     <input
                                         type="number"
                                         defaultValue={ingrediente.quantidade}
                                         className={style.input_quantidade}
                                         onChange={(e) => handleInputChange(index, 'quantidade', e.target.value)}
-                                    /> {/*Aqui tem setar o atributo quantidade do objeto ingrediente*/}
+                                    />
                                     <select name="select"
                                         defaultValue={ingrediente.unidade}
                                         className={style.input_unidade}
@@ -156,13 +156,13 @@ function AdicionarReceita() {
                                         <option value="SEM_UNIDADE">Sem Unidade</option>
                                         <option value="COLHER_SOPA">Colher de sopa</option>
                                         <option value="COLHER_CHA">Colher de chá</option>
-                                    </select> {/*Aqui tem setar o atributo unidade de medida do objeto ingrediente*/}
+                                    </select>
                                     <input
                                         type="text"
                                         defaultValue={ingrediente.nome}
                                         className={style.input_ingrediente}
                                         onChange={(e) => handleInputChange(index, 'nome', e.target.value)}
-                                    /> {/*Aqui tem setar o atributo quantidade do objeto ingrediente*/}
+                                    />
                                     <img src={trash} className={style.icone} onClick={() => removerIngrediente(index)} alt="icone de lata de lixo" />
                                 </div>
                             ))}
@@ -181,7 +181,7 @@ function AdicionarReceita() {
                                 <div className={style.passo}>
                                     <span>Passo {index + 1}</span>
                                     <img src={trash} className={style.icone} onClick={() => removerPasso(index)} alt="icone de lata de lixo" />
-                                    <textarea cols="30" rows="3" defaultValue={passo.passo} onChange={(e) => handleInputChange(index, 'passo', e.target.value)} /> {/*Aqui tem setar o atributo passo do objeto modo preparo*/}
+                                    <textarea cols="30" rows="3" defaultValue={passo.passo} onChange={(e) => handleInputChange(index, 'passo', e.target.value)} />
                                 </div>
                             </div>
                         ))}

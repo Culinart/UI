@@ -4,16 +4,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-}
-
-.conteudo {
-    width: 80rem;
-    /* background-color: #dadada; */
-    padding-top: 3rem;
-    padding-bottom: 1rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    padding-bottom: 5rem;
 }
 
 .topo {
@@ -25,7 +16,6 @@
     font-size: 32px;
     font-weight: 400;
     color: #045d53;
-
 }
 
 .linha_horizontal {
@@ -36,27 +26,57 @@
 
 .container_imagem_titulo {
     width: 70rem;
-    /* background-color: rgb(135, 183, 255); */
     display: flex;
     justify-content: space-between;
-    margin: 40px 0px;
+    margin: 40px 0px 90px 0px;
 }
 
 .container_imagem {
-    width: 22rem;
-    height: 12rem;
+    width: 28rem;
+    height: 18rem;
     border-radius: 12px;
-    background-color: lightslategray;
+    background-color: rgba(234, 240, 240, 0.77);
     box-shadow: 0px 3px 10px 3px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.imagem img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.icone_upload {
+    background-color: #ffffff4f;
+    padding: 10px;
+    border-radius: 50%;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    z-index: 10;
+    cursor: pointer;
+}
+
+.icone_upload {
+    background-color: #ffffff4f;
+    padding: 10px;
+    border-radius: 50%;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    z-index: 10;
+    cursor: pointer;
 }
 
 .container_titulo_categoria {
-    height: 12rem;
+    height: 18rem;
     width: 26.5rem;
-    /* background-color: #045d53; */
+    /* background-color: #8acfc7; */
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: space-between;
 }
 
 .container_titulo_categoria>label {
@@ -77,8 +97,30 @@
     border-radius: 8px;
 }
 
-.container_categoria {
+.container_categoria_preferencia {
     display: flex;
+    flex-direction: column;
+}
+
+.itens {
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin: 10px;
+}
+
+.itens>p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.container_categoria_preferencia>span>p {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
 }
 
 .inputs_medida .icone {
@@ -245,7 +287,7 @@
     position: relative;
 }
 
-.passo .icone{
+.passo .icone {
     background-color: #fff;
     position: absolute;
     top: 50%;
@@ -258,6 +300,7 @@
     font-weight: 600;
 }
 
+.container_titulo_categoria>label>textarea,
 .passo>textarea {
     border-radius: 12px;
     padding: 2px;
@@ -273,18 +316,30 @@
     margin: 20px 0px;
 }
 
-.container_botoes {
+.botoes {
     height: 2rem;
-    width: 70rem;
+    display: flex;
+    margin-top: 2rem;
     display: flex;
     justify-content: space-evenly;
+    font-weight: 700;
+    color: #fff;
+    width: 70rem;
 }
 
-.container_botoes>button {
-    height: 2.4rem;
-    width: 7.1rem;
-    background-color: #c5c5c5;
+.botoes>button {
     border-radius: 8px;
-    color: #fff;
-    font-weight: 700;
+    background: #C5C5C5;
+    width: 8rem;
+    transition: transform 0.1s ease-in-out;
+}
+
+.cancelar:hover {
+    background-color: red;
+    transform: scale(1.05);
+}
+
+.confirmar:hover {
+    background-color: green;
+    transform: scale(1.05);
 }

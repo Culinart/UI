@@ -1,33 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../../../api/api';
 import HeaderFornecedor from '../../../components/Fornecedor/HeaderFornecedor/HeaderFornecedor';
 import style from './AdicionarReceita.module.css';
 import trash from '../../../assets/Fornecedor/Receitas/trash.svg';
 import editar from '../../../assets/Fornecedor/Receitas/Edit.svg';
 import { FaUpload } from 'react-icons/fa';
+import { FaPlus } from "react-icons/fa";
+import ModalPreferenciasCategorias from '../../../components/Fornecedor/ModalPreferencias/ModalPreferenciasCategorias';
+import ModalPreferencias from '../../../components/Fornecedor/ModalPreferencias/ModalPreferenciasCategorias';
+import ModalCategorias from '../../../components/Fornecedor/ModalCategorias/ModalCategorias';
 
 function AdicionarReceita() {
+
+  const [preferencias, setPreferencias] = useState([])
+  const [categorias, setCategorias] = useState([])
   const [receita, setReceita] = useState({
     nome: '',
     horas: '',
     minutos: '',
     rendimento: '',
     descricao: '',
-    qtdAvaliacoes: '',
-    mediaAvaliacoes: '',
+    categoria: '',
     ingredientes: [{ quantidade: '', unidade: '', nome: '' }],
     modoPreparo: [{ passo: '' }],
   });
+  const [imagem, setImagem] = useState(null);
+  const [exibirModalPreferencias, setExibirModalPreferencias] = useState(false);
+  const [exibirModalCategorias, setExibirModalCategorias] = useState(false);
+
 
   const handleFileUploadClick = () => {
-    // Aqui você aciona o clique no input file
     document.getElementById('seuInputFile').click();
   };
 
   const handleFileChange = (e) => {
-    // Aqui você pode lidar com a alteração do arquivo se necessário
     const selectedFile = e.target.files[0];
     console.log('Arquivo selecionado:', selectedFile);
+
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagem(reader.result);
+      };
+      reader.readAsDataURL(selectedFile);
+    }
   };
 
   const adicionarPasso = () => {
@@ -55,6 +71,32 @@ function AdicionarReceita() {
         console.error('Erro ao adicionar receita:', error);
       });
     console.log('Esta é a receita', receita);
+  };
+
+  const buscarPreferencias = () => {
+    api.get('/preferencias', {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+      }
+    }).then((response) => {
+      console.log(response.data);
+      setPreferencias(response.data);
+    }).catch((error) => {
+      console.log(error);
+    });
+  };
+
+  const buscarCategorias = () => {
+    api.get('/categorias', {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+      }
+    }).then((response) => {
+      console.log(response.data);
+      setCategorias(response.data);
+    }).catch((error) => {
+      console.log(error);
+    });
   };
 
   const handleInputChange = (index, field, value, arrayField) => {
@@ -89,6 +131,29 @@ function AdicionarReceita() {
     });
   };
 
+  const handleAbrirModalPreferencias = () => {
+    setExibirModalPreferencias(true);
+  };
+
+  const handleFecharModalPreferencias = () => {
+    setExibirModalPreferencias(false);
+  };
+
+  const handleAbrirModalCategorias = () => {
+    setExibirModalCategorias(true);
+  };
+
+  const handleFecharModalCategorias = () => {
+    setExibirModalCategorias(false);
+  };
+
+  useEffect(() => {
+    buscarPreferencias();
+    buscarCategorias();
+  }, []);
+
+  console.log(categorias)
+
   return (
     <>
       <HeaderFornecedor />
@@ -99,21 +164,21 @@ function AdicionarReceita() {
         </div>
         <div className={style.container_imagem_titulo}>
           <div className={style.container_imagem}>
-            <div>
-              {/* Input file oculto */}
-              <input
-                type="file"
-                id="seuInputFile"
-                style={{ display: 'none' }}
-                onChange={handleFileChange}
-              />
-
-              {/* Ícone que substituirá o input file */}
-              <div onClick={handleFileUploadClick}>
-                <FaUpload size={30} color="blue" />
-                <p>Clique para fazer upload</p>
-              </div>
+            <div className={style.icone_upload} onClick={handleFileUploadClick}>
+              <FaUpload size={25} color="rgba(0, 0, 0, 0.5)" />
             </div>
+            {imagem && (
+              <div className={style.imagem}>
+                <img src={imagem} alt="Imagem selecionada" />
+              </div>
+            )}
+            <input
+              type="file"
+              id="seuInputFile"
+              style={{ display: 'none' }}
+              onChange={handleFileChange}
+              accept="image/jpeg,image/png"
+            />
           </div>
           <div className={style.container_titulo_categoria}>
             <label>
@@ -124,12 +189,31 @@ function AdicionarReceita() {
                 onChange={(e) => setReceita({ ...receita, nome: e.target.value })}
               />
             </label>
-            <div className={style.container_categoria}>
-              <img src={editar} className={style.icone} alt="icone de lapis" />
-              <span>
-                <b>Categoria: </b>Koreana
+            <label>
+              <span>Descrição</span>
+              <textarea cols="30" rows="3"
+                value={receita.descricao}
+                onChange={(e) => setReceita({ ...receita, descricao: e.target.value })}
+              />
+            </label>
+            <div className={style.container_categoria_preferencia}>
+              <span className={style.itens}>
+                <p onClick={handleAbrirModalPreferencias}>
+                  <FaPlus className='cursor-pointer' /> ⠀
+                  <b>Preferências: </b>
+                </p>
+                <p>
+                </p>
+              </span>
+              <span className={style.itens}>
+                <p onClick={handleAbrirModalCategorias}>
+                  <FaPlus className='cursor-pointer' /> ⠀
+                  <b>Categorias: </b>
+                </p>
+                <p></p>
               </span>
             </div>
+
           </div>
         </div>
         <div className={style.container_medida_rendimento}>
@@ -224,11 +308,25 @@ function AdicionarReceita() {
             Adicionar passo
           </button>
         </div>
-        <div className={style.container_botoes}>
-          <button>Cancelar</button>
-          <button type="submit" onClick={handleSubmit}>Confirmar</button>
+        <div className={style.botoes}>
+          <button className={style.cancelar}> Cancelar </button>
+          <button onClick={handleSubmit} className={style.confirmar}>Confirmar</button>
         </div>
       </section>
+      {exibirModalPreferencias && (
+        <ModalPreferencias
+          handleFecharModal={handleFecharModalPreferencias}
+          preferencias={preferencias}
+          titulo={'Preferências'}
+        />
+      )}
+      {exibirModalCategorias && (
+        <ModalCategorias
+          handleFecharModal={handleFecharModalCategorias}
+          categorias={categorias}
+          titulo={'Categorias'}
+        />
+      )}
     </>
   );
 }

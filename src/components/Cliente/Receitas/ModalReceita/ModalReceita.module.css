@@ -59,6 +59,7 @@
     height: 39rem;
     width: 3px;
     background-color: #045d53;
+    display: fixed;
 }
 
 .esquerda {

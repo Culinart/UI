@@ -18,10 +18,6 @@ function ModalReceita({ id, nome, ingredientes, rendimento, horas, minutos, qtdA
 
     const isPaginaReceitasCliente = location.pathname === '/fornecedor/receitas';
 
-    function atualizar() {
-        console.log('icone de editar funcionando')
-    }
-
     function exluir() {
         api.delete(`/receitas/${id}`)
             .then(response => {
@@ -80,6 +76,7 @@ function ModalReceita({ id, nome, ingredientes, rendimento, horas, minutos, qtdA
                             }
                         })()}
                     </div>
+                    <div className={style.linha_vertical} />
                     <div className={style.direita}>
                         <h2 className={style.titulo_preparo}>Modo de preparo:</h2>
                         <ol className={style.container_preparo}>

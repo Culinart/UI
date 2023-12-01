@@ -10,6 +10,7 @@ function ItemReceita({ id, nome, ingredientes, rendimento, preparo, horas, minut
 
     const [preferenciasDTO, setPreferenciaDTO] = useState(preferencia);
     const [categoriasDTO, setcategoriaDTO] = useState(categoria);
+
     const location = useLocation();
 
     const isPaginaReceitasCliente = location.pathname === '/cliente/receitas';
@@ -26,6 +27,8 @@ function ItemReceita({ id, nome, ingredientes, rendimento, preparo, horas, minut
         }
     }
 
+    
+
     const excluirReceita = () => {
         api.delete(`/receitas/${id}`)
             .then((response) => {
@@ -38,8 +41,6 @@ function ItemReceita({ id, nome, ingredientes, rendimento, preparo, horas, minut
                 console.log()
                 console.error('num foi:', error);
             });
-
-        alert('funcionou excluir')
     };
 
     const [exibirReceita, setExibirReceita] = useState(false);
@@ -55,11 +56,11 @@ function ItemReceita({ id, nome, ingredientes, rendimento, preparo, horas, minut
     return (
         <div className={style.card} onClick={handleAbrirModal}>
             <div className="relative">
-                {isPaginaReceitasCliente && (
-                    <button className="absolute top-0 left-0 bg-white rounded-lg p-2" onClick={handleFavoritedClick}>
-                        <FaHeart className={`text-gray-400 text-2xl`} />
-                    </button>
-                )}
+                <button className="absolute top-0 left-0 bg-white rounded-lg p-2">
+                    <FaHeart className={`text-gray-400 text-2xl`} />
+                </button>
+                {/* {isPaginaReceitasCliente && (
+                )} */}
                 <img src={imagem} alt="Imagem da Receita" className={style.imagem} />
             </div>
             <h2 className={style.nome_receita}>{nome}</h2>
@@ -77,21 +78,18 @@ function ItemReceita({ id, nome, ingredientes, rendimento, preparo, horas, minut
                     <Preferencia key={preferencia.nome} preferencia={preferencia} />
                 ))}
             </div>
-            <div className="flex mt-2 items-center">
+            <div className="flex mt-2 justify-between items-center">
                 <div className="flex items-center">
                     <FaStar className="text-yellow-400 text-xl mr-2" />
-                    <span className="text-sm">{mediaAvaliacao}</span>
+                    <span className="text-sm">{mediaAvaliacao} ({qtdAvaliacao} Avaliações)</span>
                 </div>
-                <div className="ml-2 mr-4 items-center">
-                    <span className="text-sm">({qtdAvaliacao} Avaliações)</span>
-                </div>
-            </div>
-            <div className="flex justify-end">
                 {isPaginaReceitasCliente && (
                     <button onClick={(e) => { e.stopPropagation() }}>
                         <FaPlusCircle className="text-green-500 text-2xl hover:text-green-700" />
                     </button>
                 )}
+            </div>
+            <div className="flex justify-end">
             </div>
             {exibirReceita && <ModalReceita
                 fecharModal={handleFecharModal}
