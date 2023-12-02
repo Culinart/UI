@@ -8,8 +8,9 @@ import style from './Receitas.module.css'
 
 function ReceitasFornecedor() {
     const [preferencias, setPreferencias] = useState([]);
-    const [receitasPedido, setReceitasPedido] = useState([]);
+    const [receitas, setReceitas] = useState([]);
     const [termoBusca, setTermoBusca] = useState('');
+    const [isPesquisando, setIsPesquisando] = useState(false);
 
     const [modalAberto, setModalAberto] = useState(false);
 
@@ -18,12 +19,16 @@ function ReceitasFornecedor() {
     }
 
     useEffect(() => {
-        buscarReceitasPedidos();
+        buscarreceitass();
     }, []);
 
-    const buscarReceitasPedidos = () => {
-        api.get('/receitas').then((response) => {
-            setReceitasPedido(response.data);
+    const buscarreceitass = () => {
+        api.get('/receitas', {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+            }
+        }).then((response) => {
+            setReceitas(response.data);
             console.log(response.data)
         }).catch((error) => {
             console.log(error);
@@ -34,8 +39,8 @@ function ReceitasFornecedor() {
         setTermoBusca(event.target.value);
     };
 
-    const receitasFiltradas = receitasPedido.filter((receita) => {
-        return receita.receitaDTO.nome.toLowerCase().includes(termoBusca.toLowerCase());
+    const receitasFiltradas = receitas.filter((receita) => {
+        return receita.nome.toLowerCase().includes(termoBusca.toLowerCase());
     });
 
     return (
@@ -69,33 +74,52 @@ function ReceitasFornecedor() {
                     </div>
                 </div>
                 <div className={style.container_receitas}>
-                    {receitasFiltradas.length > 0 ? (
-                        receitasFiltradas.map((receita) => (
-                            <ItemReceita
-                                key={receita.id}
+                {isPesquisando
+                        ? receitasFiltradas.length > 0
+                            ? receitasFiltradas.map((receita, index) => (
+                                <ItemReceita
+                                    key={index}
+                                    id={receita.id}
+                                    nome={receita.nome}
+                                    horas={receita.horas}
+                                    minutos={receita.minutos}
+                                    descricao={receita.descricao}
+                                    qtdAvaliacao={receita.qtdAvaliacoes}
+                                    mediaAvaliacao={receita.mediaAvaliacoes}
+                                    ingredientes={receita.ingredientes}
+                                    rendimento={receita.porcoes}
+                                    preparo={receita.modoPreparos}
+                                    categoria={receita.categorias}
+                                    preferencia={receita.preferencias}
+                                    imagem={receita.imagem}
+                                    abrirModal={() => setModalAberto(true)}
+                                />
+                            ))
+                            : <div className="text-gray-600 text-2xl w-full text-center">Nenhum resultado encontrado</div>
+                        : (receitas ?? []).length > 0
+                            ? (receitas ?? []).map((receita, index) => (
+                                <ItemReceita
+                                key={index}
                                 id={receita.id}
-                                nome={receita.receitaDTO.nome}
-                                horas={receita.receitaDTO.horas}
-                                minutos={receita.receitaDTO.minutos}
-                                descricao={receita.receitaDTO.descricao}
-                                qtdAvaliacao={receita.receitaDTO.qtdAvaliacoes}
-                                mediaAvaliacao={receita.receitaDTO.mediaAvaliacoes}
-                                ingredientes={receita.receitaDTO.ingredientes}
-                                rendimento={receita.receitaDTO.porcoes}
-                                preparo={receita.receitaDTO.modoPreparos}
-                                categoria={receita.categoriaDTO}
-                                preferencia={receita.preferenciaDTO}
-                                imagem={receita.receitaDTO.imagem}
-                                abrirModal={() => setModalAberto(true)}
-                            />
-                        ))
-                    ) : (
-                        <div className="text-gray-600 text-2xl w-full text-center">
-                            Nenhum resultado encontrado
-                        </div>
-                    )}
+                                nome={receita.nome}
+                                horas={receita.horas}
+                                minutos={receita.minutos}
+                                descricao={receita.descricao}
+                                qtdAvaliacao={receita.qtdAvaliacoes}
+                                mediaAvaliacao={receita.mediaAvaliacoes}
+                                ingredientes={receita.ingredientes}
+                                rendimento={receita.porcoes}
+                                preparo={receita.modoPreparos}
+                                categoria={receita.categorias}
+                                preferencia={receita.preferencias}
+                                imagem={receita.imagem}
+                                    abrirModal={() => setModalAberto(true)}
+                                />
+                            ))
+                            : <div className="text-gray-600 text-2xl w-full text-center">Nenhum resultado encontrado</div>
+                    }
                 </div>
-            </div >
+            </div>
         </>
     );
 }
