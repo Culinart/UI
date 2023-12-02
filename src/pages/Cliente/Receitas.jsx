@@ -15,20 +15,16 @@ function Receitas() {
   const [searchInput, setSearchInput] = useState('');
 
   useEffect(() => {
-    buscarPreferencias();
-    buscarReceitasPedidos();
-  }, []);
-
-  const buscarPreferencias = () => {
-    api.get('/preferencias').then((response) => {
-      setPreferencias(response.data);
-    }).catch((error) => {
-      console.log(error);
-    });
-  }
+    console.log("Número de receitas:", receitasPedido.length);
+  }, [receitasPedido]);
 
   const buscarReceitasPedidos = () => {
-    api.get('/receitas').then((response) => {
+    api.get('/receitas/categorias', {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+      }
+    }).then((response) => {
+      console.log(response.data);
       setReceitasPedido(response.data);
     }).catch((error) => {
       console.log(error);
@@ -46,8 +42,11 @@ function Receitas() {
 
   useEffect(() => {
     if (searchInput) {
-      console.log(searchInput);
-      api.get(`/search-receitas?name=${searchInput}`)
+      api.get(`receitas/categorias/pesquisar?parametro=${searchInput}`, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+        }
+      })
         .then((response) => {
           setReceitasPedido(response.data);
         })
@@ -98,9 +97,20 @@ function Receitas() {
       </div>
       <div className="flex justify-between mt-4" style={{ marginRight: "10%", marginLeft: "10%" }}>
         {receitasPedido.length > 0 ? (
-          receitasPedido.map((receita, index) => (
-            <CardReceita key={index} receita={receita} pedidosReceita={receitasPedido} />
-          ))
+          receitasPedido.map((receita) => {
+                        return (
+              <CardReceita
+                receita={receita}
+                key={receita.id}
+                id={receita.id}
+                nome={receita.receitaDTO.nome}
+                categoria={receita.categoriaDTO[0].nome}
+                preferencia={receita.preferenciaDTO}
+                imagem={receita.imagem}
+                avaliacao={receita.receitaDTO.mediaAvaliacoes.toFixed(1)}
+              />
+            );
+          })
         ) : (
           <div className="text-gray-600 text-2xl w-full text-center">
             Nenhum resultado encontrado
