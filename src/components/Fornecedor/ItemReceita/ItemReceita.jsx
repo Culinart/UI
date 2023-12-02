@@ -65,17 +65,15 @@ function ItemReceita({ id, nome, ingredientes, rendimento, preparo, horas, minut
             </div>
             <h2 className={style.nome_receita}>{nome}</h2>
             <div className={style.container_categorias}>
-                {categoriasDTO.map((categoria, index, array) => (
-                    <span className={style.nome_categoria} key={categoria.id}>
-                        {index > 0 && index < array.length - 1 ? ', ' : ''}
-                        {index === array.length - 1 && array.length > 1 ? ' e ' : ''}
-                        {categoria.nome}
+                {Array.isArray(categoria) && categoria.map((categoria, index) => (
+                    <span className={`${style.nome_categoria} mr-2 text-sm`} key={index}>
+                        {categoria.categoria.nome} | 
                     </span>
                 ))}
             </div>
             <div className="flex items-center mt-2">
-                {preferenciasDTO.map((preferencia) => (
-                    <Preferencia key={preferencia.nome} preferencia={preferencia} />
+                {preferencia.map((preferencia, index) => (
+                    <Preferencia key={index} preferencia={preferencia.preferencia} />
                 ))}
             </div>
             <div className="flex mt-2 justify-between items-center">
