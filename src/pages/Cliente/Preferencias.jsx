@@ -6,14 +6,19 @@ import { BiTrash } from 'react-icons/bi';
 import Swal from "sweetalert2";
 import api from "../../api/api";
 
-function Preferencias() {
+const Preferencias = () => {
     const [preferencias, setPreferencias] = useState([]);
     const [userPreferences, setUserPreferences] = useState([]);
 
     useEffect(() => {
         buscarPreferencias();
-        buscarPreferenciasUsuario();
     }, []);
+
+    useEffect(() => {
+        if (sessionStorage.getItem("idUsuario")) {
+            buscarPreferenciasUsuario();
+        }
+    }, [sessionStorage.getItem("idUsuario")]);
 
     const formatTipoPreferenciaEnum = (tipoPreferenciaEnum) => {
         const formattedType = tipoPreferenciaEnum
@@ -30,7 +35,6 @@ function Preferencias() {
         return formattedType;
     };
 
-
     const buscarPreferencias = () => {
         api.get('/preferencias', {
             headers: {
@@ -40,7 +44,8 @@ function Preferencias() {
             .then((response) => {
                 setPreferencias(response.data);
                 console.log("PREFERENCIAS: ", response.data)
-            }).catch((error) => {
+            })
+            .catch((error) => {
                 console.log(error);
             });
     }
@@ -52,15 +57,16 @@ function Preferencias() {
             }
         })
             .then((response) => {
-                setUserPreferences(response.data.preferencia);
-                console.log("ADD: ", response.data.preferencia);
-            }).catch((error) => {
+                setUserPreferences(response.data);
+                console.log("PREFERENCIAS USUARIO: ", response.data);
+            })
+            .catch((error) => {
                 console.log(error);
             });
     }
 
     const addPreference = (preferenceId) => {
-        if (userPreferences.length >= 12) {
+        if (userPreferences && userPreferences.length >= 12) {
             Swal.fire({
                 title: "Limite de 12 Preferências Atingidos. Por favor remova uma das preferências atuais antes de adicionar outra.",
                 confirmButtonColor: "#F29311",
@@ -73,6 +79,7 @@ function Preferencias() {
                     }
                 })
                 .then((response) => {
+                    setUserPreferences((prevPreferences) => [...prevPreferences, response.data]);
                     location.reload();
                 })
                 .catch((error) => {
@@ -83,14 +90,13 @@ function Preferencias() {
 
     const removePreference = (preferenceId) => {
         api
-            .delete(`/usuarios/preferencias/${preferenceId}/${sessionStorage.getItem("idUsuario")}`, {
+            .delete(`/usuarios/preferencias/${preferenceId}`, {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
                 }
             })
-            .then((response) => {
-                location.reload();
-                console.log("REMOVE", response);
+            .then(() => {
+                setUserPreferences((prevPreferences) => prevPreferences.filter(p => p.id !== preferenceId));
             })
             .catch((error) => {
                 console.log(error);
@@ -98,7 +104,7 @@ function Preferencias() {
     }
 
     const isPreferenceInUserPreferences = (preferenceId) => {
-        return userPreferences.some(p => p.id === preferenceId);
+        return userPreferences && userPreferences.some(p => p.preferencia.id === preferenceId);
     }
 
     const preferenciasAgrupadas = Array.isArray(preferencias)
@@ -127,7 +133,7 @@ function Preferencias() {
                         <div className="space-y-4">
                             {Array.isArray(userPreferences) && userPreferences.map((item) => (
                                 <div className="flex justify-center" key={item.id}>
-                                    <Preferencia preferencia={item} />
+                                    <Preferencia preferencia={item.preferencia} />
                                     <BiTrash
                                         className="text-lg text-gray-600 cursor-pointer"
                                         onClick={() => removePreference(item.id)}
