@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import api from "../../../api/api";
-import CadastroPassos from "../../../components/Institucional/Cadastro/CadastroPassos";
 import HeaderCliente from "../../../components/Cliente/HeaderCliente/HeaderCliente";
 import imgEndereco from "../../../assets/Institucional/Cadastro/imgEndereco.svg"
 import styles from "../../Institucional/Cadastro/CadastroStyles.module.css";
+import Swal from "sweetalert2";
 
 const validationSchema = Yup.object().shape({
     cep: Yup.string()
@@ -36,6 +36,15 @@ function AdicionarEndereco() {
     const [inputLogradouro, setInputLogradouro] = useState("");
     const [inputNumero, setInputNumero] = useState("");
     const [inputComplemento, setInputComplemento] = useState("");
+    const [cepApi, setCepApi] = useState("");
+
+    useEffect(() => {
+        if (sessionStorage.getItem('permissao') == null || sessionStorage.getItem('permissao') == '') {
+            navigate('/')
+        } else if (sessionStorage.getItem('permissao') == 'USUARIO') {
+            navigate('/cadastro/endereco')
+        }
+    }, []);
 
     const estados = [
         "AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA", "MG", "MS", "MT",
@@ -62,9 +71,8 @@ function AdicionarEndereco() {
     };
 
     function cadastrarEndereco() {
-        console.log(corpoRequisicao);
         api
-            .post(`/enderecos/${sessionStorage.getItem('idUsuario')}?cep=${inputCep}&numero=${inputNumero}&complemento=${inputComplemento}`, {
+            .post(`/enderecos/${sessionStorage.getItem('idUsuario')}?cep=${inputCep}&numero=${inputNumero}&complemento=${inputComplemento}`, null, {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
                 }
@@ -86,6 +94,7 @@ function AdicionarEndereco() {
                 }
             })
             .then((resposta) => {
+                setCepApi(resposta.data.cep);
                 console.log(resposta.data);
                 setFieldValue("cep", cep);
                 setFieldValue("bairro", resposta.data.bairro);
@@ -99,7 +108,7 @@ function AdicionarEndereco() {
                 setInputLogradouro(resposta.data.logradouro);
             })
             .catch((erro) => {
-                console.log(erro);
+                console.log("ERRO", erro);
             });
     }
 
@@ -131,11 +140,16 @@ function AdicionarEndereco() {
                                         setInputLogradouro(values.logradouro);
                                         setInputNumero(values.numero);
                                         setInputComplemento(values.complemento);
-                                        if (values.cep && values.estado && values.cidade && values.bairro && values.logradouro && values.numero) {
+                                        if (cepApi != null && values.cep && values.estado && values.cidade && values.bairro && values.logradouro && values.numero) {
                                             cadastrarEndereco();
+                                            setSubmitting(false);
+                                        } else {
+                                            Swal.fire({
+                                                title: "CEP inválido. Por favor digite um CEP válido e tente novamente.",
+                                                confirmButtonColor: "#F29311",
+                                            });
                                         }
 
-                                        setSubmitting(false);
                                     }}
                                 >
                                     {({ setFieldValue }) => (

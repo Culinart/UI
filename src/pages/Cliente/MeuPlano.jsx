@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
-import CadastroPassos from "../../../components/Institucional/Cadastro/CadastroPassos";
-import HeaderCliente from "../../../components/Cliente/HeaderCliente/HeaderCliente";
-import iconeCarne from "../../../assets/Institucional/Cadastro/iconeCarne.svg";
-import iconePeixe from "../../../assets/Institucional/Cadastro/iconePeixe.svg";
-import iconeRelogio from "../../../assets/Institucional/Cadastro/iconeRelogio.svg";
-import iconeSuco from "../../../assets/Institucional/Cadastro/iconeSuco.svg";
-import iconePlanta from "../../../assets/Institucional/Cadastro/iconePlanta.svg";
-import iconeMaca from "../../../assets/Institucional/Cadastro/iconeMaca.svg";
-import styles from "./CadastroStyles.module.css";
-import api from "../../../api/api";
+import { FiEdit } from "react-icons/fi";
+import HeaderCliente from "../../components/Cliente/HeaderCliente/HeaderCliente";
+import iconeCarne from "../../assets/Institucional/Cadastro/iconeCarne.svg";
+import iconePeixe from "../../assets/Institucional/Cadastro/iconePeixe.svg";
+import iconeRelogio from "../../assets/Institucional/Cadastro/iconeRelogio.svg";
+import iconeSuco from "../../assets/Institucional/Cadastro/iconeSuco.svg";
+import iconePlanta from "../../assets/Institucional/Cadastro/iconePlanta.svg";
+import iconeMaca from "../../assets/Institucional/Cadastro/iconeMaca.svg";
+import styles from "./MeuPlano.module.css";
+import api from "../../api/api";
+import AlertaClienteInativo from "../../components/Cliente/AlertaClienteInativo";
 
-function Plano() {
+function MeuPlano() {
 
-    const navigate = useNavigate();
-
+    const [isEditing, setIsEditing] = useState(false);
     const [categoriasSelecionadas, setCategoriasSelecionadas] = useState([]);
     const [categorias, setCategorias] = useState([]);
     const [pessoasSelecionadas, setPessoasSelecionadas] = useState(0);
@@ -22,15 +21,21 @@ function Plano() {
     const [diasSelecionados, setDiasSelecionados] = useState(0);
     const [diaSemanaSelecionado, setDiaSemanaSelecionado] = useState(0);
     const [selectedTime, setSelectedTime] = useState("");
+    const [error, setError] = useState("");
+    const [isAtivo, setAtivo] = useState(sessionStorage.getItem('isAtivo'));
+    const [permissao, setPermissao] = useState(sessionStorage.getItem('permissao'));
+    const [planId, setPlanId] = useState("");
+    const [categoriasSelecionadasAntigas, setCategoriasSelecionadasAntigas] = useState([]);
+    const [plano, setPlano] = useState([]);
     const [highestValorCategoria, setHighestValorCategoria] = useState(1);
-    const [error, setError] = useState("");const [novoValorPlano, setNovoValorPlano] = useState(pessoasSelecionadas * refeicoesSelecionadas * diasSelecionados * 4 * highestValorCategoria);
-
+    const [novoValorPlano, setNovoValorPlano] = useState(pessoasSelecionadas * refeicoesSelecionadas * diasSelecionados * 4 * highestValorCategoria);
 
     useEffect(() => {
-        buscarPlanoUsuario();
+        buscarPlano();
         buscarCategorias();
+        buscarCategoriasPlano();
     }, []);
-
+    
     useEffect(() => {
         console.log("Categorias Selecionadas:", categoriasSelecionadas);
         highestCategoria();
@@ -41,13 +46,33 @@ function Plano() {
         atualizarValorPlano();
     }, [categoriasSelecionadas, pessoasSelecionadas, refeicoesSelecionadas, diasSelecionados, highestValorCategoria]);
 
+    const atualizarValorPlano = () => {
+        setNovoValorPlano(pessoasSelecionadas * refeicoesSelecionadas * diasSelecionados * 4 * highestValorCategoria);
+    }
+    
+    const highestCategoria = () => {
+        const valoresCategorias = categoriasSelecionadas.map(
+            (categoria) => categoria.valor
+        );
+        const highestValorCategoria = valoresCategorias.length > 0 ? Math.max(...valoresCategorias) : 0;
+        setHighestValorCategoria(highestValorCategoria);
+        console.log("maior valor categoria", highestValorCategoria);
+    };    
+
     const handlePreferencias = (preferencia) => {
-        if (categoriasSelecionadas.includes(preferencia)) {
-            setCategoriasSelecionadas(categoriasSelecionadas.filter((item) => item !== preferencia));
+        const isCategoriaSelected = categoriasSelecionadas.some(
+            (selectedCategoria) => selectedCategoria.id === preferencia.id
+        );
+
+        if (isCategoriaSelected) {
+            setCategoriasSelecionadas((prevCategorias) =>
+                prevCategorias.filter((categoria) => categoria.id !== preferencia.id)
+            );
         } else {
-            setCategoriasSelecionadas([...categoriasSelecionadas, preferencia]);
+            setCategoriasSelecionadas((prevCategorias) => [...prevCategorias, preferencia]);
         }
     };
+
 
     const buscarCategorias = () => {
         api
@@ -59,6 +84,7 @@ function Plano() {
             .then((response) => {
                 console.log("Resposta", response);
                 setCategorias(response.data)
+                setCategoriasSelecionadasAntigas(response.data)
             })
             .catch((erro) => {
                 console.log("Erro", erro);
@@ -102,14 +128,14 @@ function Plano() {
         "18:00", "19:00", "20:00", "21:00", "22:00"
     ];
 
-    const splitCategorias = categorias && Array.isArray(categorias) ? categorias.reduce((result, item, index) => {
+    const splitCategorias = categorias.reduce((result, item, index) => {
         if (index % 3 === 0) {
             result.push([item]);
         } else {
             result[result.length - 1].push(item);
         }
         return result;
-    }, []) : [];
+    }, []);
 
     const handlePessoas = (count) => {
         setPessoasSelecionadas(count);
@@ -129,7 +155,8 @@ function Plano() {
 
     const validateConstants = () => {
         if (
-            categoriasSelecionadas === "" ||
+            !Array.isArray(categoriasSelecionadas) ||
+            categoriasSelecionadas.length === 0 ||
             pessoasSelecionadas === 0 ||
             refeicoesSelecionadas === 0 ||
             diasSelecionados === 0 ||
@@ -143,35 +170,65 @@ function Plano() {
         return true;
     };
 
-    const atualizarValorPlano = () => {
-        setNovoValorPlano(pessoasSelecionadas * refeicoesSelecionadas * diasSelecionados * 4 * highestValorCategoria);
-    }
+    const buscarPlano = () => {
+        api
+            .get(`/planos/${sessionStorage.getItem('idUsuario')}`, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+                }
+            })
+            .then((response) => {
+                console.log("Resposta", response);
+                setPessoasSelecionadas(response.data.qtdPessoas);
+                setRefeicoesSelecionadas(response.data.qtdRefeicoesDia);
+                setDiasSelecionados(response.data.qtdDiasSemana);
+                setDiaSemanaSelecionado(response.data.diaSemana);
+                setSelectedTime(response.data.horaEntrega);
+                setPlanId(response.data.id);
+                setPlano(response.data);
 
-    const highestCategoria = () => {
-        const valoresCategorias = categoriasSelecionadas.map(
-            (categoria) => categoria.valor
-        );
-        const highestValorCategoria = valoresCategorias.length > 0 ? Math.max(...valoresCategorias) : 0;
-        setHighestValorCategoria(highestValorCategoria);
-        console.log("maior valor categoria", highestValorCategoria);
-    };   
-      
+                buscarCategoriasPlano();
+            })
+            .catch((erro) => {
+                console.log("Erro", erro);
+            });
+    };
 
-    const cadastrarPlano = async () => {
+    const buscarCategoriasPlano = () => {
+        api
+            .get(`/planos/categorias/${sessionStorage.getItem('idUsuario')}`, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+                }
+            })
+            .then((response) => {
+                console.log("Categorias Plano: ", response.data);
+
+                const categorias = response.data.map(item => item.categoria);
+
+                console.log("CATEGORIAS SELECIONADAS", categorias)
+
+                setCategoriasSelecionadas(categorias);
+            })
+            .catch((erro) => {
+                console.log("Erro", erro);
+            })
+    };
+
+
+    const atualizarPlano = async () => {
         if (validateConstants()) {
             try {
-
-                const responsePlano = await api.post(
+    
+                const responsePlano = await api.put(
                     `/planos/${sessionStorage.getItem("idUsuario")}`,
                     {
-                        categoria: categoriasSelecionadas,
                         qtdPessoas: pessoasSelecionadas,
                         qtdRefeicoesDia: refeicoesSelecionadas,
                         valorPlano: novoValorPlano,
-                        valorAjuste: 0,
+                        valorAjuste: 0.0,
                         qtdDiasSemana: diasSelecionados,
                         horaEntrega: selectedTime,
-                        isAtivo: 'ATIVO',
                         diaSemana: diaSemanaSelecionado,
                     },
                     {
@@ -180,44 +237,53 @@ function Plano() {
                         },
                     }
                 );
-    
+
                 const planoId = responsePlano.data.id;
-    
-                const categoriaIds = categoriasSelecionadas.map(categoria => ({ idCategoria: categoria.id }));
-    
-                const responsePlanoCategoria = await api.post(
-                    '/planos/categorias',
-                    { planoId, categoriaId: categoriaIds },
-                    {
-                        headers: {
-                            Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
-                        },
-                    }
-                );
-    
-                console.log("Resposta Plano Categorias", responsePlanoCategoria);
-    
-                navigate('/cadastro/checkout');
+
+                const categoriasAtuais = categoriasSelecionadas.map(categoria => categoria.id);
+
+                const categoriasNovas = categoriasAtuais.filter(categoria => !categoriasSelecionadasAntigas.includes(categoria));
+                const categoriasRemovidas = categoriasSelecionadasAntigas.filter(categoria => !categoriasAtuais.includes(categoria));
+
+                if (categoriasNovas.length > 0) {
+                    const newPlanoCategorias = {
+                        planoId,
+                        categoriaId: categoriasNovas,
+                    };
+
+                    await api.post(
+                        `/planos/categorias`,
+                        newPlanoCategorias,
+                        {
+                            headers: {
+                                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
+                            },
+                        }
+                    );
+                }
+
+                for (const categoriaId of categoriasRemovidas) {
+                    await api.delete(
+                        `/planos/categorias/${categoriaId}`,
+                        {
+                            headers: {
+                                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
+                            },
+                        }
+                    );
+                }
+
+                console.log("Plano atualizado com sucesso!");
             } catch (error) {
                 console.error("Erro", error);
             }
         }
-    };    
+    };
 
-    const buscarPlanoUsuario = () => {
-        api
-            .get(`/planos/${sessionStorage.getItem("idUsuario")}`, {
-                headers: {
-                    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
-                }
-            })
-            .then((response) => {
-                console.log("Usuário já possui plano cadastrado: ", response);
-                navigate('/cadastro/checkout');
-            })
-            .catch((erro) => {
-                console.log("Usuário ainda não possui um plano. ", erro);
-            });
+
+
+    const cancelarEdicao = () => {
+        window.location.reload();
     }
 
     const getIconByCategoriaNome = (nome) => {
@@ -242,25 +308,36 @@ function Plano() {
 
     return (
         <>
-            <div className="flex flex-col h-screen">
+            <div className="flex flex-col">
                 <HeaderCliente />
-                <CadastroPassos corPlano="#F29311" corCheckout="#CCD7D6" />
-                <div className={`bg ${styles.bg}`}>
-                    <div className={`card ${styles.card} flex`}>
+                <AlertaClienteInativo permissao={permissao} />
+                <div className={`bg ${styles.bg} mt-10 mb-10`}>
+                    <div className={`card ${styles.card} flex relative`}>
+                        {!isEditing && (
+                            <FiEdit
+                                onClick={() => setIsEditing(true)}
+                                className="cursor-pointer text-[#DC7726] text-2xl absolute top-10 right-14 z-20"
+                            />
+                        )}
+                        {!isEditing && (
+                            <div className="flex absolute w-full h-full bg-transparent z-10"></div>
+                        )}
                         <div className="flex flex-col w-full items-center">
-                            <div className="flex flex-col items-center">
-                                <h2 className="text-[#DC7726] font-bold text-2xl mb-2">Personalize seu Plano!</h2>
+                            <div className="flex items-center">
+                                <h2 className="text-[#045D53] font-semibold text-2xl mb-2 mt-8">Meu Plano</h2>
                             </div>
                             <div className="flex mt-4 mb-4">
                                 <div className="px-8 ml-12 mr-12">
-                                    <h3 className="text-center">1. Selecione suas preferências</h3>
+                                    <h3 className="text-center font-semibold">Categorias</h3>
                                     <div className="flex w-full items-center justify-center">
                                         {splitCategorias.map((columnData, columnIndex) => (
                                             <div className="flex-col items-center justify-center" key={columnIndex}>
                                                 {columnData.map((categoria, index) => (
                                                     <div
                                                         key={index}
-                                                        className={`card ${styles.card_plano} flex-col items-center justify-center ${categoriasSelecionadas.includes(categoria) ? styles.card_plano_selecionado : ''
+                                                        className={`card ${styles.card_plano} flex-col items-center justify-center ${categoriasSelecionadas.some((selectedCategoria) => selectedCategoria.id === categoria.id)
+                                                            ? styles.card_plano_selecionado
+                                                            : ''
                                                             }`}
                                                         onClick={() => handlePreferencias(categoria)}
                                                     >
@@ -274,11 +351,11 @@ function Plano() {
                                                 ))}
                                             </div>
                                         ))}
+
                                     </div>
                                 </div>
-                                <span className={`${styles.divisor}`}></span>
                                 <div className="flex-col items-center justify-center px-8">
-                                    <h3 className="text-center mb-4">2. Customize o seu plano</h3>
+                                    <h3 className="text-center font-semibold mb-4">Quantidades</h3>
                                     <div>
                                         <div className="flex justify-between items-center mb-4" >
                                             <div className="mr-2">Pessoas</div>
@@ -365,19 +442,61 @@ function Plano() {
                                     {error}
                                 </div>
                             )}
-                            <button
-                                type="submit"
-                                className={`bg-[#F29311] ${styles.btnCadastro}`}
-                                onClick={cadastrarPlano}
-                            >
-                                Confirmar
-                            </button>
+                            {isEditing && (
+                                <>
+                                    <div className="flex flex-col w-full items-center mt-4">
+                                        <div className="flex flex-col items-center">
+                                            <h2 className="text-[#045D53] font-semibold text-2xl mb-6">Checkout</h2>
+                                        </div>
+                                        <div className="flex">
+                                            <div>
+                                                <div className="flex-col">
+                                                    <div className="flex justify-between mb-6">
+                                                        <div className="mr-8">
+                                                            + {pessoasSelecionadas * refeicoesSelecionadas * diasSelecionados * 4} Refeições por mês
+                                                        </div>
+                                                        <div>
+                                                            R$ {novoValorPlano.toFixed(2).replace('.', ',')}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <span className={`${styles.divisorTotalPreco}`}></span>
+                                                <div className="flex justify-between mb-6 mt-2">
+                                                    <div className="font-semibold">
+                                                        Total à pagar
+                                                    </div>
+                                                    <div className="font-semibold">
+                                                        R$ {novoValorPlano.toFixed(2).replace('.', ',')}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="flex space-x-12 mt-4 mb-4">
+                                        <button
+                                            className={` bg-gray-400 ${styles.btnCadastroCancelar}`}
+                                            onClick={cancelarEdicao}
+                                        >
+                                            Cancelar
+                                        </button>
+                                        <button
+                                            type="submit"
+                                            className={`bg-[#F29311] ${styles.btnCadastro}`}
+                                            onClick={atualizarPlano}
+                                        >
+                                            Confirmar
+                                        </button>
+                                    </div>
+                                </>
+                            )}
+
                         </div>
                     </div>
                 </div>
             </div>
         </>
     );
+
 }
 
-export default Plano;
+export default MeuPlano;

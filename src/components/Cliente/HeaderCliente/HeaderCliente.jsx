@@ -8,6 +8,11 @@ import perfil from '../../../assets/Institucional/header/profile.svg';
 import logout from '../../../assets/Institucional/header/logout.svg';
 
 function HeaderCliente() {
+
+    const limparSessao = () => {
+        sessionStorage.clear();
+    }
+
     return (
         <>
             <header className={style.header}>
@@ -21,13 +26,13 @@ function HeaderCliente() {
                             <img src={receitas} alt="Icone de receitas" />
                             <span>Receitas</span>
                         </a>
-                        <a href="/" className={style.item}>
+                        <a href="/cliente/meu-plano" className={style.item}>
                             <img src={meuPlano} alt="Icone meu plano" />
                             <span>Meu Plano</span>
                         </a>
                     </div>
                     <div className={style.itens_direita}>
-                        <a href="/" className={style.item}>
+                        <a href="https://app.pipefy.com/public/form/VqIeVqHH"  target="_blank" className={style.item}>
                             <img src={suporte} alt="Icone suporte" />
                             <span>Suporte</span>
                         </a>
@@ -35,7 +40,7 @@ function HeaderCliente() {
                             <img src={perfil} alt="Icone perfil" />
                             <span>Perfil</span>
                         </a>
-                        <a href="/" className={style.item}>
+                        <a href="/" onClick={limparSessao} className={style.item}>
                             <img src={logout} alt="Icone de logout" />
                             <span>Logout</span>
                         </a>
