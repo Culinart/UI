@@ -98,7 +98,7 @@ function Receitas() {
       <div className="flex justify-between mt-4" style={{ marginRight: "10%", marginLeft: "10%" }}>
         {receitasPedido.length > 0 ? (
           receitasPedido.map((receita) => {
-                        return (
+            return (
               <CardReceita
                 receita={receita}
                 key={receita.id}
