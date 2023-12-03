@@ -4,8 +4,7 @@ import iconeBusca from "../../../assets/Fornecedor/Receitas/search.svg";
 import { FiEdit } from "react-icons/fi";
 import ItemReceita from "../../../components/Fornecedor/ItemReceita/ItemReceita";
 import api from "../../../api/api";
-import style from './Receitas.module.css'
-import swal from "sweetalert2";
+import style from './Receitas.module.css';
 
 function ReceitasFornecedor() {
     const [preferencias, setPreferencias] = useState([]);
