@@ -71,6 +71,7 @@ function LoginFuncionario() {
                     sessionStorage.setItem('nome', response.data.nome);
                     sessionStorage.setItem('funcId', response.data.userID);
                     sessionStorage.setItem('email', response.data.email);
+                    sessionStorage.setItem('telefone', response.data.telefone)
                     sessionStorage.setItem('permissao', response.data.permissao);
 
                     console.log(response.data);

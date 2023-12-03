@@ -104,7 +104,7 @@ function PerfilInfoPessoalFornecedor() {
                 const corpoRequisicao = {
                     nome: values.nome,
                     email: values.email,
-                    telefone: telefoneNumerico,
+                    tel: telefoneNumerico,
                 };
                 console.log(corpoRequisicao);
 
@@ -118,11 +118,11 @@ function PerfilInfoPessoalFornecedor() {
                         console.log("Resposta", response);
                         setInputNome(response.data.nome);
                         setInputEmail(response.data.email);
-                        setInputTelefone(response.data.telefone);
+                        setInputTelefone(response.data.tel);
                         setNome(response.data.nome);
                         sessionStorage.setItem('nome', response.data.nome);
                         setEmail(response.data.email);
-                        setTelefone(response.data.telefone);
+                        setTelefone(response.data.tel);
                         Swal.fire({
                             title: "Usuário atualizado com sucesso!",
                             icon: "success",
