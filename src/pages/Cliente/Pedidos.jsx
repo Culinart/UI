@@ -79,6 +79,7 @@ function Pedidos() {
                 console.log(error);
             });
 
+        window.location.reload();
     }
 
     const pularEntrega = () => {
@@ -103,7 +104,7 @@ function Pedidos() {
             .catch((error) => {
                 console.log(error);
             });
-
+        window.location.reload();
     }
 
     const buscarEnderecoAtivo = () => {

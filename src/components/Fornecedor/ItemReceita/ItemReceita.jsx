@@ -113,7 +113,7 @@ function ItemReceita({ pedidoAtual, id, nome, ingredientes, rendimento, preparo,
             <div className="flex mt-2 justify-between items-center">
                 <div className="flex items-center">
                     <FaStar className="text-yellow-400 text-xl mr-2" />
-                    <span className="text-sm">{mediaAvaliacao} ({qtdAvaliacao} Avaliações)</span>
+                    <span className="text-sm">{mediaAvaliacao.toFixed(1)} ({qtdAvaliacao} Avaliações)</span>
                 </div>
                 {isPaginaReceitasCliente && pedidoAtual && Array.isArray(pedidoAtual.listaReceitas) && (
                     pedidoAtual.listaReceitas.some((pedidoRecipe) => {
