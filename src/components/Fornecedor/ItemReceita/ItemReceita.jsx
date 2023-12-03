@@ -7,6 +7,7 @@ import style from './ItemReceita.module.css'
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import Swal from "sweetalert2";
+import receitaDefault from '../../../assets/Receitas/receita-default.jpeg';
 
 function ItemReceita({ pedidoAtual, id, nome, ingredientes, rendimento, preparo, horas, minutos, qtdAvaliacao, mediaAvaliacao, categoria, preferencia, imagem }) {
 
@@ -95,7 +96,7 @@ function ItemReceita({ pedidoAtual, id, nome, ingredientes, rendimento, preparo,
                 </button> */}
                 {/* {isPaginaReceitasCliente && (
                 )} */}
-                <img src={imagem} alt="Imagem da Receita" className={style.imagem} />
+                <img src={imagem || receitaDefault} alt="Imagem da Receita" className={style.imagem} />
             </div>
             <h2 className={style.nome_receita}>{nome}</h2>
             <div className={style.container_categorias}>
