@@ -71,7 +71,7 @@ function ItemReceita({ id, nome, ingredientes, rendimento, preparo, horas, minut
                     </span>
                 ))}
             </div>
-            <div className="flex items-center mt-2">
+            <div className="flex items-center mt-2 flex-wrap">
                 {preferencia.map((preferencia, index) => (
                     <Preferencia key={index} preferencia={preferencia.preferencia} />
                 ))}
