@@ -53,7 +53,7 @@ function LoginFuncionario() {
 
         e.preventDefault();
 
-        api.post('/usuarios/login', {
+        api.post('/funcionarios/login', {
             email: email,
             senha: senha
         }, {
@@ -69,10 +69,9 @@ function LoginFuncionario() {
 
                     sessionStorage.setItem('authToken', response.data.token);
                     sessionStorage.setItem('nome', response.data.nome);
-                    sessionStorage.setItem('idUsuario', response.data.userID);
-                    sessionStorage.setItem('emailUsuario', response.data.email);
+                    sessionStorage.setItem('funcId', response.data.userID);
+                    sessionStorage.setItem('email', response.data.email);
                     sessionStorage.setItem('permissao', response.data.permissao);
-                    sessionStorage.setItem('isAtivo', response.data.isAtivo);
 
                     console.log(response.data);
 
@@ -139,7 +138,6 @@ function LoginFuncionario() {
                             </div>
                             <span><input type="checkbox" /> Mantenha-me conectado</span>
                             <button type="submit" onClick={login}>Entrar</button>
-                            {/* <a href="/redefinir-senha" className={styles.esqueci_senha}>Esqueci minha senha</a> */}
                             <a href="/login" className={styles.esqueci_senha}>Login de Cliente</a>
                         </div>
                     </div>

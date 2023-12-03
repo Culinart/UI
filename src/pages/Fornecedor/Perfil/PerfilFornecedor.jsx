@@ -47,7 +47,7 @@ function PerfilInfoPessoalFornecedor() {
 
     const buscarInfoPessoal = () => {
         api
-            .get(`/usuarios/${sessionStorage.getItem('idUsuario')}`, {
+            .get(`/funcionarios/${sessionStorage.getItem('funcId')}`, {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
                 },
