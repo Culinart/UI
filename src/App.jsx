@@ -29,6 +29,7 @@ import "react-toastify/dist/ReactToastify.minimal.css";
 import ReceitasFornecedor from './pages/Fornecedor/Receitas/Receitas.jsx';
 import AdicionarReceita from './pages/Fornecedor/AdicionarReceita/AdicionarReceita.jsx';
 import EditarReceita from './pages/Fornecedor/EditarReceita/EditarReceita.jsx';
+import LoginFuncionario from './pages/Fornecedor/LoginFuncionario.jsx';
 
 function App() {
 
@@ -73,6 +74,7 @@ function App() {
           <Route path="/fornecedor/pedidos" element={<PedidosFornecedor />} />
           <Route path="/fornecedor/precos" element={<Precos />} />
           <Route path="/fornecedor/dashboard" element={<Dashboard />} />
+          <Route path="/login/funcionario" element={<LoginFuncionario />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
