@@ -33,40 +33,48 @@ function Precos() {
         //         console.log("Erro", erro);
         //     });
 
-        const response = [
+        const response = { data:[
             {
                 id: 1,
                 nome: "Carnes",
-                preco: 'R$10,00'
+                preco: '10.00'
             },
             {
                 id: 2,
                 nome: "Vegetariano",
-                preco: 'R$10,00'
+                preco: '10.00'
             },
             {
                 id: 3,
                 nome: "Vegano",
-                preco: 'R$10,00'
+                preco: '10.00'
             },
             {
                 id: 4,
                 nome: "Rápido e Fácil",
-                preco: 'R$10,00'
+                preco: '10.00'
             },
             {
                 id: 5,
                 nome: "Fit e Saudável",
-                preco: 'R$10,00'
+                preco: '10.00'
             },
             {
                 id: 6,
                 nome: "Pescetariano",
-                preco: 'R$10,00'
+                preco: '10.00'
             },
-        ];
+        ]
+    };
 
-        setPrecos(response);
+    const responseFormatada = response.data.map((item) => ({
+        ...item,
+        preco: `R$${item.preco.replace('.', ',')}`,
+      }));
+      
+      console.log(responseFormatada);
+
+        setPrecos(responseFormatada);
     }
 
     const alertaValoresInválidos = () => {
@@ -81,12 +89,17 @@ function Precos() {
     };
 
     const atualizarPreco = () => {
-        const updatedPrecos = precos.map((item) => ({
+        const precosFloatAtualizados = precos.map((item) => ({
+            ...item,
+            preco: parseFloat(document.getElementById(item.nome).value.replace("R$", "").replace(",", ".")),
+          }));
+
+          const precosAtualizados = precos.map((item) => ({
             ...item,
             preco: "R$" + document.getElementById(item.nome).value.replaceAll(".", ","),
         }));
 
-        setPrecos(updatedPrecos);
+        setPrecos(precosAtualizados);
         setIsEditing(false);
 
         // api
@@ -177,6 +190,12 @@ function Precos() {
                                                     decimalSeparator=","
                                                     defaultValue={(((item.preco).replaceAll("R$", "")).replaceAll(",", "."))}
                                                     id={item.nome}
+                                                    onInput={(e) => {
+                                                        const maxLength = 10;
+                                                        if (e.target.value.length > maxLength) {
+                                                          e.target.value = e.target.value.slice(0, maxLength);
+                                                        }
+                                                      }}
                                                     required
                                                     className="w-20 sm:w-24 border border-gray-600 p-1 rounded"
                                                 />

@@ -14,7 +14,8 @@ import AlertaClienteInativo from "../../components/Cliente/AlertaClienteInativo"
 function MeuPlano() {
 
     const [isEditing, setIsEditing] = useState(false);
-    const [preferenciasSelecionadas, setPreferenciasSelecionadas] = useState([]);
+    const [categoriasSelecionadas, setCategoriasSelecionadas] = useState([]);
+    const [categorias, setCategorias] = useState([]);
     const [pessoasSelecionadas, setPessoasSelecionadas] = useState(0);
     const [refeicoesSelecionadas, setRefeicoesSelecionadas] = useState(0);
     const [diasSelecionados, setDiasSelecionados] = useState(0);
@@ -23,66 +24,93 @@ function MeuPlano() {
     const [error, setError] = useState("");
     const [isAtivo, setAtivo] = useState(sessionStorage.getItem('isAtivo'));
     const [permissao, setPermissao] = useState(sessionStorage.getItem('permissao'));
+    const [planId, setPlanId] = useState("");
+    const [categoriasSelecionadasAntigas, setCategoriasSelecionadasAntigas] = useState([]);
+    const [plano, setPlano] = useState([]);
+    const [highestValorCategoria, setHighestValorCategoria] = useState(1);
+    const [novoValorPlano, setNovoValorPlano] = useState(pessoasSelecionadas * refeicoesSelecionadas * diasSelecionados * 4 * highestValorCategoria);
 
     useEffect(() => {
         buscarPlano();
+        buscarCategorias();
+        buscarCategoriasPlano();
     }, []);
+    
+    useEffect(() => {
+        console.log("Categorias Selecionadas:", categoriasSelecionadas);
+        highestCategoria();
+    }, [categoriasSelecionadas, pessoasSelecionadas, refeicoesSelecionadas, diasSelecionados]);
+    
+    useEffect(() => {
+        console.log("Valor Plano:", categoriasSelecionadas);
+        atualizarValorPlano();
+    }, [categoriasSelecionadas, pessoasSelecionadas, refeicoesSelecionadas, diasSelecionados, highestValorCategoria]);
+
+    const atualizarValorPlano = () => {
+        setNovoValorPlano(pessoasSelecionadas * refeicoesSelecionadas * diasSelecionados * 4 * highestValorCategoria);
+    }
+    
+    const highestCategoria = () => {
+        const valoresCategorias = categoriasSelecionadas.map(
+            (categoria) => categoria.valor
+        );
+        const highestValorCategoria = valoresCategorias.length > 0 ? Math.max(...valoresCategorias) : 0;
+        setHighestValorCategoria(highestValorCategoria);
+        console.log("maior valor categoria", highestValorCategoria);
+    };    
 
     const handlePreferencias = (preferencia) => {
-        if (preferenciasSelecionadas.includes(preferencia)) {
-            setPreferenciasSelecionadas(preferenciasSelecionadas.filter((item) => item !== preferencia));
+        const isCategoriaSelected = categoriasSelecionadas.some(
+            (selectedCategoria) => selectedCategoria.id === preferencia.id
+        );
+
+        if (isCategoriaSelected) {
+            setCategoriasSelecionadas((prevCategorias) =>
+                prevCategorias.filter((categoria) => categoria.id !== preferencia.id)
+            );
         } else {
-            setPreferenciasSelecionadas([...preferenciasSelecionadas, preferencia]);
+            setCategoriasSelecionadas((prevCategorias) => [...prevCategorias, preferencia]);
         }
     };
 
-    const preferenciasData = [
-        {
-            label: "Carnes",
-            image: iconeCarne,
-        },
-        {
-            label: "Pescetariano",
-            image: iconePeixe,
-        },
-        {
-            label: "Rápido e Fácil",
-            image: iconeRelogio,
-        },
-        {
-            label: "Vegetariano",
-            image: iconeSuco,
-        },
-        {
-            label: "Vegano",
-            image: iconePlanta,
-        },
-        {
-            label: "Fit e Saudável",
-            image: iconeMaca,
-        },
-    ];
+
+    const buscarCategorias = () => {
+        api
+            .get(`/categorias`, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+                }
+            })
+            .then((response) => {
+                console.log("Resposta", response);
+                setCategorias(response.data)
+                setCategoriasSelecionadasAntigas(response.data)
+            })
+            .catch((erro) => {
+                console.log("Erro", erro);
+            });
+    }
 
     const diasSemanaData = [
         {
             label: "S",
-            data: "Segunda",
+            data: "SEGUNDA",
         },
         {
             label: "T",
-            data: "Terça",
+            data: "TERCA",
         },
         {
             label: "Q",
-            data: "Quarta",
+            data: "QUARTA",
         },
         {
             label: "Q",
-            data: "Quinta",
+            data: "QUINTA",
         },
         {
             label: "S",
-            data: "Sexta",
+            data: "SEXTA",
         },
     ];
 
@@ -100,7 +128,7 @@ function MeuPlano() {
         "18:00", "19:00", "20:00", "21:00", "22:00"
     ];
 
-    const splitPreferenciasData = preferenciasData.reduce((result, item, index) => {
+    const splitCategorias = categorias.reduce((result, item, index) => {
         if (index % 3 === 0) {
             result.push([item]);
         } else {
@@ -127,7 +155,8 @@ function MeuPlano() {
 
     const validateConstants = () => {
         if (
-            preferenciasSelecionadas == "" ||
+            !Array.isArray(categoriasSelecionadas) ||
+            categoriasSelecionadas.length === 0 ||
             pessoasSelecionadas === 0 ||
             refeicoesSelecionadas === 0 ||
             diasSelecionados === 0 ||
@@ -150,48 +179,132 @@ function MeuPlano() {
             })
             .then((response) => {
                 console.log("Resposta", response);
-                setPreferenciasSelecionadas(response.data.categoria);
                 setPessoasSelecionadas(response.data.qtdPessoas);
                 setRefeicoesSelecionadas(response.data.qtdRefeicoesDia);
                 setDiasSelecionados(response.data.qtdDiasSemana);
                 setDiaSemanaSelecionado(response.data.diaSemana);
                 setSelectedTime(response.data.horaEntrega);
+                setPlanId(response.data.id);
+                setPlano(response.data);
+
+                buscarCategoriasPlano();
             })
             .catch((erro) => {
                 console.log("Erro", erro);
             });
-    }
+    };
 
-    const atualizarPlano = () => {
+    const buscarCategoriasPlano = () => {
+        api
+            .get(`/planos/categorias/${sessionStorage.getItem('idUsuario')}`, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+                }
+            })
+            .then((response) => {
+                console.log("Categorias Plano: ", response.data);
+
+                const categorias = response.data.map(item => item.categoria);
+
+                console.log("CATEGORIAS SELECIONADAS", categorias)
+
+                setCategoriasSelecionadas(categorias);
+            })
+            .catch((erro) => {
+                console.log("Erro", erro);
+            })
+    };
+
+
+    const atualizarPlano = async () => {
         if (validateConstants()) {
-            const corpoRequisicao = {
-                preferencias: preferenciasSelecionadas,
-                qtdPessoas: pessoasSelecionadas,
-                qtdRefeicoesDia: refeicoesSelecionadas,
-                qtdDiasSemana: diasSelecionados,
-                horaEntrega: selectedTime,
-                diaSemana: diaSemanaSelecionado,
-            };
-            api
-                .put(`/planos/${sessionStorage.getItem('idUsuario')}`, corpoRequisicao, {
-                    headers: {
-                        Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+            try {
+    
+                const responsePlano = await api.put(
+                    `/planos/${sessionStorage.getItem("idUsuario")}`,
+                    {
+                        qtdPessoas: pessoasSelecionadas,
+                        qtdRefeicoesDia: refeicoesSelecionadas,
+                        valorPlano: novoValorPlano,
+                        valorAjuste: 0.0,
+                        qtdDiasSemana: diasSelecionados,
+                        horaEntrega: selectedTime,
+                        diaSemana: diaSemanaSelecionado,
+                    },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
+                        },
                     }
-                })
-                .then((response) => {
-                    console.log("Resposta", response);
-                    buscarPlano();
-                })
-                .catch((erro) => {
-                    console.log("Erro", erro);
-                });
+                );
+
+                const planoId = responsePlano.data.id;
+                window.location.reload();
+
+                // const categoriasAtuais = categoriasSelecionadas.map(categoria => categoria.id);
+
+                // const categoriasNovas = categoriasAtuais.filter(categoria => !categoriasSelecionadasAntigas.includes(categoria));
+                // const categoriasRemovidas = categoriasSelecionadasAntigas.filter(categoria => !categoriasAtuais.includes(categoria));
+
+                // if (categoriasNovas.length > 0) {
+                //     const newPlanoCategorias = {
+                //         planoId,
+                //         categoriaId: categoriasNovas,
+                //     };
+
+                //     await api.post(
+                //         `/planos/categorias`,
+                //         newPlanoCategorias,
+                //         {
+                //             headers: {
+                //                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
+                //             },
+                //         }
+                //     );
+                // }
+
+                // for (const categoriaId of categoriasRemovidas) {
+                //     await api.delete(
+                //         `/planos/categorias/${categoriaId}`,
+                //         {
+                //             headers: {
+                //                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
+                //             },
+                //         }
+                //     );
+                // }
+
+                console.log("Plano atualizado com sucesso!");
+            } catch (error) {
+                console.error("Erro", error);
+            }
         }
     };
 
+
+
     const cancelarEdicao = () => {
-        setIsEditing(false);
-        setError("");
+        window.location.reload();
     }
+
+    const getIconByCategoriaNome = (nome) => {
+        switch (nome) {
+            case "Carnes":
+                return iconeCarne;
+            case "Pescetariano":
+                return iconePeixe;
+            case "Rápido e Fácil":
+                return iconeRelogio;
+            case "Vegetariano":
+                return iconeSuco;
+            case "Vegano":
+                return iconePlanta;
+            case "Fit e Saudável":
+                return iconeMaca;
+            default:
+                return "";
+        }
+    };
 
 
     return (
@@ -200,12 +313,15 @@ function MeuPlano() {
                 <HeaderCliente />
                 <AlertaClienteInativo permissao={permissao} />
                 <div className={`bg ${styles.bg} mt-10 mb-10`}>
-                <div className={`card ${styles.card} flex relative`}>
+                    <div className={`card ${styles.card} flex relative`}>
                         {!isEditing && (
                             <FiEdit
                                 onClick={() => setIsEditing(true)}
-                                className="cursor-pointer text-[#DC7726] text-2xl absolute top-10 right-14"
+                                className="cursor-pointer text-[#DC7726] text-2xl absolute top-10 right-14 z-20"
                             />
+                        )}
+                        {!isEditing && (
+                            <div className="flex absolute w-full h-full bg-transparent z-10"></div>
                         )}
                         <div className="flex flex-col w-full items-center">
                             <div className="flex items-center">
@@ -215,24 +331,28 @@ function MeuPlano() {
                                 <div className="px-8 ml-12 mr-12">
                                     <h3 className="text-center font-semibold">Categorias</h3>
                                     <div className="flex w-full items-center justify-center">
-                                        {splitPreferenciasData.map((columnData, columnIndex) => (
+                                        {splitCategorias.map((columnData, columnIndex) => (
                                             <div className="flex-col items-center justify-center" key={columnIndex}>
-                                                {columnData.map((preferenciaData, index) => (
+                                                {columnData.map((categoria, index) => (
                                                     <div
                                                         key={index}
-                                                        className={`card ${styles.card_plano} flex-col items-center justify-center ${preferenciasSelecionadas.includes(preferenciaData.label) ? styles.card_plano_selecionado : ''}`}
-                                                        onClick={() => handlePreferencias(preferenciaData.label)}
+                                                        className={`card ${styles.card_plano} flex-col items-center justify-center ${categoriasSelecionadas.some((selectedCategoria) => selectedCategoria.id === categoria.id)
+                                                            ? styles.card_plano_selecionado
+                                                            : ''
+                                                            }`}
+                                                        onClick={() => handlePreferencias(categoria)}
                                                     >
                                                         <img
-                                                            src={preferenciaData.image}
+                                                            src={getIconByCategoriaNome(categoria.nome)}
                                                             className="mx-auto my-auto w-10"
-                                                            alt={preferenciaData.label}
+                                                            alt={categoria.nome}
                                                         />
-                                                        <div className={`${styles.texto_card_plano}`}>{preferenciaData.label}</div>
+                                                        <div className={`${styles.texto_card_plano}`}>{categoria.nome}</div>
                                                     </div>
                                                 ))}
                                             </div>
                                         ))}
+
                                     </div>
                                 </div>
                                 <div className="flex-col items-center justify-center px-8">
@@ -334,18 +454,10 @@ function MeuPlano() {
                                                 <div className="flex-col">
                                                     <div className="flex justify-between mb-6">
                                                         <div className="mr-8">
-                                                            + X Refeições por mês
+                                                            + {pessoasSelecionadas * refeicoesSelecionadas * diasSelecionados * 4} Refeições por mês
                                                         </div>
                                                         <div>
-                                                            R$ XXX,XX
-                                                        </div>
-                                                    </div>
-                                                    <div className="flex justify-between mb-4">
-                                                        <div className="mr-8">
-                                                            + Frete
-                                                        </div>
-                                                        <div>
-                                                            R$ XXX,XX
+                                                            R$ {novoValorPlano.toFixed(2).replace('.', ',')}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -355,27 +467,27 @@ function MeuPlano() {
                                                         Total à pagar
                                                     </div>
                                                     <div className="font-semibold">
-                                                        R$ XXX,XX
+                                                        R$ {novoValorPlano.toFixed(2).replace('.', ',')}
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div className="flex space-x-12 mt-4 mb-4">
-                                    <button
-                                        className={` bg-gray-400 ${styles.btnCadastroCancelar}`}
-                                        onClick={cancelarEdicao}
+                                        <button
+                                            className={` bg-gray-400 ${styles.btnCadastroCancelar}`}
+                                            onClick={cancelarEdicao}
                                         >
-                                        Cancelar
-                                    </button>
-                                    <button
-                                        type="submit"
-                                        className={`bg-[#F29311] ${styles.btnCadastro}`}
-                                        onClick={atualizarPlano}
+                                            Cancelar
+                                        </button>
+                                        <button
+                                            type="submit"
+                                            className={`bg-[#F29311] ${styles.btnCadastro}`}
+                                            onClick={atualizarPlano}
                                         >
-                                        Confirmar
-                                    </button>
-                                        </div>
+                                            Confirmar
+                                        </button>
+                                    </div>
                                 </>
                             )}
 
