@@ -14,6 +14,7 @@ import { MdOutlineFileDownload } from "react-icons/md";
 import api from "../../../api/api";
 import fileDownload from 'js-file-download';
 import Swal from "sweetalert2";
+import { useNavigate } from 'react-router-dom';
 
 const initialChartDataState = {
     labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
@@ -25,6 +26,8 @@ const initialChartDataState = {
 };
 
 function Dashboard() {
+
+    const navigate = useNavigate();
 
     const [categorias, setCategorias] = useState([]);
     const [melhoresAvaliados, setMelhoresAvaliados] = useState([])
@@ -51,6 +54,10 @@ function Dashboard() {
         getPreferencias();
         getDadosAssinaturas();
     }, []);
+
+    const navegarPrecos = () => {
+        navigate('/fornecedor/precos');
+    }
 
 
     const getDadosAssinaturas = () => {
@@ -234,6 +241,9 @@ function Dashboard() {
                                             <option value="Categorias">Categorias</option>
                                             <option value="Preferências">Preferências</option>
                                         </select>
+                                        <button onClick={navegarPrecos} className="flex justify-evenly mr-8 items-center w-32 h-[1.7rem] mt-4 bg-[#C5C5C5] text-[#FFFFFF] text-[0.85rem] rounded-md hover:bg-[#2EC4B6] transition duration-200">
+                                        Alterar Preços
+                                    </button>
                                     </div>
                                 </div>
                                 <div className="flex w-full justify-center mt-10">

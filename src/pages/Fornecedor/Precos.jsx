@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { FiEdit, FiInfo } from "react-icons/fi";
 import Swal from "sweetalert2";
-import CurrencyInput from 'react-currency-masked-input'
-import HeaderCliente from "../../components/Cliente/HeaderCliente/HeaderCliente";
+import CurrencyInput from 'react-currency-masked-input';
 import api from "../../api/api";
+import HeaderFornecedor from "../../components/Fornecedor/HeaderFornecedor/HeaderFornecedor";
 
 function Precos() {
     const [isEditing, setIsEditing] = useState(false);
     const [showTooltip, setShowTooltip] = useState(false);
     const [precos, setPrecos] = useState([]);
+    const [categorias, setCategorias] = useState([])
 
     useEffect(() => {
         buscarPrecos();
@@ -19,63 +20,44 @@ function Precos() {
     };
 
     const buscarPrecos = () => {
-        // api
-        //     .get(`/categorias`, {
-        //         headers: {
-        //             Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
-        //         },
-        //     })
-        //     .then((response) => {
-        //         console.log("Resposta", response);
-        //         setPrecos(response.data)
-        //     })
-        //     .catch((erro) => {
-        //         console.log("Erro", erro);
-        //     });
-
-        const response = { data:[
-            {
-                id: 1,
-                nome: "Carnes",
-                preco: '10.00'
-            },
-            {
-                id: 2,
-                nome: "Vegetariano",
-                preco: '10.00'
-            },
-            {
-                id: 3,
-                nome: "Vegano",
-                preco: '10.00'
-            },
-            {
-                id: 4,
-                nome: "Rápido e Fácil",
-                preco: '10.00'
-            },
-            {
-                id: 5,
-                nome: "Fit e Saudável",
-                preco: '10.00'
-            },
-            {
-                id: 6,
-                nome: "Pescetariano",
-                preco: '10.00'
-            },
-        ]
+        api
+            .get(`/categorias`, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+                }
+            })
+            .then((response) => {
+                console.log("Resposta", response);
+    
+                const responseFormatada = response.data.map((item) => {
+                    let valorFormatado;
+    
+                    if (item.valor !== undefined) {
+                        if (item.valor % 1 !== 0) {
+                            valorFormatado = `R$${item.valor.toFixed(2).replace('.', ',')}`;
+                        } else {
+                            valorFormatado = `R$${item.valor},00`;
+                        }
+                    } else {
+                        valorFormatado = 'R$0,00';
+                    }
+    
+                    return {
+                        ...item,
+                        valor: valorFormatado
+                    };
+                });
+    
+                console.log(responseFormatada);
+    
+                setCategorias(response.data)
+                setPrecos(responseFormatada);
+            })
+            .catch((erro) => {
+                console.log("Erro", erro);
+            });
     };
-
-    const responseFormatada = response.data.map((item) => ({
-        ...item,
-        preco: `R$${item.preco.replace('.', ',')}`,
-      }));
-      
-      console.log(responseFormatada);
-
-        setPrecos(responseFormatada);
-    }
+    
 
     const alertaValoresInválidos = () => {
         Swal.fire({
@@ -91,47 +73,51 @@ function Precos() {
     const atualizarPreco = () => {
         const precosFloatAtualizados = precos.map((item) => ({
             ...item,
-            preco: parseFloat(document.getElementById(item.nome).value.replace("R$", "").replace(",", ".")),
-          }));
+            valor: parseFloat(document.getElementById(item.nome).value.replace("R$", "").replace(",", ".")),
+        }));
 
-          const precosAtualizados = precos.map((item) => ({
+        const precosAtualizados = precos.map((item) => ({
             ...item,
             preco: "R$" + document.getElementById(item.nome).value.replaceAll(".", ","),
         }));
 
-        setPrecos(precosAtualizados);
-        setIsEditing(false);
+        console.log("PUT: ", precosFloatAtualizados)
 
-        // api
-        //     .put(`/categorias`, corpoRequisicao, {
-        //         headers: {
-        //             Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
-        //         },
-        //     })
-        //     .then((response) => {
-        //         console.log("Resposta", response);
-        //         setPrecos(updatedPrecos);
-        //         setIsEditing(false);
-        //         Swal.fire({
-        //             title: "Preços atualizados com sucesso!",
-        //             icon: "success",
-        //             iconColor: "#00AE9E",
-        //         })
-        //     })
-        //     .catch((erro) => {
-        //         console.log("Erro", erro);
-        //         Swal.fire({
-        //             title: "Erro ao atualizar os preços. Por favor, tente novamente.",
-        //             icon: "error",
-        //             confirmButtonColor: "#00AE9E",
-        //         });
-        //     });
+        api
+            .put(`/categorias`, precosFloatAtualizados, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
+                },
+            })
+            .then((response) => {
+                console.log("Resposta", response);
+                setPrecos(precosAtualizados);
+                setIsEditing(false);
+                Swal.fire({
+                    title: "Preços atualizados com sucesso!",
+                    icon: "success",
+                    iconColor: "#00AE9E",
+                })
+
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+
+            })
+            .catch((erro) => {
+                console.log("Erro", erro);
+                Swal.fire({
+                    title: "Erro ao atualizar os preços. Por favor, tente novamente.",
+                    icon: "error",
+                    confirmButtonColor: "#00AE9E",
+                });
+            });
     };
 
 
     return (
         <>
-            <HeaderCliente />
+            <HeaderFornecedor />
             <div className="items-center justify-center w-full flex mt-10">
                 <div className="w-4/5 flex border-b border-gray-300">
                     <h1
@@ -187,20 +173,20 @@ function Precos() {
                                         <td className="py-2 pl-4 sm:pl-8 border-b">
                                             {isEditing ? (
                                                 <CurrencyInput
-                                                    decimalSeparator=","
-                                                    defaultValue={(((item.preco).replaceAll("R$", "")).replaceAll(",", "."))}
+                                                    decimalseparator=","
+                                                    defaultValue={(((item.valor).replaceAll("R$", "")).replaceAll(",", "."))}
                                                     id={item.nome}
                                                     onInput={(e) => {
                                                         const maxLength = 10;
                                                         if (e.target.value.length > maxLength) {
-                                                          e.target.value = e.target.value.slice(0, maxLength);
+                                                            e.target.value = e.target.value.slice(0, maxLength);
                                                         }
-                                                      }}
+                                                    }}
                                                     required
                                                     className="w-20 sm:w-24 border border-gray-600 p-1 rounded"
                                                 />
                                             ) : (
-                                                item.preco
+                                                item.valor
                                             )}
                                         </td>
                                     </tr>
