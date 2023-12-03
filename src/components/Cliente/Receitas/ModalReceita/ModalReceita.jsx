@@ -3,6 +3,7 @@ import api from "../../../../api/api";
 import Preferencia from "../Preferencia";
 import style from "./ModalReceita.module.css"
 import { useLocation } from 'react-router-dom';
+import Swal from "sweetalert2";
 
 import editar from "../../../../assets/Fornecedor/Receitas/Edit.svg"
 import lixo from "../../../../assets/Fornecedor/Receitas/trash.svg"
@@ -18,8 +19,28 @@ function ModalReceita({ id, nome, ingredientes, rendimento, horas, minutos, qtdA
 
     const isPaginaReceitasCliente = location.pathname === '/fornecedor/receitas';
 
+    const excluirReceitaAlerta = () => {
+        Swal.fire({
+            title: "Tem certeza de que você deseja excluir a receita?",
+            confirmButtonColor: "#FF9F1C",
+            denyButtonColor: "#787878",
+            showDenyButton: true,
+            denyButtonText: `Não`,
+            confirmButtonText: "Sim",
+            reverseButtons: true,
+          }).then((result) => {
+            if (result.isConfirmed) {
+                exluir();
+            }
+          });
+    }
+
     function exluir() {
-        api.delete(`/receitas/${id}`)
+        api.delete(`/receitas/${id}`, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+            }
+        })
             .then(response => {
                 console.log(response.data)
             })
@@ -45,9 +66,9 @@ function ModalReceita({ id, nome, ingredientes, rendimento, horas, minutos, qtdA
                             {isPaginaReceitasCliente && (
                                 <div className={style.editar_excluir}>
                                     <a href={`/fornecedor/editar-receita/${id}`}>
-                                        <img src={editar} onClick={atualizar} className={style.icone} alt="Icone de lápis" />
+                                        <img src={editar} className={style.icone} alt="Icone de lápis" />
                                     </a>
-                                    <img src={lixo} onClick={exluir} className={style.icone} alt="Icone de lixo" />
+                                    <img src={lixo} onClick={excluirReceitaAlerta} className={style.icone} alt="Icone de lixo" />
                                 </div>
                             )}
                         </div>
@@ -89,18 +110,16 @@ function ModalReceita({ id, nome, ingredientes, rendimento, horas, minutos, qtdA
                         <div className={style.container_tempo_categoria_preferencia}>
                             <div className={style.categoria}>
                                 <b>Categoria: </b>
-                                {listaCategoria.map((categoria, index, array) => (
-                                    <span className={style.nome_categoria} key={categoria.id}>
-                                        {index > 0 && index < array.length - 1 ? ', ' : ' '}
-                                        {index === array.length - 1 && array.length > 1 ? ' e ' : ' '}
-                                        {categoria.nome}
+                                {Array.isArray(categoria) && categoria.map((cat, index) => (
+                                    <span className={`${style.nome_categoria} mr-2`} key={index}>
+                                        {cat.categoria.nome} |
                                     </span>
                                 ))}
                             </div>
                             <div className={style.preferencia}>
                                 <b>Prefêrencias:</b>
-                                {listaPreferencia.map((preferencia) => (
-                                    <Preferencia key={preferencia.nome} preferencia={preferencia} />
+                                {Array.isArray(preferencia) && preferencia.map((pref, index) => (
+                                    <Preferencia key={index} preferencia={pref.preferencia} />
                                 ))}
                             </div>
                             <span>

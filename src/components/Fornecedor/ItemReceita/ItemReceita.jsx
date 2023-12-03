@@ -56,9 +56,9 @@ function ItemReceita({ id, nome, ingredientes, rendimento, preparo, horas, minut
     return (
         <div className={style.card} onClick={handleAbrirModal}>
             <div className="relative">
-                <button className="absolute top-0 left-0 bg-white rounded-lg p-2">
+                {/* <button className="absolute top-0 left-0 bg-white rounded-lg p-2">
                     <FaHeart className={`text-gray-400 text-2xl`} />
-                </button>
+                </button> */}
                 {/* {isPaginaReceitasCliente && (
                 )} */}
                 <img src={imagem} alt="Imagem da Receita" className={style.imagem} />

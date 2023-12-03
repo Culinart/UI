@@ -5,6 +5,7 @@ import { FiEdit } from "react-icons/fi";
 import ItemReceita from "../../../components/Fornecedor/ItemReceita/ItemReceita";
 import api from "../../../api/api";
 import style from './Receitas.module.css'
+import swal from "sweetalert2";
 
 function ReceitasFornecedor() {
     const [preferencias, setPreferencias] = useState([]);
