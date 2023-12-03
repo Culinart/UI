@@ -239,39 +239,40 @@ function MeuPlano() {
                 );
 
                 const planoId = responsePlano.data.id;
+                window.location.reload();
 
-                const categoriasAtuais = categoriasSelecionadas.map(categoria => categoria.id);
+                // const categoriasAtuais = categoriasSelecionadas.map(categoria => categoria.id);
 
-                const categoriasNovas = categoriasAtuais.filter(categoria => !categoriasSelecionadasAntigas.includes(categoria));
-                const categoriasRemovidas = categoriasSelecionadasAntigas.filter(categoria => !categoriasAtuais.includes(categoria));
+                // const categoriasNovas = categoriasAtuais.filter(categoria => !categoriasSelecionadasAntigas.includes(categoria));
+                // const categoriasRemovidas = categoriasSelecionadasAntigas.filter(categoria => !categoriasAtuais.includes(categoria));
 
-                if (categoriasNovas.length > 0) {
-                    const newPlanoCategorias = {
-                        planoId,
-                        categoriaId: categoriasNovas,
-                    };
+                // if (categoriasNovas.length > 0) {
+                //     const newPlanoCategorias = {
+                //         planoId,
+                //         categoriaId: categoriasNovas,
+                //     };
 
-                    await api.post(
-                        `/planos/categorias`,
-                        newPlanoCategorias,
-                        {
-                            headers: {
-                                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
-                            },
-                        }
-                    );
-                }
+                //     await api.post(
+                //         `/planos/categorias`,
+                //         newPlanoCategorias,
+                //         {
+                //             headers: {
+                //                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
+                //             },
+                //         }
+                //     );
+                // }
 
-                for (const categoriaId of categoriasRemovidas) {
-                    await api.delete(
-                        `/planos/categorias/${categoriaId}`,
-                        {
-                            headers: {
-                                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
-                            },
-                        }
-                    );
-                }
+                // for (const categoriaId of categoriasRemovidas) {
+                //     await api.delete(
+                //         `/planos/categorias/${categoriaId}`,
+                //         {
+                //             headers: {
+                //                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
+                //             },
+                //         }
+                //     );
+                // }
 
                 console.log("Plano atualizado com sucesso!");
             } catch (error) {

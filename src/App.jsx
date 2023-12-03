@@ -10,7 +10,7 @@ import Pedidos from './pages/Cliente/Pedidos.jsx';
 import ComoFunciona from './pages/Institucional/ComoFunciona/ComoFunciona.jsx';
 import Login from './pages/Institucional/Login/Login.jsx';
 import RedefinirSenha from './pages/Institucional/Login/RedefinirSenha.jsx';
-import Receitas from './pages/Cliente/Receitas.jsx';
+import ReceitasCliente from './pages/Cliente/Receitas/Receitas.jsx';
 import Preferencias from './pages/Cliente/Preferencias.jsx';
 import PerfilInfoPessoal from './pages/Cliente/Perfil/PerfilInfoPessoal.jsx';
 import PerfilSenhaAutenticacao from './pages/Cliente/Perfil/PerfilSenhaAutenticacao.jsx';
@@ -25,7 +25,9 @@ import PedidosFornecedor from './pages/Fornecedor/Pedidos/Pedidos.jsx';
 
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.minimal.css";
-
+import ReceitasFornecedor from './pages/Fornecedor/Receitas/Receitas.jsx';
+import AdicionarReceita from './pages/Fornecedor/AdicionarReceita/AdicionarReceita.jsx';
+import EditarReceita from './pages/Fornecedor/EditarReceita/EditarReceita.jsx';
 
 function App() {
 
@@ -54,7 +56,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/redefinir-senha" element={<RedefinirSenha />} />
           <Route path="/cliente/pedidos" element={<Pedidos />} />
-          <Route path="/cliente/receitas" element={<Receitas />} />
+          <Route path="/cliente/receitas" element={<ReceitasCliente />} />
           <Route path="/cliente/preferencias" element={<Preferencias />} />
           <Route path="/cliente/perfil/info-pessoal" element={<PerfilInfoPessoal />} />
           <Route path="/cliente/perfil/senha-autenticacao" element={<PerfilSenhaAutenticacao />} />
@@ -64,6 +66,9 @@ function App() {
           <Route path="/cliente/meu-plano" element={<MeuPlano />} />
           <Route path="/fornecedor/perfil/info-pessoal" element={<PerfilInfoPessoalFornecedor />} />
           <Route path="/fornecedor/perfil/senha-autenticacao" element={<PerfilSenhaAutenticacaoFornecedor />} />
+          <Route path="/fornecedor/receitas" element={<ReceitasFornecedor />} />
+          <Route path="/fornecedor/adicionar-receita" element={<AdicionarReceita />} />
+          <Route path="/fornecedor/editar-receita/:id" element={<EditarReceita />} />
           <Route path="/fornecedor/pedidos" element={<PedidosFornecedor />} />
           <Route path="/fornecedor/precos" element={<Precos />} />
           <Route path="*" element={<NotFound />} />
