@@ -4,21 +4,21 @@ import style from "./ModalCategorias.module.css";
 import { IoClose } from "react-icons/io5";
 
 
-function ModalCategorias({ handleFecharModal, categorias }) {
-    const [categoriasSelecionadas, setCategoriasSelecionadas] = useState([]);
+function ModalCategorias({ handleFecharModal, categorias, atualizarCategoriasSelecionadas, listaCategoriasSelecionadas }) {
 
     const enviar = () => {
-        console.log(categoriasSelecionadas)
+        atualizarCategoriasSelecionadas(listaCategoriasSelecionadas);
+        handleFecharModal();
     };
 
     const handleSpanClick = (categoria) => {
-        if (!categoriasSelecionadas.includes(categoria)) {
-            setCategoriasSelecionadas([...categoriasSelecionadas, categoria]);
+        if (!listaCategoriasSelecionadas.includes(categoria)) {
+            atualizarCategoriasSelecionadas([...listaCategoriasSelecionadas, categoria]);
         }
     };
 
     const handleRemoverCategoria = (categoria) => {
-        setCategoriasSelecionadas(categoriasSelecionadas.filter((cat) => cat !== categoria));
+        atualizarCategoriasSelecionadas(listaCategoriasSelecionadas.filter((cat) => cat !== categoria));
     };
 
     const handleCliqueForaModal = (event) => {
@@ -35,8 +35,8 @@ function ModalCategorias({ handleFecharModal, categorias }) {
                     <h1 className={style.titulo}>Adicionar Categorias</h1>
                     <div className={style.container_itens_selecionados}>
                         <h2 className={style.subtitulo}>Categorias Selecionadas</h2>
-                        {categoriasSelecionadas.map((categoria) => (
-                            <span onClick={() => handleRemoverCategoria(categoria)} className={style.item} key={categoria}>
+                        {listaCategoriasSelecionadas.map((categoria) => (
+                            <span onClick={() => handleRemoverCategoria(categoria)} className={style.item} key={categoria.id}>
                                 {categoria.nome}
                             </span>
                         ))}
@@ -47,7 +47,7 @@ function ModalCategorias({ handleFecharModal, categorias }) {
                             <span
                                 onClick={() => handleSpanClick(categoria)}
                                 className={style.item}
-                                key={categoria}
+                                key={categoria.id}
                             >
                                 {categoria.nome}
                             </span>

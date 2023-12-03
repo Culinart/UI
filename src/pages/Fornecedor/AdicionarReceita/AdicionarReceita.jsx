@@ -3,31 +3,45 @@ import api from '../../../api/api';
 import HeaderFornecedor from '../../../components/Fornecedor/HeaderFornecedor/HeaderFornecedor';
 import style from './AdicionarReceita.module.css';
 import trash from '../../../assets/Fornecedor/Receitas/trash.svg';
-import editar from '../../../assets/Fornecedor/Receitas/Edit.svg';
 import { FaUpload } from 'react-icons/fa';
 import { FaPlus } from "react-icons/fa";
-import ModalPreferenciasCategorias from '../../../components/Fornecedor/ModalPreferencias/ModalPreferenciasCategorias';
-import ModalPreferencias from '../../../components/Fornecedor/ModalPreferencias/ModalPreferenciasCategorias';
+import ModalPreferencias from '../../../components/Fornecedor/ModalPreferencias/ModalPreferencias';
 import ModalCategorias from '../../../components/Fornecedor/ModalCategorias/ModalCategorias';
+import { useNavigate } from "react-router-dom";
 
 function AdicionarReceita() {
 
   const [preferencias, setPreferencias] = useState([])
   const [categorias, setCategorias] = useState([])
+  const [imagem, setImagem] = useState(null);
+  const [exibirModalPreferencias, setExibirModalPreferencias] = useState(false);
+  const [exibirModalCategorias, setExibirModalCategorias] = useState(false);
+  const [categoriasSelecionadas, setCategoriasSelecionadas] = useState([]);
+  const [preferenciasSelecionadas, setPreferenciasSelecionadas] = useState([]);
+  const navigate = useNavigate();
   const [receita, setReceita] = useState({
     nome: '',
     horas: '',
     minutos: '',
     rendimento: '',
     descricao: '',
-    categoria: '',
-    ingredientes: [{ quantidade: '', unidade: '', nome: '' }],
-    modoPreparo: [{ passo: '' }],
+    ingredientes: [{
+      quantidade: '',
+      unidadeMedidaEnum: '',
+      nome: ''
+    }],
+    modoPreparo: [{
+      passo: ''
+    }],
   });
-  const [imagem, setImagem] = useState(null);
-  const [exibirModalPreferencias, setExibirModalPreferencias] = useState(false);
-  const [exibirModalCategorias, setExibirModalCategorias] = useState(false);
 
+  const atualizarCategoriasSelecionadas = (categorias) => {
+    setCategoriasSelecionadas(categorias);
+  };
+
+  const atualizarPreferenciasSelecionadas = (preferencias) => {
+    setPreferenciasSelecionadas(preferencias);
+  };
 
   const handleFileUploadClick = () => {
     document.getElementById('seuInputFile').click();
@@ -56,21 +70,38 @@ function AdicionarReceita() {
   const adicionarIngrediente = () => {
     setReceita((prevState) => ({
       ...prevState,
-      ingredientes: [...prevState.ingredientes, { quantidade: '', unidade: '', nome: '' }],
+      ingredientes: [...prevState.ingredientes, { quantidade: '', unidadeMedidaEnum: '', nome: '' }],
     }));
   };
 
   const handleSubmit = (e) => {
+    const corpoRequisicao = {
+      nome: receita.nome,
+      horas: receita.horas,
+      minutos: receita.minutos,
+      descricao: receita.descricao,
+      qtdPorcoes: receita.rendimento,
+      imagem: '',
+      ingredientes: receita.ingredientes,
+      modoPreparos: receita.modoPreparo,
+      categorias: categoriasSelecionadas,
+      preferencias: preferenciasSelecionadas
+    };
+
     e.preventDefault();
-    api
-      .post('/receitas', receita)
+    api.post('/receitas', corpoRequisicao, {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
+      },
+    })
       .then((response) => {
         console.log('Nova receita adicionada:', response.data);
+        // navigate("/fornecedor/receitas");
       })
       .catch((error) => {
         console.error('Erro ao adicionar receita:', error);
       });
-    console.log('Esta é a receita', receita);
+    console.log('Esta é a receita', corpoRequisicao);
   };
 
   const buscarPreferencias = () => {
@@ -79,7 +110,6 @@ function AdicionarReceita() {
         Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
       }
     }).then((response) => {
-      console.log(response.data);
       setPreferencias(response.data);
     }).catch((error) => {
       console.log(error);
@@ -92,7 +122,6 @@ function AdicionarReceita() {
         Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
       }
     }).then((response) => {
-      console.log(response.data);
       setCategorias(response.data);
     }).catch((error) => {
       console.log(error);
@@ -101,33 +130,25 @@ function AdicionarReceita() {
 
   const handleInputChange = (index, field, value, arrayField) => {
     setReceita((prevState) => {
-      const newArray = [...prevState[arrayField]];
-      newArray[index][field] = value;
-      return { ...prevState, [arrayField]: newArray };
+      const newArrayField = [...prevState[arrayField]];
+      newArrayField[index][field] = value;
+      return { ...prevState, [arrayField]: newArrayField };
     });
   };
 
   const removerIngrediente = (index) => {
-    if (index === 0 && receita.ingredientes.length === 1) {
-      return;
+    if (receita.ingredientes.length > 1) {
+      setReceita((prevState) => {
+        const novosIngredientes = prevState.ingredientes.filter((_, i) => i !== index);
+        return { ...prevState, ingredientes: novosIngredientes };
+      });
     }
-
-    setReceita((prevState) => {
-      const novosIngredientes = [...prevState.ingredientes];
-      novosIngredientes.splice(index, 1);
-      return { ...prevState, ingredientes: novosIngredientes };
-    });
   };
 
   const removerPasso = (index) => {
-    if (index === 0 && receita.modoPreparo.length === 1) {
-      return;
-    }
-
     setReceita((prevState) => {
-      const novosPassos = [...prevState.modoPreparo];
-      novosPassos.splice(index, 1);
-      return { ...prevState, modoPreparo: novosPassos };
+      const novoModoPreparo = prevState.modoPreparo.filter((_, i) => i !== index);
+      return { ...prevState, modoPreparo: novoModoPreparo };
     });
   };
 
@@ -152,14 +173,12 @@ function AdicionarReceita() {
     buscarCategorias();
   }, []);
 
-  console.log(categorias)
-
   return (
     <>
       <HeaderFornecedor />
       <section onSubmit={handleSubmit} className={style.body}>
         <div className={style.topo}>
-          <h1 className={style.titulo_pagina}>Adicionar Receita</h1>
+          <h1 className={`${style.titulo_pagina} mt-8 text-2xl`}>Adicionar Receita</h1>
           <div className={style.linha_horizontal} />
         </div>
         <div className={style.container_imagem_titulo}>
@@ -182,36 +201,51 @@ function AdicionarReceita() {
           </div>
           <div className={style.container_titulo_categoria}>
             <label>
-              <span>Titulo</span>
+              <span className=' text-base'>Titulo</span>
               <input
                 className={style.input_titulo}
-                value={receita.nome}
-                onChange={(e) => setReceita({ ...receita, nome: e.target.value })}
+                value={receita.nome || ''}
+                onChange={(e) => setReceita({
+                  ...receita,
+                  nome: e.target.value,
+                })}
               />
             </label>
             <label>
-              <span>Descrição</span>
+              <span className=' text-base'>Descrição</span>
               <textarea cols="30" rows="3"
-                value={receita.descricao}
-                onChange={(e) => setReceita({ ...receita, descricao: e.target.value })}
+                value={receita.descricao || ''}
+                onChange={(e) => setReceita({
+                  ...receita,
+                  descricao: e.target.value,
+                })}
               />
             </label>
             <div className={style.container_categoria_preferencia}>
-              <span className={style.itens}>
-                <p onClick={handleAbrirModalPreferencias}>
-                  <FaPlus className='cursor-pointer' /> ⠀
-                  <b>Preferências: </b>
-                </p>
-                <p>
-                </p>
-              </span>
-              <span className={style.itens}>
-                <p onClick={handleAbrirModalCategorias}>
-                  <FaPlus className='cursor-pointer' /> ⠀
-                  <b>Categorias: </b>
-                </p>
-                <p></p>
-              </span>
+              <div onClick={handleAbrirModalPreferencias} className={style.itens}>
+                <FaPlus /> ⠀
+                <b>Preferências: </b>
+                {preferenciasSelecionadas.slice(0, 1).map((preferencia, index) => (
+                  <React.Fragment key={index}>
+                    <span style={{ backgroundColor: '#' + preferencia.corFundo, color: '#' + preferencia.corTexto }} className={style.item}>{preferencia.nome}</span>
+                  </React.Fragment>
+                ))}
+                {preferenciasSelecionadas.length > 1 && (
+                  <span>⠀e⠀mais {preferenciasSelecionadas.length - 1}</span>
+                )}
+              </div>
+              <div onClick={handleAbrirModalCategorias} className={style.itens}>
+                <FaPlus /> ⠀
+                <b>Categorias:</b>
+                {categoriasSelecionadas.slice(0, 1).map((categoria, index) => (
+                  <React.Fragment key={index}>
+                    <span>{categoria.nome}</span>
+                  </React.Fragment>
+                ))}
+                {categoriasSelecionadas.length > 1 && (
+                  <span>⠀e⠀mais {categoriasSelecionadas.length - 1}</span>
+                )}
+              </div>
             </div>
 
           </div>
@@ -219,30 +253,39 @@ function AdicionarReceita() {
         <div className={style.container_medida_rendimento}>
           <div className={style.container_rendimento_tempo}>
             <div className={style.container_rendimento}>
-              <h1>Rendimento</h1>
+              <h1 className=' text-base'>Rendimento</h1>
               <div className={style.rendimento}>
                 <span>Ingredientes para render</span>
                 <input
-                  type="number"
-                  value={receita.rendimento}
-                  onChange={(e) => setReceita({ ...receita, rendimento: e.target.value })}
+                  type='number'
+                  value={receita.rendimento || ''}
+                  onChange={(e) => setReceita({
+                    ...receita,
+                    rendimento: e.target.value
+                  })}
                 />
                 <span>porções</span>
               </div>
             </div>
             <div className={style.container_tempo}>
-              <h1>Tempo de preparo</h1>
+              <h1 className=' text-base'>Tempo de preparo</h1>
               <div className={style.tempo}>
                 <input
-                  type="number"
-                  value={receita.horas}
-                  onChange={(e) => setReceita({ ...receita, horas: e.target.value })}
+                  type='number'
+                  value={receita.horas || ''}
+                  onChange={(e) => setReceita({
+                    ...receita,
+                    horas: e.target.value
+                  })}
                 />
                 <span>Hora(s) e</span>
                 <input
-                  type="number"
-                  value={receita.minutos}
-                  onChange={(e) => setReceita({ ...receita, minutos: e.target.value })}
+                  type='number'
+                  value={receita.minutos || ''}
+                  onChange={(e) => setReceita({
+                    ...receita,
+                    minutos: e.target.value,
+                  })}
                 />
                 <span>Minuto(s)</span>
               </div>
@@ -250,23 +293,23 @@ function AdicionarReceita() {
           </div>
           <div className={style.unidade_medida}>
             <div className={style.titulos_medida}>
-              <h1 className={style.titulo_quantidade}>Quantidade</h1>
-              <h1 className={style.titulo_unidade}>Unidade</h1>
-              <h1 className={style.titulo_ingrediente}>Ingrediente</h1>
+              <h1 className={`${style.titulo_quantidade} text-base`}>Quantidade</h1>
+              <h1 className={`${style.titulo_unidade} text-base`}>Unidade</h1>
+              <h1 className={`${style.titulo_ingrediente} text-base`}>Ingrediente</h1>
             </div>
             {receita.ingredientes.map((ingrediente, index) => (
               <div className={style.inputs_medida} key={index}>
                 <input
                   type="number"
-                  value={ingrediente.quantidade}
+                  value={ingrediente.quantidade || ''}
                   className={style.input_quantidade}
                   onChange={(e) => handleInputChange(index, 'quantidade', e.target.value, 'ingredientes')}
                 />
                 <select
                   name="select"
-                  value={ingrediente.unidade}
+                  value={ingrediente.unidadeMedidaEnum || ''}
                   className={style.input_unidade}
-                  onChange={(e) => handleInputChange(index, 'unidade', e.target.value, 'ingredientes')}
+                  onChange={(e) => handleInputChange(index, 'unidadeMedidaEnum', e.target.value, 'ingredientes')}
                 >
                   <option value="UNIDADE">Unidade</option>
                   <option value="LITRO">Litro</option>
@@ -281,13 +324,14 @@ function AdicionarReceita() {
                 </select>
                 <input
                   type="text"
-                  value={ingrediente.nome}
+                  value={ingrediente.nome || ''}
                   className={style.input_ingrediente}
                   onChange={(e) => handleInputChange(index, 'nome', e.target.value, 'ingredientes')}
                 />
                 <img src={trash} className={style.icone} onClick={() => removerIngrediente(index)} alt="icone de lata de lixo" />
               </div>
             ))}
+
             <button className={style.adicionar_ingrediente} onClick={adicionarIngrediente}>
               Adicionar Ingrediente
             </button>
@@ -309,7 +353,7 @@ function AdicionarReceita() {
           </button>
         </div>
         <div className={style.botoes}>
-          <button className={style.cancelar}> Cancelar </button>
+          <button className={style.cancelar} onClick={() => navigate(-1)}> Cancelar </button>
           <button onClick={handleSubmit} className={style.confirmar}>Confirmar</button>
         </div>
       </section>
@@ -317,14 +361,16 @@ function AdicionarReceita() {
         <ModalPreferencias
           handleFecharModal={handleFecharModalPreferencias}
           preferencias={preferencias}
-          titulo={'Preferências'}
+          atualizarPreferenciasSelecionadas={atualizarPreferenciasSelecionadas}
+          listaPreferenciasSelecionadas={preferenciasSelecionadas}
         />
       )}
       {exibirModalCategorias && (
         <ModalCategorias
           handleFecharModal={handleFecharModalCategorias}
           categorias={categorias}
-          titulo={'Categorias'}
+          atualizarCategoriasSelecionadas={atualizarCategoriasSelecionadas}
+          listaCategoriasSelecionadas={categoriasSelecionadas}
         />
       )}
     </>

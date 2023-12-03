@@ -4,21 +4,21 @@ import style from "./ModalPreferencias.module.css";
 import { IoClose } from "react-icons/io5";
 
 
-function ModalPreferencias({ handleFecharModal, preferencias }) {
-    const [preferenciasSelecionadas, setPreferenciasSelecionadas] = useState([]);
+function ModalPreferencias({ handleFecharModal, preferencias, atualizarPreferenciasSelecionadas, listaPreferenciasSelecionadas }) {
 
     const enviar = () => {
-        console.log(preferenciasSelecionadas)
+        atualizarPreferenciasSelecionadas(listaPreferenciasSelecionadas);
+        handleFecharModal();
     };
 
-    const handleSpanClick = (preferencias) => {
-        if (!preferenciasSelecionadas.includes(preferencias)) {
-            setPreferenciasSelecionadas([...preferenciasSelecionadas, preferencias]);
+    const handleSpanClick = (categoria) => {
+        if (!listaPreferenciasSelecionadas.includes(categoria)) {
+            atualizarPreferenciasSelecionadas([...listaPreferenciasSelecionadas, categoria]);
         }
     };
 
-    const handleRemoverPreferencias = (preferencias) => {
-        setPreferenciasSelecionadas(preferenciasSelecionadas.filter((cat) => cat !== preferencias));
+    const handleRemoverPreferencias = (categoria) => {
+        atualizarPreferenciasSelecionadas(listaPreferenciasSelecionadas.filter((cat) => cat !== categoria));
     };
 
     const handleCliqueForaModal = (event) => {
@@ -35,12 +35,12 @@ function ModalPreferencias({ handleFecharModal, preferencias }) {
                     <h1 className={style.titulo}>Adicionar Preferências</h1>
                     <div className={style.container_itens_selecionados}>
                         <h2 className={style.subtitulo}>preferencias Selecionadas</h2>
-                        {preferenciasSelecionadas.map((preferencias) => (
+                        {listaPreferenciasSelecionadas.map((preferencias) => (
                             <span
                                 style={{ backgroundColor: '#' + preferencias.corFundo, color: '#' + preferencias.corTexto }}
                                 onClick={() => handleRemoverPreferencias(preferencias)}
                                 className={style.item}
-                                key={preferencias}>
+                                key={preferencias.id}>
                                 {preferencias.nome}
                             </span>
                         ))}
@@ -52,7 +52,7 @@ function ModalPreferencias({ handleFecharModal, preferencias }) {
                                 style={{ backgroundColor: '#' + preferencias.corFundo, color: '#' + preferencias.corTexto }}
                                 onClick={() => handleSpanClick(preferencias)}
                                 className={style.item}
-                                key={preferencias}
+                                key={preferencias.id}
                             >
                                 {preferencias.nome}
                             </span>
