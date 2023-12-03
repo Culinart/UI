@@ -7,11 +7,6 @@ import { Bar } from "react-chartjs-2";
 function Grafico({ chartData }) {
 
     const options = {
-        layout: {
-            padding: {
-                top: 50 // Aumenta o espaço abaixo da legenda em 50px
-            }
-        },
         scales: {
             x: {
                 grid: {
@@ -37,7 +32,7 @@ function Grafico({ chartData }) {
 
     return (
         <>
-            <div className="flex flex-col items-center justify-center w-12/12 h-[40rem] p-16">
+            <div className="flex flex-col items-center justify-center w-full h-[40rem] p-16">
                 <div className="flex flex-col w-full mt-4">
                     <h1 className="text-[#045D53] text-lg">Atividade</h1>
                     <h1 className="text-[#045D53] text-xl font-bold mt-2">Assinatura de Usuários</h1>

@@ -12,7 +12,43 @@ import ReceitaMelhorAvaliada from "../../../components/Fornecedor/Dashboard/Rece
 import ReceitaPiorAvaliada from "../../../components/Fornecedor/Dashboard/ReceitaPiorAvaliada";
 import Grafico from "../../../components/Fornecedor/Dashboard/Grafico";
 
+import { MdOutlineFileDownload } from "react-icons/md";
+import api from "../../../api/api";
+
+import fileDownload from 'js-file-download';
+
+import fileSaver from 'file-saver'
+import fileContent from '../../../assets/Cliente/avaliacao.txt';
+
+import Swal from "sweetalert2";
+
 function Dashboard() {
+
+    const alertaErroDownload = () => {
+        Swal.fire({
+            icon: "error",
+            title: "<b>Não foi possível fazer o download!</b>",
+            text: "Tente novamente mais tarde!",
+            position: "center",
+        })
+    }
+
+    // Exportaçãp com API
+    const handleExportArquivoTxt = () => {
+
+        api.get('"C:\Users\calebe.reboucas\Documents\Bibliotecas padrões para os requirements.txt"', {
+            responseType: 'blob'
+        }).then((response) => {
+            console.log("entrei no .then do download do txt")
+            fileDownload(response.data, 'relatorio-avaliacoes.txt')
+        }).catch((error) => {
+            console.log("Erro na exportação do arquivo txt")
+            console.log('Status do erro: ' + error.response.status)
+            console.log(error.message)
+
+            alertaErroDownload()
+        })
+    }
 
     const [selectedOptionKpiEsquerda, setSelectedOptionKpiEsquerda] = useState("");
 
@@ -52,34 +88,38 @@ function Dashboard() {
                     <div className="flex w-11/12 h-auto items-center flex-col">
                         <div className={`${style.container_kpis} flex justify-between h-auto mt-1`}>
                             <div className={`${style.kpi_esquerda} bg-[#FFFFFF] drop-shadow-[0px_4px_4px_rgba(0,0,0,0.25)] rounded-md h-auto`}>
-                                <select
-                                    className={`${style.combobox_horario_entrega} flex text-xs font-light pl-4 pr-4 ml-4 mt-6`}
-                                    value={selectedOptionKpiEsquerda}
-                                    onChange={(e) => setSelectedOptionKpiEsquerda(e.target.value)}
-                                >
-                                    <option value="">--</option>
-                                    {opcoesKpiEsquerda.map((time, index) => (
-                                        <option key={index} value={time}>
-                                            {time}
-                                        </option>
-                                    ))}
-                                </select>
+                                <div className="flex w-full justify-center">
+                                    <div className="flex justify-between items-center w-11/12 mt-2">
+                                        <select
+                                            className={`${style.combobox_horario_entrega} flex text-xs font-light  mt-5`}
+                                            value={selectedOptionKpiEsquerda}
+                                            onChange={(e) => setSelectedOptionKpiEsquerda(e.target.value)}
+                                        >
+                                            <option value="">--</option>
+                                            {opcoesKpiEsquerda.map((time, index) => (
+                                                <option key={index} value={time}>
+                                                    {time}
+                                                </option>
+                                            ))}
+                                        </select>
+
+                                        <button onClick={handleExportArquivoTxt} className="flex justify-evenly items-center w-[23.5%] h-[1.7rem] mt-4 bg-[#C5C5C5] text-[#FFFFFF] text-[0.85rem] rounded-md hover:bg-[#2EC4B6] transition duration-200">
+                                            Baixar Avaliações
+                                            <MdOutlineFileDownload className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                </div>
                                 <div className="flex w-full justify-center mt-10">
                                     <div className={`${style.container_escolhidos} flex justify-between`}>
                                         <div className={`${style.width_escolhidos} flex flex-col items-center`}>
                                             <h1 className="text-base font-medium">Mais Escolhidos</h1>
                                             <TituloRankingCategoriaMaisEscolhidos />
                                             <MaisEscolhidaRank />
-                                            <MaisEscolhidaRank />
-                                            <MaisEscolhidaRank />
-                                            <MaisEscolhidaRank />
-                                            <MaisEscolhidaRank />
-                                            <MaisEscolhidaRank />
+
                                         </div>
                                         <div className={`${style.width_escolhidos} flex flex-col items-center`}>
                                             <h1 className="text-base font-medium">Menos Escolhidos</h1>
                                             <TituloRankingCategoriaMenosEscolhidos />
-                                            <MenosEscolhidaRank />
                                             <MenosEscolhidaRank />
                                         </div>
                                     </div>
@@ -117,16 +157,16 @@ function Dashboard() {
                                         <ReceitaMelhorAvaliada />
                                     </div>
                                 </div>
+                                <div className="w-full h-5" />
                             </div>
                         </div>
                         <div className={`${style.container_kpis} flex justify-center h-auto mt-12 bg-[#FFFFFF] drop-shadow-[0px_4px_4px_rgba(0,0,0,0.25)] rounded-2xl `}>
-                                        
                             <Grafico chartData={chartDataState} />
                         </div>
                     </div>
                 </div>
             </div>
-                <footer className="w-full h-12" />
+            <footer className="w-full h-12" />
         </>
     )
 }
