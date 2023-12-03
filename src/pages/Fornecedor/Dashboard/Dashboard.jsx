@@ -17,12 +17,11 @@ import api from "../../../api/api";
 
 import fileDownload from 'js-file-download';
 
-import fileSaver from 'file-saver'
-import fileContent from '../../../assets/Cliente/avaliacao.txt';
-
 import Swal from "sweetalert2";
 
 function Dashboard() {
+
+    const [categorias, setCategorias] = useState([]);
 
     const alertaErroDownload = () => {
         Swal.fire({
@@ -34,10 +33,15 @@ function Dashboard() {
     }
 
     // Exportaçãp com API
-    const handleExportArquivoTxt = () => {
+    const handleExportArquivoTxt = (e) => {
 
-        api.get('"C:\Users\calebe.reboucas\Documents\Bibliotecas padrões para os requirements.txt"', {
-            responseType: 'blob'
+        e.preventDefault()
+
+        api.get('avaliacoes/download/txt', {
+            responseType: 'blob',
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+            }
         }).then((response) => {
             console.log("entrei no .then do download do txt")
             fileDownload(response.data, 'relatorio-avaliacoes.txt')
@@ -47,6 +51,18 @@ function Dashboard() {
             console.log(error.message)
 
             alertaErroDownload()
+        })
+    }
+
+    const heandleCategorias = () => {
+        api.get('dashboard/categorias', {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+            }
+        }).then((response) => {
+            console.log("entrei no .then do tratamento das categorias")
+            console.log(response.data)
+            setCategorias(response.data)
         })
     }
 
@@ -107,6 +123,9 @@ function Dashboard() {
                                             Baixar Avaliações
                                             <MdOutlineFileDownload className="w-4 h-4" />
                                         </button>
+
+                                        <button onClick={heandleCategorias}>a</button>
+
                                     </div>
                                 </div>
                                 <div className="flex w-full justify-center mt-10">
@@ -115,7 +134,6 @@ function Dashboard() {
                                             <h1 className="text-base font-medium">Mais Escolhidos</h1>
                                             <TituloRankingCategoriaMaisEscolhidos />
                                             <MaisEscolhidaRank />
-
                                         </div>
                                         <div className={`${style.width_escolhidos} flex flex-col items-center`}>
                                             <h1 className="text-base font-medium">Menos Escolhidos</h1>
