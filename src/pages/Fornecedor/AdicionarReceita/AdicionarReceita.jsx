@@ -178,7 +178,7 @@ function AdicionarReceita() {
       <HeaderFornecedor />
       <section onSubmit={handleSubmit} className={style.body}>
         <div className={style.topo}>
-          <h1 className={style.titulo_pagina}>Adicionar Receita</h1>
+          <h1 className={`${style.titulo_pagina} mt-8 text-2xl`}>Adicionar Receita</h1>
           <div className={style.linha_horizontal} />
         </div>
         <div className={style.container_imagem_titulo}>
@@ -201,7 +201,7 @@ function AdicionarReceita() {
           </div>
           <div className={style.container_titulo_categoria}>
             <label>
-              <span>Titulo</span>
+              <span className=' text-base'>Titulo</span>
               <input
                 className={style.input_titulo}
                 value={receita.nome || ''}
@@ -212,7 +212,7 @@ function AdicionarReceita() {
               />
             </label>
             <label>
-              <span>Descrição</span>
+              <span className=' text-base'>Descrição</span>
               <textarea cols="30" rows="3"
                 value={receita.descricao || ''}
                 onChange={(e) => setReceita({
@@ -253,7 +253,7 @@ function AdicionarReceita() {
         <div className={style.container_medida_rendimento}>
           <div className={style.container_rendimento_tempo}>
             <div className={style.container_rendimento}>
-              <h1>Rendimento</h1>
+              <h1 className=' text-base'>Rendimento</h1>
               <div className={style.rendimento}>
                 <span>Ingredientes para render</span>
                 <input
@@ -268,7 +268,7 @@ function AdicionarReceita() {
               </div>
             </div>
             <div className={style.container_tempo}>
-              <h1>Tempo de preparo</h1>
+              <h1 className=' text-base'>Tempo de preparo</h1>
               <div className={style.tempo}>
                 <input
                   type='number'
@@ -293,9 +293,9 @@ function AdicionarReceita() {
           </div>
           <div className={style.unidade_medida}>
             <div className={style.titulos_medida}>
-              <h1 className={style.titulo_quantidade}>Quantidade</h1>
-              <h1 className={style.titulo_unidade}>Unidade</h1>
-              <h1 className={style.titulo_ingrediente}>Ingrediente</h1>
+              <h1 className={`${style.titulo_quantidade} text-base`}>Quantidade</h1>
+              <h1 className={`${style.titulo_unidade} text-base`}>Unidade</h1>
+              <h1 className={`${style.titulo_ingrediente} text-base`}>Ingrediente</h1>
             </div>
             {receita.ingredientes.map((ingrediente, index) => (
               <div className={style.inputs_medida} key={index}>
