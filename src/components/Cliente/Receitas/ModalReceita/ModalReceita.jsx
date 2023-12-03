@@ -43,6 +43,7 @@ function ModalReceita({ id, nome, ingredientes, rendimento, horas, minutos, qtdA
         })
             .then(response => {
                 console.log(response.data)
+                window.location.reload();
             })
             .catch(error => {
                 console.log(error);
