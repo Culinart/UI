@@ -5,13 +5,21 @@ import api from "../../../api/api";
 import Preferencia from "../../Cliente/Receitas/Preferencia";
 import style from './ItemReceita.module.css'
 import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import Swal from "sweetalert2";
 
-function ItemReceita({ id, nome, ingredientes, rendimento, preparo, horas, minutos, qtdAvaliacao, mediaAvaliacao, categoria, preferencia, imagem }) {
+function ItemReceita({ pedidoAtual, id, nome, ingredientes, rendimento, preparo, horas, minutos, qtdAvaliacao, mediaAvaliacao, categoria, preferencia, imagem }) {
+
+    const navigate = useNavigate();
 
     const [preferenciasDTO, setPreferenciaDTO] = useState(preferencia);
     const [categoriasDTO, setcategoriaDTO] = useState(categoria);
 
     const location = useLocation();
+
+    const navegarPedidos = () => {
+        navigate("/cliente/pedidos");
+    }
 
     const isPaginaReceitasCliente = location.pathname === '/cliente/receitas';
 
@@ -27,7 +35,33 @@ function ItemReceita({ id, nome, ingredientes, rendimento, preparo, horas, minut
         }
     }
 
-    
+    const adicionarReceitaPedido = () => {
+        const corpo = {
+            receita_id: id,
+            pedido_id: pedidoAtual.id
+        }
+        api
+            .post(`/pedidos/adicionar`, corpo, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
+                },
+            })
+            .then((response) => {
+                Swal.fire({
+                    title: "Receita adicionada ao pedido com sucesso!",
+                    confirmButtonColor: "#F29311",
+                });
+
+                setTimeout(() => {
+                    navegarPedidos();
+                }, 2000);
+
+               console.log(response)
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
 
     const excluirReceita = () => {
         api.delete(`/receitas/${id}`)
@@ -67,7 +101,7 @@ function ItemReceita({ id, nome, ingredientes, rendimento, preparo, horas, minut
             <div className={style.container_categorias}>
                 {Array.isArray(categoria) && categoria.map((categoria, index) => (
                     <span className={`${style.nome_categoria} mr-2 text-sm`} key={index}>
-                        {categoria.categoria.nome} | 
+                        {categoria.categoria.nome} |
                     </span>
                 ))}
             </div>
@@ -81,10 +115,20 @@ function ItemReceita({ id, nome, ingredientes, rendimento, preparo, horas, minut
                     <FaStar className="text-yellow-400 text-xl mr-2" />
                     <span className="text-sm">{mediaAvaliacao} ({qtdAvaliacao} Avaliações)</span>
                 </div>
-                {isPaginaReceitasCliente && (
-                    <button onClick={(e) => { e.stopPropagation() }}>
-                        <FaPlusCircle className="text-green-500 text-2xl hover:text-green-700" />
-                    </button>
+                {isPaginaReceitasCliente && pedidoAtual && Array.isArray(pedidoAtual.listaReceitas) && (
+                    pedidoAtual.listaReceitas.some((pedidoRecipe) => {
+                        return pedidoRecipe.id === id;
+                    }) ? (
+                        <FaCheckCircle
+                            className=" text-blue-400 text-2xl hover:text-blue-600 cursor-pointer z-30"
+                            onClick={navegarPedidos}
+                        />
+                    ) : (
+                        <FaPlusCircle
+                            className="text-green-500 text-2xl hover:text-green-700 cursor-pointer z-30"
+                            onClick={adicionarReceitaPedido}
+                        />
+                    )
                 )}
             </div>
             <div className="flex justify-end">

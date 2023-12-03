@@ -146,34 +146,6 @@ function Pedidos() {
             .catch((error) => {
                 console.log(error);
             });
-
-
-        // const response = {
-        //     data: [
-        //         {
-        //             "datasPedidos": "2023-11-11"
-        //         },
-        //         {
-        //             "datasPedidos": "2023-11-13"
-        //         },
-        //         {
-        //             "datasPedidos": "2023-11-17"
-        //         },
-        //         {
-        //             "datasPedidos": "2023-11-24"
-        //         },
-        //         {
-        //             "datasPedidos": "2023-12-02"
-        //         }
-        //     ]
-        // }
-
-        // setDatasPedidos(response.data);
-
-        // setDataPedidoAtual(response.data[response.data.length - 1].datasPedidos);
-
-        // buscarPedido();
-
     }
 
     const buscarPedido = () => {
@@ -197,92 +169,6 @@ function Pedidos() {
             .catch((error) => {
                 console.log(error);
             });
-
-
-        // const response = {
-        //     data:
-        //     {
-        //         "id": 12,
-        //         "valor": 150.0,
-        //         "dataEntrega": "2023-12-02",
-        //         "listaReceitas": [
-        //             {
-        //                 "id": 2,
-        //                 "nome": "Salada Caesar",
-        //                 "horas": 0,
-        //                 "minutos": 20,
-        //                 "qtd_porcoes": 4,
-        //                 "preferencias": [
-        //                     {
-        //                         "nome": "Low Calorie",
-        //                         "corFundo": "1C84FF",
-        //                         "corTexto": "FFFFFF"
-        //                     },
-        //                     {
-        //                         "nome": "Brasileira",
-        //                         "corFundo": "009739",
-        //                         "corTexto": "FFFFFF"
-        //                     },
-        //                     {
-        //                         "nome": "Portuguesa",
-        //                         "corFundo": "DA291C",
-        //                         "corTexto": "FFFFFF"
-        //                     }
-        //                 ],
-        //                 "categorias": [
-        //                     {
-        //                         "nome": "Vegano"
-        //                     },
-        //                     {
-        //                         "nome": "Rápido e Fácil"
-        //                     },
-        //                     {
-        //                         "nome": "Fit e Saudável"
-        //                     }
-        //                 ]
-        //             },
-        //             {
-        //                 "id": 4,
-        //                 "nome": "Sopa de Legumes",
-        //                 "horas": 0,
-        //                 "minutos": 45,
-        //                 "qtd_porcoes": 6,
-        //                 "preferencias": [
-        //                     {
-        //                         "nome": "Húngara",
-        //                         "corFundo": "477050",
-        //                         "corTexto": "FFFFFF"
-        //                     },
-        //                     {
-        //                         "nome": "Portuguesa",
-        //                         "corFundo": "DA291C",
-        //                         "corTexto": "FFFFFF"
-        //                     },
-        //                     {
-        //                         "nome": "Gourmet",
-        //                         "corFundo": "A4D3FF",
-        //                         "corTexto": "000000"
-        //                     }
-        //                 ],
-        //                 "categorias": [
-        //                     {
-        //                         "nome": "Vegetariano"
-        //                     },
-        //                     {
-        //                         "nome": "Vegano"
-        //                     },
-        //                     {
-        //                         "nome": "Rápido e Fácil"
-        //                     }
-        //                 ]
-        //             }
-        //         ]
-        //     }
-        // }
-
-        // setPedidoAtual(response.data);
-        // setReceitas(response.data.listaReceitas);
-
     }
 
     const handleDateNavigation = (direction) => {
@@ -300,6 +186,7 @@ function Pedidos() {
         const year = parsedDate.getFullYear();
         return `${day}/${month}/${year}`;
     };
+
 
     return (
         <>
@@ -376,6 +263,7 @@ function Pedidos() {
                                         setPedidoAtual={setPedidoAtual}
                                         idReceita={receita.id}
                                         statusPedido={pedidoAtual.status}
+                                        idPedido={pedidoAtual.id}
                                     />
                                 ))}
                             </div>

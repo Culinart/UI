@@ -5,7 +5,7 @@ import { FiTrash2 } from "react-icons/fi";
 import api from "../../../api/api";
 import Swal from "sweetalert2";
 
-function CardPedido({ nome, qtd_porcoes, preferencias, categorias, pedidoAtual, setPedidoAtual, idReceita, statusPedido }) {
+function CardPedido({ idPedido, nome, qtd_porcoes, preferencias, categorias, pedidoAtual, setPedidoAtual, idReceita, statusPedido }) {
 
     const handleRemoveRecipe = (recipeId) => {
 
@@ -39,6 +39,28 @@ function CardPedido({ nome, qtd_porcoes, preferencias, categorias, pedidoAtual, 
             });
     };
 
+    
+    const excluirReceitaPedido = () => {
+        api.delete(`/pedidos/deletar/${idReceita}/${idPedido}`, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+            }
+        })
+            .then((response) => {
+                Swal.fire({
+                    title: "Receita retirada do pedido com sucesso",
+                    confirmButtonColor: "#F29311",
+                });
+
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+
+            })
+            .catch((error) => {
+                console.log(error);
+            });  
+    }
 
     return (
         <div className="flex items-center flex-col w-10/12 h-auto bg-[#FFFFFF] drop-shadow-[0px_4px_4px_rgba(0,0,0,0.5)] rounded-xl border-solid border border-[#DADADA]">
@@ -58,7 +80,7 @@ function CardPedido({ nome, qtd_porcoes, preferencias, categorias, pedidoAtual, 
                     ))}
                 </div>
                 <div className="flex justify-end items-center w-full mt-2">
-                    {statusPedido == "ATIVO" ? <FiTrash2 className="cursor-pointer text-red-500 text-2xl mr-4" onClick={() => handleRemoveRecipe(idReceita)} /> : ""}
+                    {statusPedido == "ATIVO" ? <FiTrash2 className="cursor-pointer text-red-500 text-2xl mr-4" onClick={excluirReceitaPedido} /> : ""}
                 </div>
             </div>
             <div className="w-full h-5" />
