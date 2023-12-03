@@ -120,6 +120,7 @@ function PerfilInfoPessoalFornecedor() {
                         setInputEmail(response.data.email);
                         setInputTelefone(response.data.telefone);
                         setNome(response.data.nome);
+                        sessionStorage.setItem('nome', response.data.nome);
                         setEmail(response.data.email);
                         setTelefone(response.data.telefone);
                         Swal.fire({
