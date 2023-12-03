@@ -34,7 +34,7 @@ function Dashboard() {
     const [melhoresPreferencias, setMelhoresPreferencias] = useState([])
     const [pioresPreferencias, setPioresPreferencias] = useState([])
     const [dadosAssinaturas, setDadosAssinaturas] = useState([]);
-    const [selectedOptionKpiEsquerda, setSelectedOptionKpiEsquerda] = useState("Categorias");
+    const [selectedOptionKpiEsquerda, setSelectedOptionKpiEsquerda] = useState("Preferências");
     const [selectedOptionKpiDireita, setSelectedOptionKpiDireita] = useState("Melhor");
     const [chartDataState, setChartDataState] = useState(initialChartDataState);
 
@@ -239,12 +239,12 @@ function Dashboard() {
                                 <div className="flex w-full justify-center mt-10">
                                     <div className={`${style.container_escolhidos} flex justify-between`}>
                                         <div className={`${style.width_escolhidos} flex flex-col items-center`}>
-                                            <h1 className="text-base font-medium">Mais Escolhidos</h1>
+                                            <h1 className="text-base font-medium">Top 5 Mais Escolhidos</h1>
                                             <TituloRankingCategoriaMaisEscolhidos />
                                             {renderMelhoresRank()}
                                         </div>
                                         <div className={`${style.width_escolhidos} flex flex-col items-center`}>
-                                            <h1 className="text-base font-medium">Menos Escolhidos</h1>
+                                            <h1 className="text-base font-medium">Top 5 Menos Escolhidos</h1>
                                             <TituloRankingCategoriaMenosEscolhidos />
                                             {renderPioresRank()}
                                         </div>
