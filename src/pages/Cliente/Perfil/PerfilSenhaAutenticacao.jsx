@@ -47,7 +47,7 @@ function PerfilSenhaAutenticacao() {
           senha: values.senhaNova,
         };
         api
-          .put(`/usuarios/senha/${sessionStorage.getItem("idUsuario")}`, corpoRequisicao, {
+          .patch(`/usuarios/senhas/${sessionStorage.getItem("idUsuario")}`, corpoRequisicao, {
             headers: {
               Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
             },
