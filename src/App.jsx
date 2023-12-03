@@ -21,6 +21,7 @@ import MeuPlano from './pages/Cliente/MeuPlano.jsx';
 import PerfilInfoPessoalFornecedor from './pages/Fornecedor/Perfil/PerfilFornecedor.jsx';
 import PerfilSenhaAutenticacaoFornecedor from './pages/Fornecedor/Perfil/PerfilSenhaAutenticacaoFornecedor.jsx';
 import Precos from './pages/Fornecedor/Precos.jsx'
+import Dashboard from './pages/Fornecedor/Dashboard/Dashboard.jsx'
 import PedidosFornecedor from './pages/Fornecedor/Pedidos/Pedidos.jsx';
 
 import { ToastContainer } from 'react-toastify';
@@ -71,6 +72,7 @@ function App() {
           <Route path="/fornecedor/editar-receita/:id" element={<EditarReceita />} />
           <Route path="/fornecedor/pedidos" element={<PedidosFornecedor />} />
           <Route path="/fornecedor/precos" element={<Precos />} />
+          <Route path="/fornecedor/dashboard" element={<Dashboard />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
