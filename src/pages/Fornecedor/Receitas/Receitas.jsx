@@ -46,7 +46,7 @@ function ReceitasFornecedor() {
     return (
         <>
             <HeaderFornecedor />
-            <div className="items-center justify-center w-full flex mt-10 flex flex-col">
+            <div className="items-center justify-center w-full mt-10 flex flex-col">
                 <div className="pb-3 items-end justify-between w-4/5 flex border-b border-gray-300 ">
                     <div>
                         <h1 className="text-2xl text-[#045D53] mb-4">Você faz parte disso!</h1>
