@@ -54,6 +54,34 @@ function ModalReceita({ id, nome, ingredientes, rendimento, horas, minutos, qtdA
         fecharModal();
     }
 
+    const formatarEnum = (enumValue) => {
+        switch (enumValue) {
+            case 'LITRO':
+                return 'Litros de';
+            case 'KILO':
+                return 'Quilos';
+            case 'GRAMA':
+                return 'Gramas de';
+            case 'MILIGRAMA':
+                return 'Miligramas de';
+            case 'MILILITRO':
+                return 'Mililitros de';
+            case 'XICARA':
+                return 'Xícaras de';
+            case 'SEM_UNIDADE':
+                return '';
+            case 'COLHER_SOPA':
+                return 'Colheres de Sopa de';
+            case 'COLHER_CHA':
+                return 'Colheres de Chá de';
+            case 'UNIDADE':
+                return 'Unidades de';
+            default:
+                return '';
+        }
+    };
+
+
     return (
         <>
             <div className={style.body}>
@@ -85,7 +113,7 @@ function ModalReceita({ id, nome, ingredientes, rendimento, horas, minutos, qtdA
                             {listaIngredientes.map((ingrediente) => (
                                 <li key={ingrediente.id}>
                                     {ingrediente.quantidade} <span> </span>
-                                    {ingrediente.unidadeMedidaEnum} <span> </span>
+                                    {formatarEnum(ingrediente.unidadeMedidaEnum)} <span> </span>
                                     {ingrediente.nome} <span> </span>
                                 </li>
                             ))}
