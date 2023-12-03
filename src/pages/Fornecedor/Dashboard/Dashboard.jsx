@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import style from "./Dashboard.module.css"
-
 import HeaderFornecedor from "../../../components/Fornecedor/HeaderFornecedor/HeaderFornecedor";
 import TituloRankingCategoriaMaisEscolhidos from "../../../components/Fornecedor/Dashboard/TituloRankingCategoriaMaisEscolhidos";
 import TituloRankingCategoriaMenosEscolhidos from "../../../components/Fornecedor/Dashboard/TituloRankingCategoriaMenosEscolhidos";
@@ -11,13 +10,19 @@ import TituloRankingPioresReceita from "../../../components/Fornecedor/Dashboard
 import ReceitaMelhorAvaliada from "../../../components/Fornecedor/Dashboard/ReceitaMelhorAvaliada";
 import ReceitaPiorAvaliada from "../../../components/Fornecedor/Dashboard/ReceitaPiorAvaliada";
 import Grafico from "../../../components/Fornecedor/Dashboard/Grafico";
-
 import { MdOutlineFileDownload } from "react-icons/md";
 import api from "../../../api/api";
-
 import fileDownload from 'js-file-download';
-
 import Swal from "sweetalert2";
+
+const initialChartDataState = {
+    labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+    datasets: [{
+        label: 'Quantidade de usuários',
+        data: Array(12).fill(0),
+        backgroundColor: '#2EC4B6',
+    }]
+};
 
 function Dashboard() {
 
@@ -28,12 +33,55 @@ function Dashboard() {
     const [pioresCategorias, setPioresCategorias] = useState([])
     const [melhoresPreferencias, setMelhoresPreferencias] = useState([])
     const [pioresPreferencias, setPioresPreferencias] = useState([])
+    const [dadosAssinaturas, setDadosAssinaturas] = useState([]);
+    const [selectedOptionKpiEsquerda, setSelectedOptionKpiEsquerda] = useState("Categorias");
+    const [selectedOptionKpiDireita, setSelectedOptionKpiDireita] = useState("Melhor");
+    const [chartDataState, setChartDataState] = useState(initialChartDataState);
+
+    const opcoesKpiEsquerda = [
+        "Categorias", "Preferências"
+    ];
+    const opcoesKpiDireita = [
+        "Melhor", "Pior"
+    ];
 
     useEffect(() => {
         getAvaliacoes();
         getCategorias();
         getPreferencias();
+        getDadosAssinaturas();
     }, []);
+
+
+    const getDadosAssinaturas = () => {
+        api.get('dashboard', {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+            }
+        }).then((response) => {
+            const assinaturas = response.data;
+
+            assinaturas.forEach((assinatura) => {
+                const monthIndex = chartDataState.labels.indexOf(assinatura.mes); 
+                if (monthIndex !== -1) {
+                    setChartDataState((prevChartDataState) => {
+                        const newData = [...prevChartDataState.datasets[0].data];
+                        newData[monthIndex] = assinatura.qtd_usuarios;
+                        return {
+                            ...prevChartDataState,
+                            datasets: [{ ...prevChartDataState.datasets[0], data: newData }],
+                        };
+                    });
+                }
+            });
+
+            console.log("DADOS DE ASSINATURAS:", response.data);
+        }).catch((error) => {
+            console.log('Status do erro: ' + error.response.status);
+            console.log(error.message);
+        });
+    };
+    
 
     const getPreferencias = () => {
         api.get('dashboard/preferencias', {
@@ -143,36 +191,6 @@ function Dashboard() {
             setPioresCategorias(pioresPreferencias);
         }
     };
-
-    const [selectedOptionKpiEsquerda, setSelectedOptionKpiEsquerda] = useState("Categorias");
-
-    const opcoesKpiEsquerda = [
-        "Categorias", "Preferências"
-    ];
-
-    const [selectedOptionKpiDireita, setSelectedOptionKpiDireita] = useState("Melhor");
-
-    const opcoesKpiDireita = [
-        "Melhor", "Pior"
-    ];
-
-    const chartData = {
-        labels: ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'NOV', 'DEZ'],
-        datasets: [{
-            label: 'Clientes Inativos',
-            data: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120],
-            backgroundColor: '#FF9F1C',
-        },
-        {
-            label: 'Clientes  Ativos',
-            data: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120],
-            backgroundColor: '#2EC4B6',
-        }]
-    };
-
-    console.log(chartData.datasets)
-
-    const [chartDataState, setChartDataState] = useState(chartData)
 
     const renderMelhoresRank = () => {
         if (selectedOptionKpiEsquerda === 'Categorias') {

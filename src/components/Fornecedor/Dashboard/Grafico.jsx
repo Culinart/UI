@@ -23,7 +23,7 @@ function Grafico({ chartData }) {
                 ticks: {
                     color: '#045D53',
                     callback: function (value, index, values) {
-                        return value + "K";
+                        return value ;
                     }
                 }
             }
