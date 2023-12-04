@@ -10,6 +10,7 @@ import { FiCheck } from "react-icons/fi";
 import { FiPlus } from "react-icons/fi";
 import Preferencia from "../../../components/Cliente/Receitas/Preferencia";
 import receitaDefault from '../../../assets/Receitas/receita-default.jpeg';
+import AlertaClienteInativo from "../../../components/Cliente/AlertaClienteInativo";
 
 
 function ReceitasFornecedor() {
@@ -22,6 +23,7 @@ function ReceitasFornecedor() {
   const [isPesquisando, setIsPesquisando] = useState(false);
   const [dataPedido, setDataPedido] = useState("");
   const [pedidoAtual, setPedidoAtual] = useState([]);
+  const [permissao, setPermissao] = useState(sessionStorage.getItem('permissao'));
 
   const [modalAberto, setModalAberto] = useState(false);
 
@@ -122,8 +124,8 @@ function ReceitasFornecedor() {
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
                 responseType: 'arraybuffer'
               }
-            });          
-            if(imagemResponse.status == 204){
+            });
+            if (imagemResponse.status == 204) {
               receita.imagem = receitaDefault;
               return receita;
             }
@@ -141,7 +143,7 @@ function ReceitasFornecedor() {
             }
           }
         });
-  
+
         Promise.all(promises)
           .then((receitasComImagens) => {
             setReceitas(receitasComImagens);
@@ -161,7 +163,7 @@ function ReceitasFornecedor() {
       buscarReceitas();
       return;
     }
-  
+
     api.get(`/buscar?termo=${termo}`, {
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
@@ -176,8 +178,8 @@ function ReceitasFornecedor() {
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
                 responseType: 'arraybuffer'
               }
-            });          
-            if(imagemResponse.status == 204){
+            });
+            if (imagemResponse.status == 204) {
               receita.imagem = receitaDefault;
               return receita;
             }
@@ -195,7 +197,7 @@ function ReceitasFornecedor() {
             }
           }
         });
-  
+
         Promise.all(promises)
           .then((receitasComImagens) => {
             setReceitas(receitasComImagens);
@@ -212,7 +214,7 @@ function ReceitasFornecedor() {
   const handleBusca = (event) => {
     const novoTermo = event.target.value;
     setTermoBusca(novoTermo);
-  
+
     if (novoTermo.trim() !== "") {
       setIsPesquisando(true);
       buscarReceitasPorTermo(novoTermo);
@@ -230,6 +232,7 @@ function ReceitasFornecedor() {
   return (
     <>
       <HeaderCliente />
+      <AlertaClienteInativo permissao={permissao} />
       <div className="items-center justify-center w-full mt-10 flex flex-col">
         <div className="pb-3 items-end justify-between w-4/5 flex border-b border-gray-300 ">
           <div>

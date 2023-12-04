@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import api from "../../api/api";
 import Swal from "sweetalert2";
 import ModalAvaliarReceitas from "../../components/Cliente/Pedido/ModalAvaliarReceitas";
+import AlertaClienteInativo from "../../components/Cliente/AlertaClienteInativo";
 
 
 function Pedidos() {
@@ -26,6 +27,7 @@ function Pedidos() {
     const [dataPedidoAtual, setDataPedidoAtual] = useState("");
     const [pedidoAtual, setPedidoAtual] = useState([]);
     const [receitas, setReceitas] = useState([]);
+    const [permissao, setPermissao] = useState(sessionStorage.getItem('permissao'));
 
     const navigateToPage = (path) => {
         navigate(path);
@@ -192,6 +194,7 @@ function Pedidos() {
     return (
         <>
             <HeaderCliente />
+            <AlertaClienteInativo permissao={permissao} />
             <div className="flex justify-center w-full h-full mt-14">
                 <div className="flex flex-col items-center justify-center w-full h-full">
                     <div className="items-center justify-center w-4/5 flex border-b border-gray-300">
