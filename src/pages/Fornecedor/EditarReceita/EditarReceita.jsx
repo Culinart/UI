@@ -302,6 +302,7 @@ function EditarReceita() {
                                         ...receita,
                                         qtdPorcoes: e.target.value
                                     })}
+                                    min={0}
                                 />
                                 <span>porções</span>
                             </div>
@@ -317,6 +318,7 @@ function EditarReceita() {
                                         ...receita,
                                         horas: e.target.value
                                     })}
+                                    min={0}
                                 />
                                 <span>Hora(s) e</span>
                                 <input
@@ -327,6 +329,7 @@ function EditarReceita() {
                                         ...receita,
                                         minutos: e.target.value,
                                     })}
+                                    min={0}
                                 />
                                 <span>Minuto(s)</span>
                             </div>
@@ -345,13 +348,15 @@ function EditarReceita() {
                                     value={ingrediente.quantidade || ''}
                                     className={style.input_quantidade}
                                     onChange={(e) => handleInputChange(index, 'quantidade', e.target.value, 'ingredientes')}
+                                    min={0}
                                 />
                                 <select
                                     name="select"
-                                    value={ingrediente.unidadeMedidaEnum || ''}
+                                    defaultValue={ingrediente.unidadeMedidaEnum || ''}
                                     className={style.input_unidade}
                                     onChange={(e) => handleInputChange(index, 'unidade', e.target.value, 'ingredientes')}
                                 >
+                                    <option value="">--</option>
                                     <option value="UNIDADE">Unidade</option>
                                     <option value="LITRO">Litro</option>
                                     <option value="KILO">Kilo</option>

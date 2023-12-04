@@ -263,6 +263,7 @@ function AdicionarReceita() {
                     ...receita,
                     rendimento: e.target.value
                   })}
+                  min={0}
                 />
                 <span>porções</span>
               </div>
@@ -277,6 +278,7 @@ function AdicionarReceita() {
                     ...receita,
                     horas: e.target.value
                   })}
+                  min={0}
                 />
                 <span>Hora(s) e</span>
                 <input
@@ -286,6 +288,7 @@ function AdicionarReceita() {
                     ...receita,
                     minutos: e.target.value,
                   })}
+                  min={0}
                 />
                 <span>Minuto(s)</span>
               </div>
@@ -304,6 +307,7 @@ function AdicionarReceita() {
                   value={ingrediente.quantidade || ''}
                   className={style.input_quantidade}
                   onChange={(e) => handleInputChange(index, 'quantidade', e.target.value, 'ingredientes')}
+                  min={0}
                 />
                 <select
                   name="select"
@@ -311,6 +315,7 @@ function AdicionarReceita() {
                   className={style.input_unidade}
                   onChange={(e) => handleInputChange(index, 'unidadeMedidaEnum', e.target.value, 'ingredientes')}
                 >
+                  <option value="">--</option>
                   <option value="UNIDADE">Unidade</option>
                   <option value="LITRO">Litro</option>
                   <option value="KILO">Kilo</option>
