@@ -110,8 +110,10 @@ function Endereco() {
                 }
             })
             .then((response) => {
-                console.log("Usuário já possui endereço cadastrado: ", response);
-                navigate('/cadastro/plano');
+                if(response.status == 200) {
+                    console.log("Usuário já possui endereço cadastrado: ", response);
+                    navigate('/cadastro/plano');
+                }
             })
             .catch((erro) => {
                 console.log("Usuário ainda não possui um endereço. ", erro);
