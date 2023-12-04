@@ -8,6 +8,8 @@ import Plano from './pages/Institucional/Cadastro/Plano.jsx';
 import Checkout from './pages/Institucional/Cadastro/Checkout.jsx';
 import Pedidos from './pages/Cliente/Pedidos.jsx';
 import ComoFunciona from './pages/Institucional/ComoFunciona/ComoFunciona.jsx';
+import Funcionarios from './pages/Fornecedor/Funcionarios/Funcionarios.jsx';
+
 import Login from './pages/Institucional/Login/Login.jsx';
 import RedefinirSenha from './pages/Institucional/Login/RedefinirSenha.jsx';
 import ReceitasCliente from './pages/Cliente/Receitas/Receitas.jsx';
@@ -30,6 +32,7 @@ import ReceitasFornecedor from './pages/Fornecedor/Receitas/Receitas.jsx';
 import AdicionarReceita from './pages/Fornecedor/AdicionarReceita/AdicionarReceita.jsx';
 import EditarReceita from './pages/Fornecedor/EditarReceita/EditarReceita.jsx';
 import LoginFuncionario from './pages/Fornecedor/LoginFuncionario.jsx';
+
 
 function App() {
 
@@ -55,6 +58,7 @@ function App() {
           <Route path="/cadastro/plano" element={<Plano />} />
           <Route path="/cadastro/checkout" element={<Checkout />} />
           <Route path="/como-funciona" element={<ComoFunciona />} />
+          <Route path="/fornecedor/funcionarios" element={<Funcionarios />} />
           <Route path="/login" element={<Login />} />
           <Route path="/redefinir-senha" element={<RedefinirSenha />} />
           <Route path="/cliente/pedidos" element={<Pedidos />} />
