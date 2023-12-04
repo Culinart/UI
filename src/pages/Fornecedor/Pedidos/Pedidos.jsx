@@ -41,8 +41,7 @@ function PedidosFornecedor() {
         <>
             <HeaderFornecedor />
             <div className={style.container_topo}>
-                <span>Entrega das próximas duas semanas</span>
-                <span>Próxima entrega - Sexta-feira, 4 de Agosto</span>
+                <span className={`${style.posicaoTexto} text-2xl text-[#045D53] `}>Entrega das próximas semanas</span>
             </div>
             <div className={style.container_pedidos}>
                 {pedidos.length > 0 ? (

@@ -58,7 +58,6 @@ function App() {
           <Route path="/cadastro/plano" element={<Plano />} />
           <Route path="/cadastro/checkout" element={<Checkout />} />
           <Route path="/como-funciona" element={<ComoFunciona />} />
-          <Route path="/fornecedor/funcionarios" element={<Funcionarios />} />
           <Route path="/login" element={<Login />} />
           <Route path="/redefinir-senha" element={<RedefinirSenha />} />
           <Route path="/cliente/pedidos" element={<Pedidos />} />
@@ -78,6 +77,7 @@ function App() {
           <Route path="/fornecedor/pedidos" element={<PedidosFornecedor />} />
           <Route path="/fornecedor/precos" element={<Precos />} />
           <Route path="/fornecedor/dashboard" element={<Dashboard />} />
+          <Route path="/fornecedor/funcionarios" element={<Funcionarios />} />
           <Route path="/login/funcionario" element={<LoginFuncionario />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
