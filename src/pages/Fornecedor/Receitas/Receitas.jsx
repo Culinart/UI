@@ -5,6 +5,8 @@ import { FiEdit } from "react-icons/fi";
 import ItemReceita from "../../../components/Fornecedor/ItemReceita/ItemReceita";
 import api from "../../../api/api";
 import style from './Receitas.module.css';
+import receitaDefault from '../../../assets/Receitas/receita-default.jpeg';
+
 
 function ReceitasFornecedor() {
     const [preferencias, setPreferencias] = useState([]);
@@ -96,6 +98,7 @@ function ReceitasFornecedor() {
                   receita.imagem = receitaDefault;
                   return receita;
                 }
+                
                 receita.imagem = "data:image/jpeg;base64," + imagemResponse.data;
                 return receita;
     
