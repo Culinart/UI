@@ -111,7 +111,7 @@ function Endereco() {
             })
             .then((response) => {
                 console.log("Usuário já possui endereço cadastrado: ", response);
-                // navigate('/cadastro/plano');
+                navigate('/cadastro/plano');
             })
             .catch((erro) => {
                 console.log("Usuário ainda não possui um endereço. ", erro);
