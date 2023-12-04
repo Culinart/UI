@@ -27,7 +27,7 @@ function HeaderFornecedor() {
                             <img src={receitas} alt="Icone de receitas" />
                             <span>Receitas</span>
                         </a>
-                        <a href="/" className={style.item}>
+                        <a href="/fornecedor/funcionarios" className={style.item}>
                             <img src={funcionarios} alt="Icone meu plano" />
                             <span>Funcionários</span>
                         </a>
