@@ -19,29 +19,127 @@ function ReceitasFornecedor() {
     }
 
     useEffect(() => {
-        buscarreceitass();
+        buscarReceitas();
     }, []);
 
-    const buscarreceitass = () => {
+    const buscarReceitas = () => {
         api.get('/receitas', {
-            headers: {
-                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
-            }
-        }).then((response) => {
-            setReceitas(response.data);
-            console.log(response.data)
-        }).catch((error) => {
-            console.log(error);
-        });
-    }
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+          }
+        })
+          .then((response) => {
+            const promises = response.data.map(async (receita) => {
+              try {
+                const idReceita = receita.id;
+                const imagemResponse = await api.get(`/receitas/imagem/${idReceita}`, {
+                  headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
+                    responseType: 'arraybuffer'
+                  }
+                });
+                if (imagemResponse.status == 204) {
+                  receita.imagem = receitaDefault;
+                  return receita;
+                }
+                receita.imagem = "data:image/jpeg;base64," + imagemResponse.data;
+                return receita;
+    
+              } catch (error) {
+                if (error.response && error.response.status === 404) {
+                  // Se a imagem não for encontrada, atribua a imagem padrão
+                  receita.imagem = receitaDefault;
+                  return receita;
+                } else {
+                  console.error(`Erro ao processar imagem da receita ${receita.id}`, error);
+                  return receita;
+                }
+              }
+            });
+    
+            Promise.all(promises)
+              .then((receitasComImagens) => {
+                setReceitas(receitasComImagens);
+              })
+              .catch((error) => {
+                console.error("Erro ao processar promessas", error);
+              });
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+    
+      const buscarReceitasPorTermo = (termo) => {
+        if (termo.trim() === "") {
+          // Se o termo estiver vazio, retorne todas as receitas
+          buscarReceitas();
+          return;
+        }
+    
+        api.get(`/buscar?termo=${termo}`, {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+          }
+        })
+          .then((response) => {
+            const promises = response.data.map(async (receita) => {
+              try {
+                const idReceita = receita.id;
+                const imagemResponse = await api.get(`/receitas/imagem/${idReceita}`, {
+                  headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
+                    responseType: 'arraybuffer'
+                  }
+                });
+                if (imagemResponse.status == 204) {
+                  receita.imagem = receitaDefault;
+                  return receita;
+                }
+                receita.imagem = "data:image/jpeg;base64," + imagemResponse.data;
+                return receita;
+    
+              } catch (error) {
+                if (error.response && error.response.status === 404) {
+                  // Se a imagem não for encontrada, atribua a imagem padrão
+                  receita.imagem = receitaDefault;
+                  return receita;
+                } else {
+                  console.error(`Erro ao processar imagem da receita ${receita.id}`, error);
+                  return receita;
+                }
+              }
+            });
+    
+            Promise.all(promises)
+              .then((receitasComImagens) => {
+                setReceitas(receitasComImagens);
+              })
+              .catch((error) => {
+                console.error("Erro ao processar promessas", error);
+              });
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      };
 
-    const handleBusca = (event) => {
-        setTermoBusca(event.target.value);
-    };
-
-    const receitasFiltradas = receitas.filter((receita) => {
+      const handleBusca = (event) => {
+        const novoTermo = event.target.value;
+        setTermoBusca(novoTermo);
+    
+        if (novoTermo.trim() !== "") {
+          setIsPesquisando(true);
+          buscarReceitasPorTermo(novoTermo);
+        } else {
+          setIsPesquisando(false);
+          buscarReceitas();
+        }
+      };
+    
+      const receitasFiltradas = receitas.filter((receita) => {
         return receita.nome.toLowerCase().includes(termoBusca.toLowerCase());
-    });
+      });
 
     return (
         <>
