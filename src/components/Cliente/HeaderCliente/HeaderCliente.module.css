@@ -20,13 +20,13 @@
 }
 
 .itens_esquerda {
-    width: 30%;
+    width: 35%;
     display: flex;
     justify-content: space-between;
 }
 
 .itens_direita {
-    width: 30%;
+    width: 35%;
     display: flex;
     justify-content: space-between;
     align-items: center;
