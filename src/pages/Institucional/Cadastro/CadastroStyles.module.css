@@ -160,3 +160,13 @@
     font-weight: 600;
     margin-top: 1.4rem;
 }
+
+.btnCadastroCancelar {
+    width: 8rem;
+    height: 2.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    color: white;
+    font-weight: 600;
+    margin-top: 1.4rem;
+}

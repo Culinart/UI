@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -37,6 +37,10 @@ function Endereco() {
     const [inputNumero, setInputNumero] = useState("");
     const [inputComplemento, setInputComplemento] = useState("");
 
+    useEffect(() => {
+        buscarEnderecoUsuario();
+    }, []);
+
     const estados = [
         "AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA", "MG", "MS", "MT",
         "PA", "PB", "PE", "PI", "PR", "RJ", "RN", "RO", "RR", "RS", "SC", "SE", "SP", "TO"
@@ -58,29 +62,18 @@ function Endereco() {
     };
 
     function cadastrarEndereco() {
-
-        const corpoRequisicao = {
-            cep: inputCep,
-            estado: inputEstado,
-            cidade: inputCidade,
-            bairro: inputBairro,
-            logradouro: inputLogradouro,
-            numero: inputNumero,
-            complemento: inputComplemento
-        };
-        console.log(corpoRequisicao);
         api
-            .post(`/${sessionStorage.getItem('idUsuario')}`, corpoRequisicao, {
+            .post(`/enderecos/${sessionStorage.getItem('idUsuario')}?cep=${inputCep}&numero=${inputNumero}&complemento=${inputComplemento}`, null, {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
                 }
             })
             .then((response) => {
-                console.log("Resposta", response);
+                console.log("Resposta: ", response);
                 navigate('/cadastro/plano');
             })
             .catch((erro) => {
-                console.log("Erro", erro);
+                console.log("Erro: ", erro);
             });
     }
 
@@ -109,6 +102,24 @@ function Endereco() {
             });
     }
 
+    const buscarEnderecoUsuario = () => {
+        api
+            .get(`/enderecos/usuarios/${sessionStorage.getItem("idUsuario")}`, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+                }
+            })
+            .then((response) => {
+                if(response.status == 200) {
+                    console.log("Usuário já possui endereço cadastrado: ", response);
+                    navigate('/cadastro/plano');
+                }
+            })
+            .catch((erro) => {
+                console.log("Usuário ainda não possui um endereço. ", erro);
+            });
+    }
+    
     return (
         <>
             <div className="flex flex-col h-screen">

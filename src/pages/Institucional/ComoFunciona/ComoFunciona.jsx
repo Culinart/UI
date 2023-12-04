@@ -1,6 +1,7 @@
 import React from "react"
 import style from "./ComoFunciona.module.css";
 import Header from "../../../components/Institucional/Header/Header";
+import { useNavigate } from 'react-router-dom';
 
 import duvida from "../../../assets/como-funciona/duvida.svg";
 import refeicoes from "../../../assets/como-funciona/refeicoes.svg";
@@ -11,6 +12,12 @@ import comendo from "../../../assets/como-funciona/aproveitando-refeicao.svg";
 import Footer from "../../../components/Cliente/Footer/Footer";
 
 function ComoFunciona() {
+
+    const navigate = useNavigate()
+
+    const cadastro = () => {
+        navigate('/cadastro/info-pessoal')
+    }
 
     return (
         <>
@@ -73,7 +80,7 @@ function ComoFunciona() {
                         <p>
                             Uma das principais vantagens dos kits de refeição é a variedade de receitas disponíveis. Os kits oferecem uma ampla gama de opções, desde pratos tradicionais até receitas mais exóticas. Isso torna possível experimentar novos sabores e pratos sem ter que planejar ou comprar os ingredientes.
                         </p>
-                        <button>Faça parte disso!</button>
+                        <button onClick={cadastro}>Faça parte disso!</button>
                     </div>
                 </section>
             </body>

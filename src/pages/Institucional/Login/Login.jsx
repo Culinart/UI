@@ -44,7 +44,7 @@ function Login() {
         Swal.fire({
             icon: "error",
             title: "<b>Acesso Negado!</b>",
-            text: "Ocorreu um erro interno!",
+            text: "Verifique suas informações e tente novamente",
             position: "center",
         })
     }
@@ -68,18 +68,15 @@ function Login() {
                     console.log("Entrei na validação de status do .then -> Login")
 
                     sessionStorage.setItem('authToken', response.data.token);
-                    sessionStorage.setItem('nome', response.data.nome)
-                    sessionStorage.setItem('idUsuario', response.data.userID)
-                    sessionStorage.setItem('emailUsuario', response.data.email)
-
-                    console.log("Token gerado: " + response.data.token)
-                    console.log("Nome do usuario: " + response.data.nome)
-                    console.log("ID Usuário: " + response.data.userID)
-                    console.log("EMail usuário: " + response.data.email)
+                    sessionStorage.setItem('nome', response.data.nome);
+                    sessionStorage.setItem('idUsuario', response.data.userID);
+                    sessionStorage.setItem('emailUsuario', response.data.email);
+                    sessionStorage.setItem('permissao', response.data.permissao);
+                    sessionStorage.setItem('isAtivo', response.data.isAtivo);
 
                     console.log(response.data);
 
-                    navigate('/cliente/pedidos');
+                    verificarPermissao();
 
                     toast.success('Login realizado com sucesso!');
                 }
@@ -98,6 +95,10 @@ function Login() {
                     alertaErroInterno()
                 }
             })
+    }
+
+    const verificarPermissao = () => {
+        navigate('/cliente/perfil/info-pessoal');
     }
 
     return (
@@ -141,7 +142,8 @@ function Login() {
                             </div>
                             <span><input type="checkbox" /> Mantenha-me conectado</span>
                             <button type="submit" onClick={login}>Entrar</button>
-                            <a href="" className={styles.esqueci_senha}>Esqueci minha senha</a>
+                            {/* <a href="/redefinir-senha" className={styles.esqueci_senha}>Esqueci minha senha</a> */}
+                            <a href="/login/funcionario" className={styles.esqueci_senha}>Login de Colaborador</a>
                             <div className={styles.container_ou}>
                                 <div className={styles.linha} />
                                 <h1>ou</h1>
