@@ -2,12 +2,11 @@ import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import CadastroPassos from "../../../components/Institucional/Cadastro/CadastroPassos";
 import imgCadastro from "../../../assets/Institucional/Cadastro/imgCadastro.svg";
 import Header from "../../../components/Institucional/Header/Header";
 import api from "../../../api/api";
 import styles from "./CadastroStyles.module.css";
-
+import Swal from "sweetalert2";
 
 const validationSchema = Yup.object().shape({
   nome: Yup.string()
@@ -29,6 +28,9 @@ const validationSchema = Yup.object().shape({
   senhaConfirmacao: Yup.string()
     .oneOf([Yup.ref("senha"), null], "Senhas não coincidem")
     .required("Confirme a sua senha"),
+  cpf: Yup.string()
+    .matches(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, "Insira um CPF válido")
+    .required("Insira o seu CPF"),
 });
 
 function InformacoesPessoais() {
@@ -40,6 +42,7 @@ function InformacoesPessoais() {
   const [inputTelefone, setInputTelefone] = useState("");
   const [inputSenha, setInputSenha] = useState("");
   const [inputSenhaConfirmacao, setInputSenhaConfirmacao] = useState("");
+  const [inputCPF, setInputCPF] = useState("");
 
   const handleTelefoneChange = (event) => {
     const inputTelefone = event.target.value.replace(/\D/g, '');
@@ -60,23 +63,59 @@ function InformacoesPessoais() {
     }
   };
 
-  function cadastrarUsuario() {
+  const handleCPFChange = (event) => {
+    const inputCPF = event.target.value.replace(/\D/g, "");
+    let cpfFormatado = "";
+
+    if (inputCPF.length > 0) {
+      cpfFormatado = `${inputCPF.slice(0, 3)}.`;
+
+      if (inputCPF.length > 3) {
+        cpfFormatado += `${inputCPF.slice(3, 6)}.`;
+
+        if (inputCPF.length > 6) {
+          cpfFormatado += `${inputCPF.slice(6, 9)}-`;
+
+          if (inputCPF.length > 9) {
+            cpfFormatado += `${inputCPF.slice(9, 11)}`;
+          }
+        }
+      }
+
+      setInputCPF(cpfFormatado);
+    }
+  };
+
+  function cadastrarUsuario(values) {
+    const cpfNumerico = inputCPF.replace(/\D/g, "");
     const telefoneNumerico = inputTelefone.replace(/\D/g, "");
 
     const corpoRequisicao = {
-      nome: inputNome,
-      email: inputEmail,
+      nome: values.nome,
+      email: values.email,
+      cpf: cpfNumerico,
       telefone: telefoneNumerico,
-      senha: inputSenha,
+      senha: values.senha,
     };
-    console.log(corpoRequisicao);
-    navigate('/cadastro/endereco');
+
+    api
+      .post(`/usuarios/cadastro`, corpoRequisicao)
+      .then((response) => {
+        console.log("Resposta", response);
+        navigate('/login');
+      })
+      .catch((erro) => {
+        Swal.fire({
+          title: "Cadastro inválido ou já existente. Por favor tente novamente.",
+          confirmButtonColor: "#F29311",
+      });
+        console.log("Erro", erro);
+      });
   }
 
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <CadastroPassos corEndereco="#AEBDBC" corPlano="#AEBDBC" corCheckout="#AEBDBC" />
       <div className={`bg ${styles.bg}`}>
         <div className={`card ${styles.card} flex p-4`}>
           <div className="flex flex-col w-full max-w-md mx-auto">
@@ -85,6 +124,7 @@ function InformacoesPessoais() {
               initialValues={{
                 nome: "",
                 email: "",
+                cpf: "",
                 telefone: "",
                 senha: "",
                 senhaConfirmacao: "",
@@ -93,18 +133,20 @@ function InformacoesPessoais() {
               onSubmit={(values, { setSubmitting }) => {
                 setInputNome(values.nome);
                 setInputEmail(values.email);
+                setInputCPF(inputCPF);
                 setInputTelefone(inputTelefone);
                 setInputSenha(values.senha);
                 setInputSenhaConfirmacao(values.senhaConfirmacao);
-                if (values.nome && values.email && inputTelefone && values.senha && values.senhaConfirmacao) {
-                  cadastrarUsuario();
+
+                if (values.nome && values.email && inputCPF && inputTelefone && values.senha && values.senhaConfirmacao) {
+                  cadastrarUsuario(values);
                 }
 
                 setSubmitting(false);
               }}
             >
               {({ setFieldValue }) => (
-                <Form className="flex flex-col space-y-4 w-full items-center">
+                <Form className="flex flex-col space-y-2 w-full items-center">
                   <div className="flex flex-col">
                     <label htmlFor="nome" className={`text-[#045D53] font-medium ${styles.inputLabel}`}>Nome</label>
                     <Field
@@ -136,7 +178,23 @@ function InformacoesPessoais() {
                     />
                     <ErrorMessage name="email" component="div" className="text-red-500 font-medium text-xs" />
                   </div>
-
+                  <div className="flex flex-col">
+                    <label htmlFor="cpf" className={`text-[#045D53] font-medium ${styles.inputLabel}`}>CPF</label>
+                    <Field
+                      type="text"
+                      id="cpf"
+                      name="cpf"
+                      placeholder="000.000.000-00"
+                      maxLength="14"
+                      className={styles.input}
+                      value={inputCPF}
+                      onChange={(e) => {
+                        handleCPFChange(e);
+                        setFieldValue("cpf", e.target.value);
+                      }}
+                    />
+                    <ErrorMessage name="cpf" component="div" className="text-red-500 font-medium text-xs" />
+                  </div>
                   <div className="flex flex-col">
                     <label htmlFor="telefone" className={`text-[#045D53] font-medium ${styles.inputLabel}`}>Telefone</label>
                     <Field

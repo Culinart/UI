@@ -20,7 +20,7 @@
 }
 
 .itens_esquerda {
-    width: 40%;
+    width: 50%;
     display: flex;
     justify-content: space-between;
 }
