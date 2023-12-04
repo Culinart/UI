@@ -23,7 +23,8 @@ function Plano() {
     const [diaSemanaSelecionado, setDiaSemanaSelecionado] = useState(0);
     const [selectedTime, setSelectedTime] = useState("");
     const [highestValorCategoria, setHighestValorCategoria] = useState(1);
-    const [error, setError] = useState("");const [novoValorPlano, setNovoValorPlano] = useState(pessoasSelecionadas * refeicoesSelecionadas * diasSelecionados * 4 * highestValorCategoria);
+    const [error, setError] = useState("");
+    const [novoValorPlano, setNovoValorPlano] = useState(pessoasSelecionadas * refeicoesSelecionadas * diasSelecionados * 4 * highestValorCategoria);
 
 
     useEffect(() => {

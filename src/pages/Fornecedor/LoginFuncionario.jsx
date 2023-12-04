@@ -1,28 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 
-import api from "../../../api/api";
+import api from "../../api/api";
 
 import { toast } from 'react-toastify';
 import { injectStyle } from "react-toastify/dist/inject-style";
 
 import Swal from "sweetalert2";
 
-import Header from "../../../components/Institucional/Header/Header";
-import imgLogin from "../../../assets/Institucional/Login/imgLogin.png"
-import ondaSuperiorDireita from "../../../assets/Institucional/Login/ondaSuperiorDireita.png"
-import ondaInferiorEsquerda from "../../../assets/Institucional/Login/ondaInferiorEsquerda.png"
-import ondaInferiorDireita from "../../../assets/Institucional/Login/ondaInferiorDireita.png"
+import Header from "../../components/Institucional/Header/Header";
+import imgLogin from "../../assets/Institucional/Login/imgLoginFunc.png"
+import ondaSuperiorDireita from "../../assets/Institucional/Login/ondaSuperiorDireitaAzul.png"
+import ondaInferiorEsquerda from "../../assets/Institucional/Login/ondaInferiorEsquerdaAzul.png"
+import ondaInferiorDireita from "../../assets/Institucional/Login/ondaInferiorDireitaAzul.png"
 
-import styles from "./LoginStyles.module.css";
+import styles from "../Institucional/Login/LoginStyles.module.css";
 
-function Login() {
+function LoginFuncionario() {
 
     injectStyle();
     const navigate = useNavigate();
 
-    const cadastro = () => {
-        navigate('/cadastro/info-pessoal');
+    const loginFunc = () => {
+        navigate('/fornecedor/perfil/info-pessoal');
     }
 
     const [email, setEmail] = useState('')
@@ -53,7 +53,7 @@ function Login() {
 
         e.preventDefault();
 
-        api.post('/usuarios/login', {
+        api.post('/funcionarios/login', {
             email: email,
             senha: senha
         }, {
@@ -69,14 +69,14 @@ function Login() {
 
                     sessionStorage.setItem('authToken', response.data.token);
                     sessionStorage.setItem('nome', response.data.nome);
-                    sessionStorage.setItem('idUsuario', response.data.userID);
-                    sessionStorage.setItem('emailUsuario', response.data.email);
+                    sessionStorage.setItem('funcId', response.data.userID);
+                    sessionStorage.setItem('email', response.data.email);
+                    sessionStorage.setItem('telefone', response.data.telefone)
                     sessionStorage.setItem('permissao', response.data.permissao);
-                    sessionStorage.setItem('isAtivo', response.data.isAtivo);
 
                     console.log(response.data);
 
-                    verificarPermissao();
+                    loginFunc();
 
                     toast.success('Login realizado com sucesso!');
                 }
@@ -97,9 +97,6 @@ function Login() {
             })
     }
 
-    const verificarPermissao = () => {
-        navigate('/cliente/perfil/info-pessoal');
-    }
 
     return (
         <>
@@ -111,8 +108,8 @@ function Login() {
                     <img src={ondaInferiorDireita} className={styles.ondaInferiorDireita} />
                     <div className={`${styles.containerCard} flex`}>
                         <img src={imgLogin} alt="Mulher cozinhando" />
-                        <div className={styles.card_formulario}>
-                            <h1>Bem vindo, Chef!</h1>
+                        <div className={`${styles.card_formulario} flex justify-center`}>
+                            <p className="text-[#3D7872] text-3xl font-semibold">Boas vindas!</p>
                             <div className={styles.campo}>
                                 <b>Email</b>
                                 <input
@@ -142,14 +139,7 @@ function Login() {
                             </div>
                             <span><input type="checkbox" /> Mantenha-me conectado</span>
                             <button type="submit" onClick={login}>Entrar</button>
-                            {/* <a href="/redefinir-senha" className={styles.esqueci_senha}>Esqueci minha senha</a> */}
-                            <a href="/login/funcionario" className={styles.esqueci_senha}>Login de Colaborador</a>
-                            <div className={styles.container_ou}>
-                                <div className={styles.linha} />
-                                <h1>ou</h1>
-                                <div className={styles.linha} />
-                            </div>
-                            <a onClick={cadastro} className={styles.cadastre_conta}>Cadastre uma conta</a>
+                            <a href="/login" className={styles.esqueci_senha}>Login de Cliente</a>
                         </div>
                     </div>
                 </div>
@@ -157,5 +147,4 @@ function Login() {
         </>
     )
 }
-
-export default Login;
+export default LoginFuncionario;

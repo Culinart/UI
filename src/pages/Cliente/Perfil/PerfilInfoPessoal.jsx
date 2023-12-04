@@ -133,6 +133,7 @@ function PerfilInfoPessoal() {
                 console.log("Resposta", response);
                 setInputNome(response.data.nome);
                 setNome(response.data.nome);
+                sessionStorage.setItem('nome', response.data.nome)
                 telefoneChange(response.data.telefone);
                 return true;
             })

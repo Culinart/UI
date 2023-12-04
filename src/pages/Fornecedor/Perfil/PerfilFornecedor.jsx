@@ -24,15 +24,11 @@ function PerfilInfoPessoalFornecedor() {
     const [isEditing, setIsEditing] = useState(false);
     const [inputNome, setInputNome] = useState("");
     const [inputEmail, setInputEmail] = useState("");
-    const [inputTelefone, setInputTelefone] = useState("");
-    const [nome, setNome] = useState("");
-    const [email, setEmail] = useState("");
-    const [telefone, setTelefone] = useState("");
+    const [inputTelefone, setInputTelefone] = useState(sessionStorage.getItem('telefone'));
+    const [nome, setNome] = useState(sessionStorage.getItem('nome'));
+    const [email, setEmail] = useState(sessionStorage.getItem('email'));
+    const [telefone, setTelefone] = useState(sessionStorage.getItem('telefone'));
     const [isSubmitting, setIsSubmitting] = useState(false);
-
-    useEffect(() => {
-        buscarInfoPessoal();
-    }, []);
 
     const alertaErro = () => {
         Swal.fire({
@@ -44,27 +40,6 @@ function PerfilInfoPessoalFornecedor() {
             confirmButtonColor: "#FF9F1C"
         })
     }
-
-    const buscarInfoPessoal = () => {
-        api
-            .get(`/usuarios/${sessionStorage.getItem('idUsuario')}`, {
-                headers: {
-                    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
-                },
-            })
-            .then((response) => {
-                console.log("Resposta", response);
-                setInputNome(response.data.nome);
-                setInputEmail(response.data.email);
-                setInputTelefone(response.data.telefone);
-                setNome(response.data.nome);
-                setEmail(response.data.email);
-                setTelefone(response.data.telefone);
-            })
-            .catch((erro) => {
-                console.log("Erro", erro);
-            });
-    };
 
     const handleTelefoneChange = (event) => {
         const inputTelefone = event.target.value.replace(/\D/g, "");
@@ -82,6 +57,7 @@ function PerfilInfoPessoalFornecedor() {
             }
 
             setInputTelefone(telefoneFormatado);
+            setTelefone(telefoneFormatado);
         }
     };
 
@@ -104,12 +80,12 @@ function PerfilInfoPessoalFornecedor() {
                 const corpoRequisicao = {
                     nome: values.nome,
                     email: values.email,
-                    telefone: telefoneNumerico,
+                    tel: telefoneNumerico,
                 };
                 console.log(corpoRequisicao);
 
                 return api
-                    .put(`/usuarios/${sessionStorage.getItem("idUsuario")}`, corpoRequisicao, {
+                    .put(`/funcionarios/${sessionStorage.getItem("idUsuario")}`, corpoRequisicao, {
                         headers: {
                             Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
                         },
@@ -118,10 +94,11 @@ function PerfilInfoPessoalFornecedor() {
                         console.log("Resposta", response);
                         setInputNome(response.data.nome);
                         setInputEmail(response.data.email);
-                        setInputTelefone(response.data.telefone);
+                        setInputTelefone(response.data.tel);
                         setNome(response.data.nome);
+                        sessionStorage.setItem('nome', response.data.nome);
                         setEmail(response.data.email);
-                        setTelefone(response.data.telefone);
+                        setTelefone(response.data.tel);
                         Swal.fire({
                             title: "Usuário atualizado com sucesso!",
                             icon: "success",
