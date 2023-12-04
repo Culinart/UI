@@ -42,11 +42,11 @@ function Funcionarios() {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Accept: 'application/json',
+                    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
                 },
             };
 
             const response = await api.post(`/funcionarios/txt`, formData, config);
-
             console.log("Arquivos enviados com sucesso:", response.data);
             window.location.reload();
         } catch (error) {
@@ -56,7 +56,11 @@ function Funcionarios() {
 
 
     function listar() {
-        api.get(`/funcionarios`)
+        api.get(`/funcionarios`, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+            }
+        })
             .then((respostaObtida) => {
                 setFuncionarios(respostaObtida.data);
                 console.log(respostaObtida.data);

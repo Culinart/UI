@@ -18,7 +18,11 @@ function ItemFuncionario({ id, nome, email, permissao }) {
     }
 
     const excluirFuncionario = () => {
-        api.delete(`/funcionarios/${id}`)
+        api.delete(`/funcionarios/${id}`, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+            }
+        })
             .then((response) => {
                 console.log('Funcionário excluído com sucesso:', response);
                 window.location.reload();

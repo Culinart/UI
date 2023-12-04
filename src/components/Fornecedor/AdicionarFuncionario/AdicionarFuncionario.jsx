@@ -41,7 +41,11 @@ function AdicionarFuncionario({ handleFecharModal }) {
         const emailValido = validarEmail(novoFuncionario.email);
 
         if (novoFuncionario.nome.length >= 3 && emailValido) {
-            api.post(`/funcionarios`, novoFuncionario)
+            api.post(`/funcionarios`, novoFuncionario, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+                }
+            })
                 .then(response => {
 
                     console.log("Novo funcionário adicionado:", response.data);

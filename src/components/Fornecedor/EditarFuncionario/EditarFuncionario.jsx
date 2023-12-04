@@ -27,7 +27,11 @@ function EditarFuncionario({ id, nome, email, permissao, handleFecharModal }) {
         const emailValido = validarEmail(corpoRequisicao.email);
 
         if (corpoRequisicao.nome.length >= 3 && emailValido) {
-            api.put(`funcionarios/${id}`, corpoRequisicao)
+            api.put(`funcionarios/${id}`, corpoRequisicao, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+                }
+            })
                 .then((response) => {
                     console.log("Resposta", response);
                     handleFecharModal();
