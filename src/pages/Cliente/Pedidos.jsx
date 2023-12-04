@@ -8,7 +8,6 @@ import Swal from "sweetalert2";
 import ModalAvaliarReceitas from "../../components/Cliente/Pedido/ModalAvaliarReceitas";
 import AlertaClienteInativo from "../../components/Cliente/AlertaClienteInativo";
 
-
 function Pedidos() {
 
     const navigate = useNavigate();
