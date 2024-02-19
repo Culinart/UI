@@ -164,6 +164,42 @@ function Pedidos() {
             }
         })
             .then((response) => {
+                const promises = response.data.listaReceitas.map(async (receita) => {
+                    try {
+                        const idReceita = receita.id;
+                        const imagemResponse = await api.get(`/receitas/imagem/${idReceita}`, {
+                            headers: {
+                                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
+                                responseType: 'arraybuffer'
+                            }
+                        });
+
+                        if (imagemResponse.status == 204) {
+                            receita.imagem = receitaDefault;
+                            return receita;
+                        }
+                        receita.imagem = "data:image/jpeg;base64," + imagemResponse.data;
+                        return receita;
+                    } catch (error) {
+                        if (error.response && error.response.status === 404) {
+                            // Se a imagem não for encontrada, atribua a imagem padrão
+                            receita.imagem = receitaDefault;
+                            return receita;
+                        } else {
+                            console.error(`Erro ao processar imagem da receita ${receita.id}`, error);
+                            return receita;
+                        }
+                    }
+                });
+
+                Promise.all(promises)
+                    .then((receitasComImagens) => {
+                        setReceitas(receitasComImagens);                    
+                    })
+                    .catch((error) => {
+                        console.error("Erro ao processar promessas", error);
+                    });
+
                 console.log('PEDIDO ', response)
                 setPedidoAtual(response.data);
                 setReceitas(response.data.listaReceitas);
@@ -268,6 +304,7 @@ function Pedidos() {
                                         idReceita={receita.id}
                                         statusPedido={pedidoAtual.status}
                                         idPedido={pedidoAtual.id}
+                                        imagem={receita.imagem}
                                     />
                                 ))}
                             </div>
