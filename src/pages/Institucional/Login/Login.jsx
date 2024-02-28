@@ -32,7 +32,7 @@ function Login() {
         Swal.fire({
             icon: "error",
             iconColor: "#FF9F1C",
-            title: "<b>Acesso Negado!</b>",
+            title: "<b>Oops!</b>",
             text: "Confira suas credênciais",
             position: "center",
             confirmButtonColor: "#FF9F1C",
