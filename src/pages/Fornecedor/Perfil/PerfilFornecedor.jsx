@@ -82,10 +82,10 @@ function PerfilInfoPessoalFornecedor() {
                     email: values.email,
                     tel: telefoneNumerico,
                 };
-                console.log(corpoRequisicao);
+                console.log("corpo da requisição" + corpoRequisicao);
 
                 return api
-                    .put(`/funcionarios/${sessionStorage.getItem("idUsuario")}`, corpoRequisicao, {
+                    .put(`/funcionarios/perfil/${sessionStorage.getItem("funcId")}`, corpoRequisicao, {
                         headers: {
                             Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
                         },
@@ -97,6 +97,8 @@ function PerfilInfoPessoalFornecedor() {
                         setInputTelefone(response.data.tel);
                         setNome(response.data.nome);
                         sessionStorage.setItem('nome', response.data.nome);
+                        sessionStorage.setItem('email', response.data.email);
+                        sessionStorage.setItem('telefone', response.data.tel);
                         setEmail(response.data.email);
                         setTelefone(response.data.tel);
                         Swal.fire({
@@ -145,7 +147,7 @@ function PerfilInfoPessoalFornecedor() {
                                 setIsSubmitting(true);
                                 setInputNome(values.nome);
                                 setInputEmail(values.email);
-                                setInputTelefone(inputTelefone);
+                                setInputTelefone(values.telefone);
 
                                 atualizarUsuario(values)
                                     .then((success) => {
