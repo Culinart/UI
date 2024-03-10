@@ -5,14 +5,16 @@ import HeaderCliente from "../../../components/Cliente/HeaderCliente/HeaderClien
 import styles from "./CadastroStyles.module.css";
 import api from "../../../api/api";
 import Swal from "sweetalert2";
+import { set } from "date-fns";
 
 function Checkout() {
 
     const navigate = useNavigate();
 
     const [endereco, setEndereco] = useState([]);
+    const [pagamento, setPagamento] = useState([]);
     const [plano, setPlano] = useState([]);
-    const [precoMes, setPrecoMes] = useState([]);
+
 
     useEffect(() => {
         buscarEnderecoUsuario();
@@ -43,7 +45,7 @@ function Checkout() {
                 }
             })
             .then((response) => {
-                console.log(response.data)
+                console.log(response.data);
                 setPlano(response.data);
             })
             .catch((erro) => {
@@ -60,8 +62,8 @@ function Checkout() {
             })
             .then((response) => {
                 console.log("Resposta", response);
-                sessionStorage.setItem('permissao', response.data.permissao)
-                criarPagamentoUsuario();
+                sessionStorage.setItem('permissao', response.data.permissao);
+                criarPlanoDeAssinatura();
 
             })
             .catch((erro) => {
@@ -69,26 +71,17 @@ function Checkout() {
             });
     }
 
-    const criarPagamentoUsuario = () => {
+    const criarPlanoDeAssinatura = () => {
         api
-            .post(`/pagamentos/solicitar/${sessionStorage.getItem("idUsuario")}`, null, {
+            .post(`/assinaturas/solicitar/${sessionStorage.getItem("idUsuario")}`, null, {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
                 }
             })
-            .then((response) => {
-                console.log("Resposta Pagamento: ", response);
-                Swal.fire({
-                    title: "Checkout realizado com sucesso!",
-                    confirmButtonColor: "#F29311",
-                });
-
+            .then(async (response) => {
                 window.open(`${response.data.linkCobranca}`, '_blank');
-
-                setTimeout(() => {
-                    navigate('/cliente/pedidos');
-                }, 2000);
-
+                console.log("Resposta Pagamento: ", response);
+                verificarPagamentoConcluido()
             })
             .catch((erro) => {
                 console.log("Erro ", erro);
@@ -98,6 +91,98 @@ function Checkout() {
                 });
             });
     }
+
+    const exibeStatusPagamento = () => {
+        return api
+            .put(`/pagamentos/atualizar/status/${sessionStorage.getItem("idUsuario")}`, null, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+                }
+            })
+            .then((response) => {
+                console.log(response.data[0]);
+                const pagamentoAtualizado = response.data[0].statusTransacao;
+                return pagamentoAtualizado;
+            })
+            .catch((erro) => {
+                console.log("Erro ", erro);
+                // Swal.fire({
+                //     title: "Erro ao realizar o pagamento! Confira se as informações inseridas são válidas.",
+                //     confirmButtonColor: "#F29311",
+                // });
+                throw erro;
+            });
+    }
+    
+    const verificarPagamentoConcluido = () => {
+        api
+            .put(`/pagamentos/atualizar/status/${sessionStorage.getItem("idUsuario")}`, null, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+                }
+            })
+            .then((response) => {
+                console.log(response.data[0]);
+                const pagamentoAtualizado = response.data[0];
+                setPagamento(pagamentoAtualizado);
+                console.log(pagamentoAtualizado); // Aqui você tem acesso ao estado atualizado
+    
+                // Função recursiva para exibir o Swal
+                function exibirSwal(tentativas) {
+                    if (tentativas <= 999) {
+                        Swal.fire({
+                            title: "Checkout realizado com sucesso!",
+                            text: "Por favor, realizar pagamento!",
+                            icon: "success",
+                            showCancelButton: true,
+                            confirmButtonColor: "#F29311",
+                            cancelButtonColor: "#808080",
+                            confirmButtonText: "Já realizei!",
+                            cancelButtonText: "Ainda não!"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                exibeStatusPagamento().then(status => {
+                                    if (status == "approved" || status == "settled") {
+                                        Swal.fire({
+                                            title: "Pagamento realizado",
+                                            text: "Pagamento feito com sucesso!",
+                                            icon: "success"
+                                        });
+                                        setTimeout(() => {
+                                            navigate('/cliente/pedidos');
+                                        }, 2500);
+                                    } else {
+                                        Swal.fire({
+                                            title: "O Pagamento não foi identificado como realizado.",
+                                            confirmButtonColor: "#F29311",
+                                        }).then(() => {
+                                            setTimeout(() => {
+                                                exibirSwal(tentativas++);
+                                            }, 1500); // Chamada recursiva com próxima tentativa
+                                        });
+                                    }
+                                })
+                                .catch(error => {
+                                    // Trate os erros aqui, se necessário
+                                    console.error("Erro ao exibir status de pagamento:", error);
+                                });
+                            }
+                        });
+                    }
+                }
+    
+                // Inicia a exibição do Swal
+                exibirSwal(1);
+            })
+            .catch((erro) => {
+                console.log("Erro ", erro);
+                // Swal.fire({
+                //     title: "Erro ao realizar o pagamento! Confira se as informações inseridas são válidas.",
+                //     confirmButtonColor: "#F29311",
+                // });
+            });
+    }
+
 
     return (
         <>
