@@ -26,9 +26,9 @@ function HeaderCliente() {
             })
             .then((response) => {
                 console.log("Resposta", response);
-                setInputNome(response.data.nome);
-                setNome(response.data.nome);
-                telefoneChange(response.data.telefone);
+                //setInputNome(response.data.nome);
+                //setNome(response.data.nome);
+                //telefoneChange(response.data.telefone);
                 setPermissao(response.data.permissao); // Defina a permissão do usuário
             })
             .catch((erro) => {
