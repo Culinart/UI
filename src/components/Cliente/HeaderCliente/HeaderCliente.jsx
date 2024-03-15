@@ -26,9 +26,9 @@ function HeaderCliente() {
             })
             .then((response) => {
                 console.log("Resposta", response);
-                setInputNome(response.data.nome);
-                setNome(response.data.nome);
-                telefoneChange(response.data.telefone);
+                //setInputNome(response.data.nome);
+                //setNome(response.data.nome);
+                //telefoneChange(response.data.telefone);
                 setPermissao(response.data.permissao); // Defina a permissão do usuário
             })
             .catch((erro) => {
@@ -49,7 +49,7 @@ function HeaderCliente() {
                         <a href="/">
                             <img src={logo} alt="Logo Culinart" href="/" className={style.logo} />
                         </a>
-                        {permissao === 'USUARIO' && ( // Renderize apenas se o usuário tiver permissão
+                        {permissao === 'CLIENTE' && ( // Renderize apenas se o usuário tiver permissão
                             <>
                                 <a href="/cliente/pedidos" className={style.item}>
                                     <img src={pedidos} alt="Icone de pedidos" />

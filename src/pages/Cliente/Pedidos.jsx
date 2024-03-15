@@ -13,11 +13,8 @@ function Pedidos() {
 
     const navigate = useNavigate();
 
-    const [enderecoUsuario, setEnderecoUsuario] = useState({
-        usuario: {},
-        endereco: {},
-        isAtivo: null,
-    });
+    const [logradouroEnderecoPedido, setlogradouroEnderecoPedido] = useState("");
+    const [numeroEnderecoPedido, setnumeroEnderecoPedido] = useState("");
     const [categorias, setCategorias] = useState([]);
     const [selectedDateIndex, setSelectedDateIndex] = useState(0);
     // const [statusPedido, setStatusPedido] = useState("ATIVO");
@@ -44,7 +41,7 @@ function Pedidos() {
         }
     }, [datasPedidos, selectedDateIndex]);
     useEffect(() => {
-        buscarEnderecoAtivo();
+        //buscarEnderecoAtivo();
         buscarDatasPedidos();
     }, []);
 
@@ -109,20 +106,20 @@ function Pedidos() {
         window.location.reload();
     }
 
-    const buscarEnderecoAtivo = () => {
-        api.get(`/enderecos/usuarios/enderecoAtivo/${sessionStorage.getItem("idUsuario")}`, {
-            headers: {
-                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
-            }
-        })
-            .then((response) => {
-                setEnderecoUsuario(response.data);
-                console.log("ENDERECO: ", response.data);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
+    // const buscarEnderecoAtivo = () => {
+    //    api.get(`/enderecos/usuarios/enderecoAtivo/${sessionStorage.getItem("idUsuario")}`, {
+    //        headers: {
+    //           Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
+    //        }
+    //    })
+    //        .then((response) => {
+    //            setEnderecoUsuario(response.data);
+    //            console.log("ENDERECO: ", response.data);
+    //        })
+    //        .catch((error) => {
+    //            console.log(error);
+    //       });
+    //}
 
     const buscarDatasPedidos = () => {
         api
@@ -203,6 +200,8 @@ function Pedidos() {
                 console.log('PEDIDO ', response)
                 setPedidoAtual(response.data);
                 setReceitas(response.data.listaReceitas);
+                setlogradouroEnderecoPedido(response.data.logradouro);
+                setnumeroEnderecoPedido(response.data.numero);
                 // setStatusPedido(response.data.status);
             })
             .catch((error) => {
@@ -257,7 +256,7 @@ function Pedidos() {
                             <div className="flex-col text-[#3F4747] text-[1.1rem] ml-5">
                                 Entrega
                                 <p className="flex items-center">
-                                    {`${enderecoUsuario.endereco.logradouro}, ${enderecoUsuario.endereco.numero}`}
+                                    {`${logradouroEnderecoPedido}, ${numeroEnderecoPedido}`}
                                     <FiEdit className="ml-2 mb-0.5 text-gray-600 cursor-pointer" onClick={() => navigateToPage('/cliente/perfil/endereco')} />
                                 </p>
                                 <span className="flex">
