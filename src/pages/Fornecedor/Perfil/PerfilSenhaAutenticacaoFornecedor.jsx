@@ -32,10 +32,10 @@ function PerfilSenhaAutenticacaoFornecedor() {
         }).then((result) => {
             if (result.isConfirmed) {
                 const corpoRequisicao = {
-                    senha: values.senhaNova,
+                    senhaNova: values.senhaNova,
                 };
                 api
-                    .put(`/usuarios/senha/${sessionStorage.getItem("idUsuario")}`, corpoRequisicao, {
+                    .put(`/funcionarios/senha/${sessionStorage.getItem("funcId")}`, corpoRequisicao, {
                         headers: {
                             Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
                         },
