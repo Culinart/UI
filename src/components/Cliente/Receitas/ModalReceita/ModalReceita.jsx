@@ -5,9 +5,9 @@ import style from "./ModalReceita.module.css"
 import { useLocation } from 'react-router-dom';
 import Swal from "sweetalert2";
 
-import editar from "src/assets/Fornecedor/Receitas/edit.svg"
-import lixo from "src/assets/Fornecedor/Receitas/trash.svg"
-import sair from "src/assets/Fornecedor/Receitas/exit.svg"
+import editar from "./../../../assets/Fornecedor/Receitas/edit.svg"
+import lixo from "./../../../assets/Fornecedor/Receitas/trash.svg"
+import sair from "./../../../assets/Fornecedor/Receitas/exit.svg"
 
 function ModalReceita({ id, nome, ingredientes, rendimento, horas, minutos, qtdAvaliacao, mediaAvaliacao, preparo, categoria, preferencia, imagem, fecharModal }) {
 
