@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import api from "../../../../api/api.js";
+import api from "../api/api";
 import Preferencia from "../Preferencia";
 import style from "./ModalReceita.module.css"
 import { useLocation } from 'react-router-dom';
 import Swal from "sweetalert2";
 
-import editar from "./../../../assets/Fornecedor/Receitas/edit.svg"
-import lixo from "./../../../assets/Fornecedor/Receitas/trash.svg"
-import sair from "./../../../assets/Fornecedor/Receitas/exit.svg"
+import editar from "../assets/Fornecedor/Receitas/Edit.svg"
+import lixo from "../assets/Fornecedor/Receitas/trash.svg"
+import sair from "../assets/Fornecedor/Receitas/exit.svg"
 
 function ModalReceita({ id, nome, ingredientes, rendimento, horas, minutos, qtdAvaliacao, mediaAvaliacao, preparo, categoria, preferencia, imagem, fecharModal }) {
 
