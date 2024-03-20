@@ -70,9 +70,9 @@ function CardPedido({ idPedido, nome, qtd_porcoes, preferencias, categorias, ped
                 <h2 className="text-[1.165rem] font-medium">{nome}</h2>
                 <p className="text-[1rem] mt-[0.9rem]">{qtd_porcoes} no pacote</p>
                 <p className="text-[1rem] mt-1">{qtd_porcoes} Porções</p>
-                <div className="flex items-center mt-[1.1rem]">
+                {/* <div className="flex items-center mt-[1.1rem]">
                     <p className="text-sm font-light ml-1">{categorias.map((cat) => cat.nome).join(", ")}</p>
-                </div>
+                </div> */}
                 <div className="flex flex-wrap justify-start items-center w-full mt-[1.2rem]">
                     {preferencias.map((preferencia, index) => (
                         <div key={index} className="mb-2">
