@@ -180,7 +180,7 @@ function PerfilPagamento() {
                                     <p className="text-[#DC7726] font-medium mt-8 mb-6">
                                         Status Assinatura: {statusAssinatura}
                                     </p>
-                                    <a
+                                    {/* <a
                                         className="text-[#00AE9E] font-medium mt-8 mb-8"
                                         href={pagamento.linkCobranca}
                                         target="_blank"
@@ -188,7 +188,7 @@ function PerfilPagamento() {
                                         style={{ wordWrap: "break-word" }}
                                     >
                                         Link Cobrança: {pagamento.linkCobranca}
-                                    </a>
+                                    </a> */}
                                 </span>
                             ) : (
                                 <p className="text-[#DC7726] font-medium mt-8 mb-6">
