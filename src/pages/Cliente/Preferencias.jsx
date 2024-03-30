@@ -81,7 +81,6 @@ const Preferencias = () => {
                 })
                 .then((response) => {
                     setUserPreferences((prevPreferences) => [...prevPreferences, response.data]);
-                    location.reload();
                 })
                 .catch((error) => {
                     console.log(error);
