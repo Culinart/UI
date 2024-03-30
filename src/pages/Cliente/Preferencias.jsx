@@ -12,6 +12,7 @@ const Preferencias = () => {
 
     useEffect(() => {
         buscarPreferencias();
+        console.log(preferencias);
     }, []);
 
     useEffect(() => {
@@ -88,15 +89,33 @@ const Preferencias = () => {
         }
     }
 
-    const removePreference = (preferenceId) => {
+    const removePreference = (preference, up) => {
+
+        var idUsuario;
+
+        userPreferences.map(item => {
+            if(item.preferencia.id == preference && up == 2) {
+                idUsuario = item.id
+            }
+        })
+    
         api
-            .delete(`/usuarios/preferencias/${preferenceId}`, {
+            .delete(`/usuarios/preferencias/${up == 1 ? preference.id : idUsuario}`, {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
                 }
             })
             .then(() => {
-                setUserPreferences((prevPreferences) => prevPreferences.filter(p => p.id !== preferenceId));
+
+                setUserPreferences((prevPreferences) => prevPreferences.filter(p => {
+                    console.log("Id que vai ser apagado: " + p.id);
+
+                    if (up === 1) {
+                        return p.id !== preference.id
+                    }
+
+                    return p.preferencia.id !== preference;
+                }));
             })
             .catch((error) => {
                 console.log(error);
@@ -136,7 +155,7 @@ const Preferencias = () => {
                                     <Preferencia preferencia={item.preferencia} />
                                     <BiTrash
                                         className="text-lg text-gray-600 cursor-pointer"
-                                        onClick={() => removePreference(item.id)}
+                                        onClick={() => removePreference(item, 1)}
                                     />
                                 </div>
                             ))}
@@ -154,7 +173,7 @@ const Preferencias = () => {
                                                 {isPreferenceInUserPreferences(item.id) ? (
                                                     <BiTrash
                                                         className="text-lg text-gray-600 cursor-pointer"
-                                                        onClick={() => removePreference(item.id)}
+                                                        onClick={() => removePreference(item.id, 2)}
                                                     />
                                                 ) : (
                                                     <AiOutlinePlusCircle
