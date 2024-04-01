@@ -69,7 +69,7 @@ function LoginFuncionario() {
 
                     sessionStorage.setItem('authToken', response.data.token);
                     sessionStorage.setItem('nome', response.data.nome);
-                    sessionStorage.setItem('funcId', response.data.userID);
+                    sessionStorage.setItem('funcId', response.data.funcId);
                     sessionStorage.setItem('email', response.data.email);
                     sessionStorage.setItem('telefone', response.data.telefone)
                     sessionStorage.setItem('permissao', response.data.permissao);

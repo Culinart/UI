@@ -5,7 +5,7 @@ import style from "./ModalReceita.module.css"
 import { useLocation } from 'react-router-dom';
 import Swal from "sweetalert2";
 
-import editar from "../../../../assets/Fornecedor/Receitas/Edit.svg"
+import editar from "../../../../assets/Fornecedor/Receitas/edit.svg"
 import lixo from "../../../../assets/Fornecedor/Receitas/trash.svg"
 import sair from "../../../../assets/Fornecedor/Receitas/exit.svg"
 

@@ -17,7 +17,7 @@ import Swal from "sweetalert2";
 import { useNavigate } from 'react-router-dom';
 
 const initialChartDataState = {
-    labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+    labels: ['Janeiro', 'Fevereiro', 'Marco', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
     datasets: [{
         label: 'Quantidade de usuários',
         data: Array(12).fill(0),

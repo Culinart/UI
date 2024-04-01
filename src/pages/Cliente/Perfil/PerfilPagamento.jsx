@@ -9,8 +9,8 @@ function PerfilPagamento() {
 
     const navigate = useNavigate();
 
-    const [plano, setPlano] = useState("");
-    const [statusPlano, setStatusPlano] = useState("");
+    const [assinaturaId, setAssinaturaId] = useState("");
+    const [statusAssinatura, setstatusAssinatura] = useState("");
     const [pagamento, setPagamento] = useState("");
 
     useEffect(() => {
@@ -19,19 +19,22 @@ function PerfilPagamento() {
         } else if (sessionStorage.getItem('permissao') == 'USUARIO') {
             navigate('/cadastro/endereco')
         }
-        buscarPlano();
+        buscarAssinatura();
         buscarPagamento();
     }, []);
 
-    const buscarPlano = () => {
-        api.get(`/planos/${sessionStorage.getItem('idUsuario')}`, {
+    const buscarAssinatura = () => {
+        api.get(`/assinaturas`, {
+            params: {
+                idUsuario: sessionStorage.getItem('idUsuario')
+            },
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
             }
         })
             .then((response) => {
-                setPlano(response.data);
-                setStatusPlano(response.data.isAtivo);
+                setAssinaturaId(response.data.idAssinatura);
+                setstatusAssinatura(response.data.statusAssinatura);
             }).catch((error) => {
                 console.log(error);
             });
@@ -51,7 +54,7 @@ function PerfilPagamento() {
     }
 
     const cancelarAssinatura = () => {
-        api.delete(`/pagamentos/assinatura/${plano.id}`, {
+        api.delete(`/assinaturas/${assinaturaId}`, {
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
             }
@@ -172,12 +175,12 @@ function PerfilPagamento() {
                             <h1 className="text-[#DC7726] font-bold text-2xl mb-2 flex justify-center items-center w-full">
                                 Pagamento
                             </h1>
-                            {statusPlano === "ATIVO" ? (
+                            {statusAssinatura === "active" ? (
                                 <span>
                                     <p className="text-[#DC7726] font-medium mt-8 mb-6">
-                                        Status Plano: {statusPlano}
+                                        Status Assinatura: {statusAssinatura}
                                     </p>
-                                    <a
+                                    {/* <a
                                         className="text-[#00AE9E] font-medium mt-8 mb-8"
                                         href={pagamento.linkCobranca}
                                         target="_blank"
@@ -185,21 +188,21 @@ function PerfilPagamento() {
                                         style={{ wordWrap: "break-word" }}
                                     >
                                         Link Cobrança: {pagamento.linkCobranca}
-                                    </a>
+                                    </a> */}
                                 </span>
                             ) : (
                                 <p className="text-[#DC7726] font-medium mt-8 mb-6">
-                                    Status Plano: {statusPlano}
+                                    Status Plano: {statusAssinatura}
                                 </p>
                             )}
-                            {statusPlano == "ATIVO" ? <span>
+                            {statusAssinatura == "active" ? <span>
                                 <p className="mt-4 mb-4">
                                     Para cancelar sua assinatura, basta clicar na opção de cancelamento. Caso mude de ideia no futuro, a opção para reativar a assinatura estará disponível, permitindo que retorne ao seu plano anterior.
                                 </p>
                                 <span className="w-full flex items-center justify-center">
                                     <button
                                         type="button"
-                                        onClick={desativarPlano}
+                                        onClick={cancelarAssinatura}
                                         className="border border-gray-300 rounded-md px-3 py-1 bg-[#DC7726] hover-bg-[#ba5a0d] text-white">
                                         Cancelar Assinatura
                                     </button>
