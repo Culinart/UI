@@ -2,7 +2,7 @@ import React from "react";
 import imgReceitaPedido from "../../../assets/Cliente/Pedidos/imgReceitaPedido.png";
 import Preferencia from "../Receitas/Preferencia";
 import { FiTrash2 } from "react-icons/fi";
-import api from "../../../api/api";
+import {api} from "../../../api/api";
 import Swal from "sweetalert2";
 import receitaDefault from '../../../assets/Receitas/receita-default.jpeg';
 

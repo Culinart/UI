@@ -3,7 +3,7 @@ import HeaderCliente from "../../components/Cliente/HeaderCliente/HeaderCliente"
 import { FiEdit } from "react-icons/fi";
 import CardPedido from "../../components/Cliente/Pedido/CardPedido";
 import { useNavigate } from 'react-router-dom';
-import api from "../../api/api";
+import {api} from "../../api/api";
 import Swal from "sweetalert2";
 import ModalAvaliarReceitas from "../../components/Cliente/Pedido/ModalAvaliarReceitas";
 import AlertaClienteInativo from "../../components/Cliente/AlertaClienteInativo";

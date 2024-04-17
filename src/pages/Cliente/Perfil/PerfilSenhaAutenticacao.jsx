@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import HeaderCliente from "../../../components/Cliente/HeaderCliente/HeaderCliente";
 import SidebarPerfil from "../../../components/Cliente/Perfil/SidebarPerfil";
-import api from "../../../api/api";
+import {api} from "../../../api/api";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Swal from "sweetalert2";

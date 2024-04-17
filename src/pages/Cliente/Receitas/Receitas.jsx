@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import iconeBusca from "../../../assets/Fornecedor/Receitas/search.svg";
 import ItemReceita from "../../../components/Fornecedor/ItemReceita/ItemReceita";
-import api from "../../../api/api";
+import {api} from "../../../api/api";
 import style from './Receitas.module.css';
 import HeaderCliente from "../../../components/Cliente/HeaderCliente/HeaderCliente";
 import { useNavigate } from 'react-router-dom';
@@ -116,41 +116,7 @@ function ReceitasFornecedor() {
       }
     })
       .then((response) => {
-        const promises = response.data.map(async (receita) => {
-          try {
-            const idReceita = receita.id;
-            const imagemResponse = await api.get(`/receitas/imagem/${idReceita}`, {
-              headers: {
-                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
-                responseType: 'arraybuffer'
-              }
-            });
-            if (imagemResponse.status == 204) {
-              receita.imagem = receitaDefault;
-              return receita;
-            }
-            receita.imagem = "data:image/jpeg;base64," + imagemResponse.data;
-            return receita;
-
-          } catch (error) {
-            if (error.response && error.response.status === 404) {
-              // Se a imagem não for encontrada, atribua a imagem padrão
-              receita.imagem = receitaDefault;
-              return receita;
-            } else {
-              console.error(`Erro ao processar imagem da receita ${receita.id}`, error);
-              return receita;
-            }
-          }
-        });
-
-        Promise.all(promises)
-          .then((receitasComImagens) => {
-            setReceitas(receitasComImagens);
-          })
-          .catch((error) => {
-            console.error("Erro ao processar promessas", error);
-          });
+          setReceitas(response.data)
       })
       .catch((error) => {
         console.error(error);
@@ -170,41 +136,7 @@ function ReceitasFornecedor() {
       }
     })
       .then((response) => {
-        const promises = response.data.map(async (receita) => {
-          try {
-            const idReceita = receita.id;
-            const imagemResponse = await api.get(`/receitas/imagem/${idReceita}`, {
-              headers: {
-                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
-                responseType: 'arraybuffer'
-              }
-            });
-            if (imagemResponse.status == 204) {
-              receita.imagem = receitaDefault;
-              return receita;
-            }
-            receita.imagem = "data:image/jpeg;base64," + imagemResponse.data;
-            return receita;
-
-          } catch (error) {
-            if (error.response && error.response.status === 404) {
-              // Se a imagem não for encontrada, atribua a imagem padrão
-              receita.imagem = receitaDefault;
-              return receita;
-            } else {
-              console.error(`Erro ao processar imagem da receita ${receita.id}`, error);
-              return receita;
-            }
-          }
-        });
-
-        Promise.all(promises)
-          .then((receitasComImagens) => {
-            setReceitas(receitasComImagens);
-          })
-          .catch((error) => {
-            console.error("Erro ao processar promessas", error);
-          });
+        setReceitas(response.data)
       })
       .catch((error) => {
         console.error(error);

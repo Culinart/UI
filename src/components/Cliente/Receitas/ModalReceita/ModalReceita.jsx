@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import api from "../../../../api/api";
+import {api} from "../../../../api/api";
 import Preferencia from "../Preferencia";
 import style from "./ModalReceita.module.css"
 import { useLocation } from 'react-router-dom';
@@ -11,6 +11,8 @@ import sair from "../../../../assets/Fornecedor/Receitas/exit.svg"
 
 function ModalReceita({ id, nome, ingredientes, rendimento, horas, minutos, qtdAvaliacao, mediaAvaliacao, preparo, categoria, preferencia, imagem, fecharModal }) {
 
+    const BASE_URL = 'https://drive.google.com/thumbnail?id=';
+    
     const [listaIngredientes, setListaIngredientes] = useState(ingredientes);
     const [listaPreparo, setListaPreparo] = useState(preparo);
     const [listaPreferencia, setListaPreferencia] = useState(preferencia);
@@ -102,7 +104,7 @@ function ModalReceita({ id, nome, ingredientes, rendimento, horas, minutos, qtdA
                             )}
                         </div>
                         <div className={style.imagem}>
-                            <img src={imagem} alt="Foto da receita" />
+                            <img src={BASE_URL + imagem} alt="Foto da receita" />
                         </div>
                         <div className={style.container_nome}>
                             <h1 className={style.nome_receita}>{nome}</h1>

@@ -5,7 +5,7 @@ import AdicionarFuncionario from "../../../components/Fornecedor/AdicionarFuncio
 import ItemFuncionario from "../../../components/Fornecedor/Funcionario/ItemFuncionario";
 import seta from "../../../assets/Institucional/Funcionarios/down.svg";
 import buscar from "../../../assets/Institucional/Funcionarios/search.svg";
-import api from "../../../api/api";
+import {api} from "../../../api/api";
 // import validator from 'validator';
 
 function Funcionarios() {

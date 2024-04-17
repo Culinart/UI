@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FiEdit, FiInfo } from "react-icons/fi";
 import Swal from "sweetalert2";
 import CurrencyInput from 'react-currency-masked-input';
-import api from "../../api/api";
+import {api} from "../../api/api";
 import HeaderFornecedor from "../../components/Fornecedor/HeaderFornecedor/HeaderFornecedor";
 
 function Precos() {
