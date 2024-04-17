@@ -15,6 +15,7 @@ const api = axios.create({
     }
 });
 
+
 const apiImg = axios.create({
     baseURL: IP.img,
     timeout: 15000
@@ -24,3 +25,4 @@ export {
     api,
     apiImg
 };
+
