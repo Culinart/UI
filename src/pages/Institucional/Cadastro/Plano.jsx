@@ -24,7 +24,7 @@ function Plano() {
     const [selectedTime, setSelectedTime] = useState("");
     const [highestValorCategoria, setHighestValorCategoria] = useState(1);
     const [error, setError] = useState("");
-    const [novoValorPlano, setNovoValorPlano] = useState(pessoasSelecionadas * refeicoesSelecionadas * diasSelecionados * 4 * highestValorCategoria);
+    const [novoValorPlano, setNovoValorPlano] = useState(pessoasSelecionadas * refeicoesSelecionadas * diasSelecionados * highestValorCategoria);
 
 
     useEffect(() => {
@@ -145,7 +145,7 @@ function Plano() {
     };
 
     const atualizarValorPlano = () => {
-        setNovoValorPlano(pessoasSelecionadas * refeicoesSelecionadas * diasSelecionados * 4 * highestValorCategoria);
+        setNovoValorPlano(pessoasSelecionadas * refeicoesSelecionadas * diasSelecionados * highestValorCategoria);
     }
 
     const highestCategoria = () => {
