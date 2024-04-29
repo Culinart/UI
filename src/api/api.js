@@ -2,11 +2,12 @@ import axios from "axios";
 
 const IP = {
     local: `http://localhost:8080/api`,
+    img: `http://23.21.48.222:8000`,
     ec2: `http://107.20.93.62:8080/api`
 }
 
 const api = axios.create({
-    baseURL: IP.ec2,
+    baseURL: IP.local,
     timeout: 15000,
     headers: {
         'Content-Type': 'application/json',
@@ -14,4 +15,14 @@ const api = axios.create({
     }
 });
 
-export default api;
+
+const apiImg = axios.create({
+    baseURL: IP.img,
+    timeout: 15000
+});
+
+export {
+    api,
+    apiImg
+};
+

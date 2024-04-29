@@ -4,7 +4,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import imgCadastro from "../../../assets/Institucional/Cadastro/imgCadastro.svg";
 import Header from "../../../components/Institucional/Header/Header";
-import api from "../../../api/api";
+import {api} from "../../../api/api";
 import styles from "./CadastroStyles.module.css";
 import Swal from "sweetalert2";
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../../components/Institucional/Header/Header";
-import api from "../../../api/api";
+import {api} from "../../../api/api";
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";

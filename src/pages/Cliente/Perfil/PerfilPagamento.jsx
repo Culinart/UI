@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import HeaderCliente from "../../../components/Cliente/HeaderCliente/HeaderCliente";
 import SidebarPerfil from "../../../components/Cliente/Perfil/SidebarPerfil";
 import { useNavigate } from 'react-router-dom';
-import api from "../../../api/api";
+import {api} from "../../../api/api";
 import Swal from "sweetalert2";
 
 function PerfilPagamento() {

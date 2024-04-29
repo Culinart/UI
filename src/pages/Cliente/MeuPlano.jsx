@@ -8,7 +8,7 @@ import iconeSuco from "../../assets/Institucional/Cadastro/iconeSuco.svg";
 import iconePlanta from "../../assets/Institucional/Cadastro/iconePlanta.svg";
 import iconeMaca from "../../assets/Institucional/Cadastro/iconeMaca.svg";
 import styles from "./MeuPlano.module.css";
-import api from "../../api/api";
+import {api} from "../../api/api";
 import AlertaClienteInativo from "../../components/Cliente/AlertaClienteInativo";
 
 function MeuPlano() {

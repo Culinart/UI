@@ -11,7 +11,7 @@ import ReceitaMelhorAvaliada from "../../../components/Fornecedor/Dashboard/Rece
 import ReceitaPiorAvaliada from "../../../components/Fornecedor/Dashboard/ReceitaPiorAvaliada";
 import Grafico from "../../../components/Fornecedor/Dashboard/Grafico";
 import { MdOutlineFileDownload } from "react-icons/md";
-import api from "../../../api/api";
+import {api} from "../../../api/api";
 import fileDownload from 'js-file-download';
 import Swal from "sweetalert2";
 import { useNavigate } from 'react-router-dom';

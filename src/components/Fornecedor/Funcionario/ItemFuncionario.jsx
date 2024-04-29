@@ -4,7 +4,7 @@ import EditarFuncionario from "../EditarFuncionario/EditarFuncionario";
 
 import editar from '../../../assets/Institucional/Funcionarios/edit.svg';
 import lixo from '../../../assets/Institucional/Funcionarios/trash.svg';
-import api from "../../../api/api";
+import {api} from "../../../api/api";
 
 function ItemFuncionario({ id, nome, email, permissao }) {
     const [exibirEditar, setExibirEditar] = useState(false);
