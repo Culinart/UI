@@ -79,7 +79,7 @@ function ReceitasFornecedor() {
     };
 
     api
-      .post(`/pedidos/entrega/${sessionStorage.getItem("idUsuario")}`, corpoRequisicao, {
+      .post(`/pedidos/entrega/${sessionStorage.getItem("idUsuario")}`, dataPedido, {
         headers: {
           Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
         },
