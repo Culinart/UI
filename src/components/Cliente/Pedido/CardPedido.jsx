@@ -8,6 +8,8 @@ import receitaDefault from '../../../assets/Receitas/receita-default.jpeg';
 
 function CardPedido({ idPedido, nome, qtd_porcoes, preferencias, categorias, pedidoAtual, setPedidoAtual, idReceita, statusPedido, imagem}) {
 
+const BASE_URL = 'https://drive.google.com/thumbnail?id=';
+
     const handleRemoveRecipe = (recipeId) => {
 
         const updatedRecipes = pedidoAtual.listaReceitas.filter((recipe) => recipe.id !== recipeId);
@@ -65,7 +67,7 @@ function CardPedido({ idPedido, nome, qtd_porcoes, preferencias, categorias, ped
 
     return (
         <div className="flex items-center flex-col w-10/12 h-auto bg-[#FFFFFF] drop-shadow-[0px_4px_4px_rgba(0,0,0,0.5)] rounded-xl border-solid border border-[#DADADA]">
-            <img src={imagem || receitaDefault} className="w-[93%] h-40 mt-3" alt="Receita" />
+            <img src={BASE_URL+imagem} className="w-[93%] h-40 mt-3" alt="Receita" />
             <div className="flex flex-col w-11/12 h-auto mt-2">
                 <h2 className="text-[1.165rem] font-medium">{nome}</h2>
                 <p className="text-[1rem] mt-[0.9rem]">{qtd_porcoes} no pacote</p>
@@ -77,6 +79,7 @@ function CardPedido({ idPedido, nome, qtd_porcoes, preferencias, categorias, ped
                     {preferencias.map((preferencia, index) => (
                         <div key={index} className="mb-2">
                             <Preferencia preferencia={preferencia} />
+                            {console.log(preferencia)}
                         </div>
                     ))}
                 </div>

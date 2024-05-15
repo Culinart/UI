@@ -30,15 +30,8 @@ function Pedidos() {
         navigate(path);
     }
     useEffect(() => {
-        setDataPedidoAtual(datasPedidos[selectedDateIndex]?.datasPedidos);
-        buscarPedido();
-    }, [selectedDateIndex, datasPedidos]);
-
-    useEffect(() => {
-        if (datasPedidos.length > 0) {
-            setDataPedidoAtual(datasPedidos[selectedDateIndex]?.datasPedidos);
+            setDataPedidoAtual(datasPedidos);
             buscarPedido();
-        }
     }, [datasPedidos, selectedDateIndex]);
     useEffect(() => {
         //buscarEnderecoAtivo();
@@ -129,17 +122,15 @@ function Pedidos() {
                 },
             })
             .then((response) => {
-                setDatasPedidos(response.data);
+                const dataDoUltimoPedido = response.data[response.data.length-1].datasPedidos
+                console.log(dataDoUltimoPedido);
+                setDataPedidoAtual(dataDoUltimoPedido)
 
                 const ativoOrderIndex = response.data.findIndex(
                     (order) => order.status === "ATIVO"
                 );
 
                 setSelectedDateIndex(ativoOrderIndex !== -1 ? ativoOrderIndex : response.data.length - 1);
-
-                setDataPedidoAtual(
-                    response.data[ativoOrderIndex !== -1 ? ativoOrderIndex : response.data.length - 1].datasPedidos
-                );
 
                 buscarPedido();
             })
@@ -150,53 +141,13 @@ function Pedidos() {
 
     const buscarPedido = () => {
 
-        const corpoRequisicao = {
-            dataEntrega: datasPedidos?.[selectedDateIndex]?.datasPedidos
-        }
-
-
-        api.post(`/pedidos/entrega/${sessionStorage.getItem("idUsuario")}`, corpoRequisicao, {
+        console.log("Aqui temos pedido atual: "+ dataPedidoAtual);
+        api.post(`/pedidos/entrega/${sessionStorage.getItem("idUsuario")}`, dataPedidoAtual, {
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
             }
         })
             .then((response) => {
-                const promises = response.data.listaReceitas.map(async (receita) => {
-                    try {
-                        const idReceita = receita.id;
-                        const imagemResponse = await api.get(`/receitas/imagem/${idReceita}`, {
-                            headers: {
-                                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
-                                responseType: 'arraybuffer'
-                            }
-                        });
-
-                        if (imagemResponse.status == 204) {
-                            receita.imagem = receitaDefault;
-                            return receita;
-                        }
-                        receita.imagem = "data:image/jpeg;base64," + imagemResponse.data;
-                        return receita;
-                    } catch (error) {
-                        if (error.response && error.response.status === 404) {
-                            // Se a imagem não for encontrada, atribua a imagem padrão
-                            receita.imagem = receitaDefault;
-                            return receita;
-                        } else {
-                            console.error(`Erro ao processar imagem da receita ${receita.id}`, error);
-                            return receita;
-                        }
-                    }
-                });
-
-                Promise.all(promises)
-                    .then((receitasComImagens) => {
-                        setReceitas(receitasComImagens);                    
-                    })
-                    .catch((error) => {
-                        console.error("Erro ao processar promessas", error);
-                    });
-
                 console.log('PEDIDO ', response)
                 setPedidoAtual(response.data);
                 setReceitas(response.data.listaReceitas);
