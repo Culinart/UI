@@ -6,7 +6,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Swal from "sweetalert2";
 import SidebarPerfilFornecedor from "../../../components/Fornecedor/HeaderFornecedor/Perfil/SidebarPerfilFornecedor";
-
+import { useNavigate } from 'react-router-dom';
 const validationSchema = Yup.object().shape({
     nome: Yup.string()
         .required("Insira o seu nome completo")
@@ -21,6 +21,7 @@ const validationSchema = Yup.object().shape({
 });
 
 function PerfilInfoPessoalFornecedor() {
+    const navigate = useNavigate();
     const [isEditing, setIsEditing] = useState(false);
     const [inputNome, setInputNome] = useState("");
     const [inputEmail, setInputEmail] = useState("");
@@ -107,7 +108,8 @@ function PerfilInfoPessoalFornecedor() {
                             iconColor: "#FF9F1C",
                         });
                         setTimeout(() => {
-                            window.location.reload();
+                            sessionStorage.clear();
+                            navigate("/login/funcionario");
                         }, 2000);
                     })
                     .catch((erro) => {

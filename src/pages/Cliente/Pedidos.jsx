@@ -30,8 +30,15 @@ function Pedidos() {
         navigate(path);
     }
     useEffect(() => {
-            setDataPedidoAtual(datasPedidos);
+        setDataPedidoAtual(datasPedidos[selectedDateIndex]?.datasPedidos);
+        buscarPedido();
+    }, [selectedDateIndex, datasPedidos]);
+
+    useEffect(() => {
+        if (datasPedidos.length > 0) {
+            setDataPedidoAtual(datasPedidos[selectedDateIndex]?.datasPedidos);
             buscarPedido();
+        }
     }, [datasPedidos, selectedDateIndex]);
     useEffect(() => {
         //buscarEnderecoAtivo();
@@ -122,15 +129,17 @@ function Pedidos() {
                 },
             })
             .then((response) => {
-                const dataDoUltimoPedido = response.data[response.data.length-1].datasPedidos
-                console.log(dataDoUltimoPedido);
-                setDataPedidoAtual(dataDoUltimoPedido)
+                setDatasPedidos(response.data);
 
                 const ativoOrderIndex = response.data.findIndex(
                     (order) => order.status === "ATIVO"
                 );
 
                 setSelectedDateIndex(ativoOrderIndex !== -1 ? ativoOrderIndex : response.data.length - 1);
+
+                setDataPedidoAtual(
+                    response.data[ativoOrderIndex !== -1 ? ativoOrderIndex : response.data.length - 1].datasPedidos
+                );
 
                 buscarPedido();
             })
@@ -141,8 +150,12 @@ function Pedidos() {
 
     const buscarPedido = () => {
 
-        console.log("Aqui temos pedido atual: "+ dataPedidoAtual);
-        api.post(`/pedidos/entrega/${sessionStorage.getItem("idUsuario")}`, dataPedidoAtual, {
+        const corpoRequisicao = {
+            dataEntrega: datasPedidos?.[selectedDateIndex]?.datasPedidos
+        }
+
+
+        api.post(`/pedidos/entrega/${sessionStorage.getItem("idUsuario")}`, corpoRequisicao.dataEntrega, {
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
             }
