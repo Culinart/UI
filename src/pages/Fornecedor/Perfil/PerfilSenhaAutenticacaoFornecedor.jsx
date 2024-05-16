@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import HeaderFornecedor from "../../../components/Fornecedor/HeaderFornecedor/HeaderFornecedor";
 import SidebarPerfilFornecedor from "../../../components/Fornecedor/HeaderFornecedor/Perfil/SidebarPerfilFornecedor";
-import api from "../../../api/api";
+import {api} from "../../../api/api";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Swal from "sweetalert2";

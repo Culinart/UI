@@ -3,7 +3,7 @@ import HeaderCliente from "../../components/Cliente/HeaderCliente/HeaderCliente"
 import { FiEdit } from "react-icons/fi";
 import CardPedido from "../../components/Cliente/Pedido/CardPedido";
 import { useNavigate } from 'react-router-dom';
-import api from "../../api/api";
+import {api} from "../../api/api";
 import Swal from "sweetalert2";
 import ModalAvaliarReceitas from "../../components/Cliente/Pedido/ModalAvaliarReceitas";
 import AlertaClienteInativo from "../../components/Cliente/AlertaClienteInativo";
@@ -155,48 +155,12 @@ function Pedidos() {
         }
 
 
-        api.post(`/pedidos/entrega/${sessionStorage.getItem("idUsuario")}`, corpoRequisicao, {
+        api.post(`/pedidos/entrega/${sessionStorage.getItem("idUsuario")}`, corpoRequisicao.dataEntrega, {
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
             }
         })
             .then((response) => {
-                const promises = response.data.listaReceitas.map(async (receita) => {
-                    try {
-                        const idReceita = receita.id;
-                        const imagemResponse = await api.get(`/receitas/imagem/${idReceita}`, {
-                            headers: {
-                                Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
-                                responseType: 'arraybuffer'
-                            }
-                        });
-
-                        if (imagemResponse.status == 204) {
-                            receita.imagem = receitaDefault;
-                            return receita;
-                        }
-                        receita.imagem = "data:image/jpeg;base64," + imagemResponse.data;
-                        return receita;
-                    } catch (error) {
-                        if (error.response && error.response.status === 404) {
-                            // Se a imagem não for encontrada, atribua a imagem padrão
-                            receita.imagem = receitaDefault;
-                            return receita;
-                        } else {
-                            console.error(`Erro ao processar imagem da receita ${receita.id}`, error);
-                            return receita;
-                        }
-                    }
-                });
-
-                Promise.all(promises)
-                    .then((receitasComImagens) => {
-                        setReceitas(receitasComImagens);                    
-                    })
-                    .catch((error) => {
-                        console.error("Erro ao processar promessas", error);
-                    });
-
                 console.log('PEDIDO ', response)
                 setPedidoAtual(response.data);
                 setReceitas(response.data.listaReceitas);

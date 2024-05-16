@@ -3,8 +3,9 @@ import { FiStar } from "react-icons/fi";
 import imgReceitaPedido from "../../../assets/Cliente/Pedidos/imgReceitaPedido.png";
 
 function CardReceitaAvaliacao({ recipe, onSelect, onRate }) {
+  console.log(recipe)
     const [rating, setRating] = useState(0);
-  
+    const BASE_URL = 'https://drive.google.com/thumbnail?id=';
     const handleStarClick = (value) => {
       setRating(value);
       onRate(value);
@@ -17,7 +18,7 @@ function CardReceitaAvaliacao({ recipe, onSelect, onRate }) {
     return (
       <div className="flex items-center flex-col w-48 bg-white shadow-md rounded-xl border border-gray-300 p-2" onClick={handleCardClick}>
         <img
-          src={imgReceitaPedido}
+          src={BASE_URL + recipe.imagem}
           className="w-full h-28 object-cover mb-2"
           alt="Receita"
         />

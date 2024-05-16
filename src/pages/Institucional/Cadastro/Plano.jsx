@@ -9,7 +9,7 @@ import iconeSuco from "../../../assets/Institucional/Cadastro/iconeSuco.svg";
 import iconePlanta from "../../../assets/Institucional/Cadastro/iconePlanta.svg";
 import iconeMaca from "../../../assets/Institucional/Cadastro/iconeMaca.svg";
 import styles from "./CadastroStyles.module.css";
-import api from "../../../api/api";
+import {api} from "../../../api/api";
 
 function Plano() {
 
@@ -24,7 +24,7 @@ function Plano() {
     const [selectedTime, setSelectedTime] = useState("");
     const [highestValorCategoria, setHighestValorCategoria] = useState(1);
     const [error, setError] = useState("");
-    const [novoValorPlano, setNovoValorPlano] = useState(pessoasSelecionadas * refeicoesSelecionadas * diasSelecionados * 4 * highestValorCategoria);
+    const [novoValorPlano, setNovoValorPlano] = useState(pessoasSelecionadas * refeicoesSelecionadas * diasSelecionados * highestValorCategoria);
 
 
     useEffect(() => {
@@ -145,7 +145,7 @@ function Plano() {
     };
 
     const atualizarValorPlano = () => {
-        setNovoValorPlano(pessoasSelecionadas * refeicoesSelecionadas * diasSelecionados * 4 * highestValorCategoria);
+        setNovoValorPlano(pessoasSelecionadas * refeicoesSelecionadas * diasSelecionados * highestValorCategoria);
     }
 
     const highestCategoria = () => {

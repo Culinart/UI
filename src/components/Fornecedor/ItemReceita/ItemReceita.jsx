@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaHeart, FaStar, FaPlusCircle, FaCheckCircle } from 'react-icons/fa';
 import ModalReceita from "../../Cliente/Receitas/ModalReceita/ModalReceita";
-import api from "../../../api/api";
+import {api} from "../../../api/api";
 import Preferencia from "../../Cliente/Receitas/Preferencia";
 import style from './ItemReceita.module.css'
 import { useLocation } from 'react-router-dom';
@@ -10,6 +10,8 @@ import Swal from "sweetalert2";
 import receitaDefault from '../../../assets/Receitas/receita-default.jpeg';
 
 function ItemReceita({ pedidoAtual, id, nome, ingredientes, rendimento, preparo, horas, minutos, qtdAvaliacao, mediaAvaliacao, categoria, preferencia, imagem }) {
+
+    const BASE_URL = 'https://drive.google.com/thumbnail?id=';
 
     const navigate = useNavigate();
 
@@ -96,7 +98,7 @@ function ItemReceita({ pedidoAtual, id, nome, ingredientes, rendimento, preparo,
                 </button> */}
                 {/* {isPaginaReceitasCliente && (
                 )} */}
-                <img src={imagem || receitaDefault} alt="Imagem da Receita" className={style.imagem} />
+                <img src={BASE_URL + imagem} alt="Imagem da Receita" className={style.imagem} />
             </div>
             <h2 className={style.nome_receita}>{nome}</h2>
             <div className={style.container_categorias}>

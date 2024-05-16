@@ -4,7 +4,7 @@ import Preferencia from "../../components/Cliente/Receitas/Preferencia";
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { BiTrash } from 'react-icons/bi';
 import Swal from "sweetalert2";
-import api from "../../api/api";
+import {api} from "../../api/api";
 
 const Preferencias = () => {
     const [preferencias, setPreferencias] = useState([]);

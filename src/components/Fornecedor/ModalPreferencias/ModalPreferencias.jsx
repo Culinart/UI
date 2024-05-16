@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api from "../../../api/api";
+import {api} from "../../../api/api";
 import style from "./ModalPreferencias.module.css";
 import { IoClose } from "react-icons/io5";
 

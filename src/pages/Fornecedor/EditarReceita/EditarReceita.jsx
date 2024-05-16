@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import api from '../../../api/api';
+import {api} from '../../../api/api';
 import HeaderFornecedor from '../../../components/Fornecedor/HeaderFornecedor/HeaderFornecedor';
 import style from './EditarReceita.module.css';
 import trash from '../../../assets/Fornecedor/Receitas/trash.svg';

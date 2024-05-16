@@ -5,7 +5,7 @@ import style from "./AdicionarFuncionario.module.css"
 import x from "../../../assets/Institucional/Funcionarios/x.svg";
 import user from "../../../assets/Institucional/Funcionarios/user.svg"
 import icon_email from "../../../assets/Institucional/Funcionarios/email.svg"
-import api from "../../../api/api";
+import {api} from "../../../api/api";
 import Swal from 'sweetalert2';
 
 function AdicionarFuncionario({ handleFecharModal }) {

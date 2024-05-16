@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import HeaderCliente from "../../../components/Cliente/HeaderCliente/HeaderCliente";
 import SidebarPerfil from "../../../components/Cliente/Perfil/SidebarPerfil";
 import { useNavigate } from 'react-router-dom';
-import api from "../../../api/api";
+import {api} from "../../../api/api";
 import Swal from "sweetalert2";
 
 function PerfilPagamento() {
@@ -24,10 +24,7 @@ function PerfilPagamento() {
     }, []);
 
     const buscarAssinatura = () => {
-        api.get(`/assinaturas`, {
-            params: {
-                idUsuario: sessionStorage.getItem('idUsuario')
-            },
+        api.get(`/assinaturas/${sessionStorage.getItem('idUsuario')}`, {
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
             }
@@ -41,7 +38,7 @@ function PerfilPagamento() {
     }
 
     const buscarPagamento = () => {
-        api.get(`/pagamentos/${sessionStorage.getItem('idUsuario')}`, {
+        api.put(`/pagamentos/atualizar/status/${sessionStorage.getItem('idUsuario')}`, {
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
             }
@@ -113,7 +110,7 @@ function PerfilPagamento() {
     }
 
     const ativarPagamento = () => {
-        api.post(`/pagamentos/solicitar/${sessionStorage.getItem('idUsuario')}`, null, {
+        api.post(`/assinaturas/solicitar/${sessionStorage.getItem('idUsuario')}`, null, {
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem('authToken')}`
             }
@@ -178,7 +175,7 @@ function PerfilPagamento() {
                             {statusAssinatura === "active" ? (
                                 <span>
                                     <p className="text-[#DC7726] font-medium mt-8 mb-6">
-                                        Status Assinatura: {statusAssinatura}
+                                        Status Assinatura: Ativo
                                     </p>
                                     {/* <a
                                         className="text-[#00AE9E] font-medium mt-8 mb-8"
@@ -214,7 +211,7 @@ function PerfilPagamento() {
                                 <span className="w-full flex items-center justify-center">
                                     <button
                                         type="button"
-                                        onClick={ativarPlano}
+                                        onClick={ativarPagamento}
                                         className="border border-gray-300 rounded-md px-3 py-1 bg-[#DC7726] hover-bg-[#ba5a0d] text-white">
                                         Renovar Assinatura
                                     </button>

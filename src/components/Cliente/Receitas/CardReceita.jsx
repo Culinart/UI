@@ -3,7 +3,7 @@ import { FaHeart, FaStar, FaPlusCircle, FaCheckCircle } from 'react-icons/fa';
 import Preferencia from "./Preferencia";
 import ModalPedido from "../Pedido/ModalPedido";
 import ModalReceita from "./ModalReceita/ModalReceita";
-import api from "../../../api/api";
+import {api} from "../../../api/api";
 
 function CardReceita(/*props*/{ nome, tempoPreparo, categoria, preferencia, imagem , avaliacao}) {
 

@@ -4,7 +4,7 @@ import x from "../../../assets/Institucional/Funcionarios/x.svg";
 import user from "../../../assets/Institucional/Funcionarios/user.svg";
 import icon_email from "../../../assets/Institucional/Funcionarios/email.svg";
 import apiMock from "../../../api/mockapi";
-import api from "../../../api/api";
+import {api} from "../../../api/api";
 import Swal from 'sweetalert2';
 
 function EditarFuncionario({ id, nome, email, permissao, handleFecharModal }) {

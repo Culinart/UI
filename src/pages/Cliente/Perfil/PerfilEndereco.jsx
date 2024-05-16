@@ -5,7 +5,7 @@ import { FiHome } from "react-icons/fi";
 import { BiTrash } from 'react-icons/bi';
 import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
-import api from "../../../api/api";
+import {api} from "../../../api/api";
 import Swal from "sweetalert2";
 
 

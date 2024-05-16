@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import style from './Pedidos.module.css';
 import HeaderFornecedor from '../../../components/Fornecedor/HeaderFornecedor/HeaderFornecedor';
 import ItemPedido from '../../../components/Fornecedor/Pedidos/ItemPedido/ItemPedido';
-import api from '../../../api/api';
+import {api} from '../../../api/api';
 
 function PedidosFornecedor() {
     const [pedidos, setPedidos] = useState([]);

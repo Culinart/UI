@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import api from "../../../api/api";
+import {api} from "../../../api/api";
 import HeaderCliente from "../../../components/Cliente/HeaderCliente/HeaderCliente";
 import imgEndereco from "../../../assets/Institucional/Cadastro/imgEndereco.svg"
 import styles from "../../Institucional/Cadastro/CadastroStyles.module.css";

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import CardReceitaAvaliacao from "./CardReceitaAvaliacao";
-import api from "../../../api/api";
+import {api} from "../../../api/api";
 import Swal from "sweetalert2";
 
 function ModalAvaliarReceitas({ recipes, oncloseModal }) {

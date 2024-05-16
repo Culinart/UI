@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 
-import api from "../../api/api";
+import {api} from "../../api/api";
 
 import { toast } from 'react-toastify';
 import { injectStyle } from "react-toastify/dist/inject-style";
