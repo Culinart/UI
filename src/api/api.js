@@ -3,11 +3,11 @@ import axios from "axios";
 const IP = {
     local: `http://localhost:8080/api`,
     img: `http://23.21.48.222:8000`,
-    ec2: `http://107.20.93.62:8080/api`
+    ec2: `http://34.235.192.141/api`
 }
 
 const api = axios.create({
-    baseURL: IP.local,
+    baseURL: IP.ec2,
     timeout: 15000,
     headers: {
         'Content-Type': 'application/json',
