@@ -7,7 +7,7 @@ const IP = {
 }
 
 const api = axios.create({
-    baseURL: IP.ec2,
+    baseURL: IP.local,
     timeout: 15000,
     headers: {
         'Content-Type': 'application/json',
