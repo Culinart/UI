@@ -254,7 +254,9 @@ function Pedidos() {
                             {pedidoAtual.status == "ATIVO" ?
                                 <span></span>
                                 : (
-                                    pedidoAtual.status == "PREPARANDO" ?
+                                    pedidoAtual.status == "PREPARANDO" ? "" :
+                                    (
+                                        pedidoAtual.status == "ATIVO" ?
                                         <button className="ml-20 px-2 py-1 text-sm text-[#FFFFFF] bg-[#DC7726] rounded-md" onClick={() => navigateToPage('/cliente/receitas')}>
                                             Adicionar Receita
                                         </button>
@@ -262,6 +264,7 @@ function Pedidos() {
                                         <button onClick={openModalAvaliacao} className="px-2 py-1 text-base text-[#FFFFFF] bg-[#008E80] rounded-md">
                                             Avaliar Receitas
                                         </button>
+                                        )
                                 )
                             }
                         </div>
