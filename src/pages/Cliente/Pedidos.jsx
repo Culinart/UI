@@ -237,11 +237,15 @@ function Pedidos() {
                             {pedidoAtual.status == "PREPARANDO" ? <span>
                                 <button onClick={confirmarEntrega} className="mr-8 px-2 py-1 text-sm text-[#FFFFFF] bg-[#DC7726] rounded-md">
                                     Confirmar Entrega
-                                </button>
-                                <button onClick={pularEntrega} className="px-2 py-1 text-sm text-[#FFFFFF] bg-slate-400 rounded-md">
+                                </button></span> :
+                                (
+                                pedidoAtual.status == "ATIVO" ?
+                                <span><button onClick={pularEntrega} className="px-2 py-1 text-sm text-[#FFFFFF] bg-slate-400 rounded-md">
                                     Pular Entrega
-                                </button>
-                            </span> : ""}
+                                </button></span>
+                                : ""
+                                )
+                                }
                         </div>
                     </div>
                     <div className="flex items-center flex-col w-full h-auto mt-[4.5rem]">
