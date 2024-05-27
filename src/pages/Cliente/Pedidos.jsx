@@ -261,7 +261,7 @@ function Pedidos() {
                                             Adicionar Receita
                                         </button>
                                         :
-                                        <button onClick={openModalAvaliacao} className="px-2 py-1 text-base text-[#FFFFFF] bg-[#008E80] rounded-md">
+                                        <button onClick={openModalAvaliacao} className="ml-20 px-2 py-1 text-base text-[#FFFFFF] bg-[#008E80] rounded-md">
                                             Avaliar Receitas
                                         </button>
                                         )
