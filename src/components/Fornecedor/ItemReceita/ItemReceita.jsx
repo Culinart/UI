@@ -122,11 +122,13 @@ function ItemReceita({ pedidoAtual, id, nome, ingredientes, rendimento, preparo,
                     pedidoAtual.listaReceitas.some((pedidoRecipe) => {
                         return pedidoRecipe.id === id;
                     }) ? (
+                        pedidoAtual.status == 'PREPARANDO' ? "" :
                         <FaCheckCircle
                             className=" text-blue-400 text-2xl hover:text-blue-600 cursor-pointer z-30"
                             onClick={navegarPedidos}
                         />
                     ) : (
+                        pedidoAtual.status == 'PREPARANDO' ? "" :
                         <FaPlusCircle
                             className="text-green-500 text-2xl hover:text-green-700 cursor-pointer z-30"
                             onClick={adicionarReceitaPedido}
