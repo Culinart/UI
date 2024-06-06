@@ -1,5 +1,5 @@
 service:
-  load_lancer:
+  load_balancer:
     imagem: nginx:latest
     ports:
       - "80:80"
@@ -16,10 +16,12 @@ service:
     imagem: gabsmvb/culinartfront:latest
     networks: 
       - rede-compose
-        driver: bridge
-  
+    
   site2:
     imagem: gabsmvb/culinartfront:latest
     networks: 
       - rede-compose
-        driver: bridge
+
+networks:
+  rede-compose:
+    driver: bridge
