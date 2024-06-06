@@ -1,0 +1,27 @@
+service:
+  load_balancer:
+    imagem: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./load-balancer/nginx.conf:/etc/nginx/nginx.conf
+    
+    networks:
+      - rede-compose
+    depends_on:
+      - site1
+      - site2
+
+  site1:
+    imagem: gabsmvb/culinartfront:latest
+    networks: 
+      - rede-compose
+    
+  site2:
+    imagem: gabsmvb/culinartfront:latest
+    networks: 
+      - rede-compose
+
+networks:
+  rede-compose:
+    driver: bridge
