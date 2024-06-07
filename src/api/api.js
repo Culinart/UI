@@ -4,10 +4,11 @@ const IP = {
     local: `http://localhost:8080/api`,
     img: `http://23.21.48.222:8000`,
     ec2: `https://culinart.ddns.net:443/api`
+    
 }
 
 const api = axios.create({
-    baseURL: IP.local,
+    baseURL: IP.ec2,
     timeout: 15000,
     headers: {
         'Content-Type': 'application/json',
