@@ -25,7 +25,7 @@ function Home() {
             <div className={style.storyBoard}>
               <div className={style.cardStoryBoard}>
                 <img src={img1StoryBoard} />
-                <p>Crie seu plano de <br /> assinatura <br /> personalizado</p>
+                <p>Crie seu plano de ||||||||||||||<br /> assinatura <br /> personalizado</p>
               </div>
               <div className={style.cardStoryBoard}>
                 <img src={img2StoryBoard} />
