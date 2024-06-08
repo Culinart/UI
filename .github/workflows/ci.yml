@@ -1,6 +1,5 @@
 name: Exemplo de CI
 
-
 on:
   push:
       branches: [ main ]
