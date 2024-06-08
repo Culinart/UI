@@ -25,7 +25,7 @@ function Home() {
             <div className={style.storyBoard}>
               <div className={style.cardStoryBoard}>
                 <img src={img1StoryBoard} />
-                <p>Crie seu plano de ||||||||||||||<br /> assinatura <br /> personalizado</p>
+                <p>Crie seu plano de<br /> assinatura <br /> personalizado</p>
               </div>
               <div className={style.cardStoryBoard}>
                 <img src={img2StoryBoard} />
@@ -55,7 +55,7 @@ function Home() {
         </div>
         <div className={style.textoCategorias}>
           <p>
-            Desde os pratos Rápidos e Fáceis até mais Fit e Saudáveis, nossas <br />
+            ENTROU AQUI Desde os pratos Rápidos e Fáceis até mais Fit e Saudáveis, nossas <br />
             categorias para todos os tipos de gostos, paladares e estilos de vida.
           </p>
         </div>
