@@ -2,7 +2,7 @@ import axios from "axios";
 
 const IP = {
     local: `http://localhost:8080/api`,
-    img: `http://23.21.48.222:8000`,
+    img: `http://3.212.111.79:8000`,
     ec2: `https://culinart.ddns.net:443/api`,
     dominio: 'https://culinart.ddns.net:443/api'
 }
