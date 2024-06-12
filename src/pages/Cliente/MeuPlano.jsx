@@ -47,7 +47,7 @@ function MeuPlano() {
     }, [categoriasSelecionadas, pessoasSelecionadas, refeicoesSelecionadas, diasSelecionados, highestValorCategoria]);
 
     const atualizarValorPlano = () => {
-        setNovoValorPlano(pessoasSelecionadas * refeicoesSelecionadas * diasSelecionados * 4 * highestValorCategoria);
+        setNovoValorPlano(pessoasSelecionadas * refeicoesSelecionadas * diasSelecionados * highestValorCategoria);
     }
     
     const highestCategoria = () => {
@@ -293,13 +293,13 @@ function MeuPlano() {
                 return iconeCarne;
             case "Pescetariano":
                 return iconePeixe;
-            case "Rápido e Fácil":
+            case "Rapido e Facil":
                 return iconeRelogio;
             case "Vegetariano":
                 return iconeSuco;
             case "Vegano":
                 return iconePlanta;
-            case "Fit e Saudável":
+            case "Fit e Saudavel":
                 return iconeMaca;
             default:
                 return "";
