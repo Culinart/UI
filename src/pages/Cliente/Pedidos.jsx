@@ -186,7 +186,7 @@ function Pedidos() {
         const day = parsedDate.getDate();
         const month = parsedDate.getMonth() + 1;
         const year = parsedDate.getFullYear();
-        return `${day}/${month}/${year}`;
+        return `${day+1}/${month}/${year}`;
     };
 
 
