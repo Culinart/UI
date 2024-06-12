@@ -92,7 +92,7 @@ function ModalReceita({ id, nome, ingredientes, rendimento, horas, minutos, qtdA
                     <div className={style.esquerda}>
                         <div className={style.container_avaliacao}>
                             <div className={style.avaliacao}>
-                                <span>⭐{mediaAvaliacao} ({qtdAvaliacao} Avaliações)</span>
+                                <span>⭐{mediaAvaliacao.toFixed(1)} ({qtdAvaliacao} Avaliações)</span>
                             </div>
                             {isPaginaReceitasCliente && (
                                 <div className={style.editar_excluir}>
